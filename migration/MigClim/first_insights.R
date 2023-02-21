@@ -7,7 +7,7 @@ library(MigClim)
 library(ggplot2)
 library(terra)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/migration/MigClim"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/migration/MigClim"
 
 # little modification of MigClim R function
 source(file.path(wd, "functions", "migclim.migrate.custom.R"))
@@ -146,7 +146,18 @@ MigClim.migrate.custom(iniDist= "init_dist", # initial distribution
                 testMode=FALSE, fullOutput=FALSE, keepTempFiles=FALSE)
 
 
-Rst <- raster("MigClimTest/MigClimTest1_raster.asc")
+
+#---------#  
+# 3. Plot #
+#---------#  
+
+rst <- terra::rast("MigClimTest/MigClimTest1_raster.asc")
+
+# change to 1km resolution // plotting resolution
+rst <- terra::aggregate(rst, fact = 1000/res, fun="mean", cores = 10)
+
+
+
 Df <- as.data.frame(Rst, xy= TRUE)
 ggplot() +
   geom_raster(data = Df[Df$MigClimTest1_raster == 0,], 
