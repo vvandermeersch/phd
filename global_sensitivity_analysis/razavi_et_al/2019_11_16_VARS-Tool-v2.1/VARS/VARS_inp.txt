@@ -1,0 +1,23 @@
+% <><><><>            Variogram Analysis of Response Surfaces (VARS) Main Input File           <><><><>
+% <><><>             © Saman Razavi 2018; V1 written in 2013-15; V2 written in 2017-18           <><><><>
+% <><>          Do not change row numbers and orders. Any text after % is deemed comments          <><><><>
+% <>                VARS-TOOL will scale factors in range zero to one before analysis                <><><><>
+forceeps_out_3                   % 5. Output folder: name of the folder where VARS results are to be stored
+100                       % 6. Number of stars: the total number of stars for a STAR-VARS run
+0.1                       % 7. Sampling resolution, Delta h: The minimum h in the VARS analysis
+0.1  0.3  0.5             % 8. IVARS scale ranges of interest, H: e.g., 0.1 and 0.3 correspond [0-0.1] and [0-0.3], respectively
+eval_HBV_SASK             % 9. Model filename: MATLAB m-file without .m extension
+../forceeps              % 10. Folder address: that includes model file, factor space, and star centers (if applicable)
+                          % 11. Star-centers file: if blank, VARS generates star centers via the sampling strategy specified in line 12
+PLHS                       % 12. Sampling strategy: RND, LHS, PLHS, SobolSeq, or Halton for generation of star centers; if blank, default is LHS
+123456789                 % 13. Seed number: for randomization of sampling strategy specified in line 12; leave blank for automatic randomization
+1                         % 14. Bootstrap-and-grouping flag: enter "1" to bootstrap and group, or "0" not to
+1000                      % 15. Bootstrap size: number of sampling iterations with replacement; if bootstrap flag = 0, this line will be ignored
+0.9                       % 16. Confidence level: for bootstrap-based confidence intervals on results; if line 14 = 0, this line will be ignored
+                          % 17. User-specified number of groups: if blank, VARS-TOOL will find the optimal number; if line 14 = 0, this line will be ignored
+1                         % 18. Online/offline flag: enter "0" for online VARS, or "1" for offline VARS  
+2                         % 19. Offline-stage flag: enter "1" to run STAR & write samples, or "2" to read model output & run VARS; active when line 18 = 1
+10                        % 20. Reporting frequency, R: reports after completion of every set of R stars; if line 12 = PLHS, R will also be the slice size
+1                         % 21. Plotting flag: enter "1" to generate plots on the results, or "0" not to generate
+1                         % 22. Time series length: needed for the GGSM analysis of dynamical systems models; enter "1" for conventional GSA
+1                         % 23. Text-report flag: enter "1" to write txt report files, or "0" not to write

@@ -1,0 +1,13 @@
+Factor#  LB     UB    Name	- title Line - this line should remain here
+1        20     200    kS    % allometry
+2        10     100    kHMax    % maximum tree height [m]
+3        50     3000    kAMax   % maximum tree age [year]
+4        10     1000    kG    % growth rate parameter [cm/year]
+5        100    2000    kDDMin    % minimal annual degree-day sum [°C]
+6        -50    10    kWiTN  % minimum winter temperature tolerated [°C]
+7        -20    30    kWiTX  % maximum winter temperature tolerated [°C]
+8      	 10     40    kTHot    % Fast reservoir coefficient, which determines what proportion of the storage is released per day (unitless)
+9        40     50    kTCo2Hot % 
+10       0.01   1    kDrTol    % water stress
+11       1   	9    kLa    % shade tolerance	
+12       0   	1    kLy    % shade tolerance, first year			
