@@ -1,0 +1,44 @@
+\contentsline {section}{Remerciements}{1}{section*.3}%
+\contentsline {section}{Résumé substantiel}{7}{section*.4}%
+\contentsline {subsection}{Introduction}{7}{subsection*.5}%
+\contentsline {subsubsection}{La biodiversité dans les espèces étroitement liées des forêts tropicales du bassin de l'Amazone}{7}{subsubsection*.6}%
+\contentsline {subsubsection}{Coexistence locale des espèces : considérations écologiques et évolutives}{7}{subsubsection*.7}%
+\contentsline {subsubsection}{Contexte de l'étude : le site d'étude à long terme de Paracou dans une forêt côtière du Bouclier guyanais}{8}{subsubsection*.8}%
+\contentsline {subsubsection}{Modèles d'étude : \emph {Symphonia globulifera} et \emph {Eschweilera} clade \emph {Parvifolia}, deux complexes d'arbres localement abondants}{8}{subsubsection*.9}%
+\contentsline {subsubsection}{Objectifs et plan général}{9}{subsubsection*.10}%
+\contentsline {subsection}{Chapitre 1 : La topographie façonne la coexistence locale des espèces d'arbres au sein des complexes d'espèces des forêts néotropicales}{9}{subsection*.11}%
+\contentsline {subsection}{Chapitre 2 : La topographie entraîne systématiquement une variation intra- et inter-spécifique des traits foliaires au sein des complexes d'espèces d'arbres dans une forêt néotropicale}{10}{subsection*.12}%
+\contentsline {subsection}{Chapitre 3 : La topographie est le moteur des adaptations microgéographiques des espèces proches dans deux complexes d'espèces d'arbres tropicaux}{10}{subsection*.13}%
+\contentsline {subsection}{Chapitre 4 : La dynamique des trouées forestières : un facteur sous-exploré qui entraîne des stratégies de croissance adaptative divergentes au sein des espèces d'arbres tropicaux}{11}{subsection*.14}%
+\contentsline {subsection}{Discussion}{11}{subsection*.15}%
+\contentsline {section}{Introduction}{13}{section*.16}%
+\contentsline {subsection}{Biodiversity in tropical forests from the Amazon Basin}{13}{subsection*.17}%
+\contentsline {subsubsection}{Tropical forests' outstanding biodiversity}{13}{subsubsection*.18}%
+\contentsline {subsubsection}{Threats that affect tropical forests}{13}{subsubsection*.19}%
+\contentsline {subsubsection}{Regional and local species richness in the Amazon Basin}{13}{subsubsection*.20}%
+\contentsline {subsubsection}{The paradoxical coexistence of closely-related tree species in sympatry}{14}{subsubsection*.21}%
+\contentsline {subsection}{Biodiversity in closely-related species}{14}{subsection*.22}%
+\contentsline {subsubsection}{Species concepts and their limits}{14}{subsubsection*.23}%
+\contentsline {subsubsection}{Beyond species: species complexes and syngameons}{15}{subsubsection*.24}%
+\contentsline {subsubsection}{The neglected intraspecific variability}{15}{subsubsection*.25}%
+\contentsline {subsection}{Local coexistence of species: ecological considerations}{16}{subsection*.26}%
+\contentsline {subsubsection}{Niche and neutral theory}{16}{subsubsection*.27}%
+\contentsline {subsubsection}{Neighbours and competition}{17}{subsubsection*.28}%
+\contentsline {subsubsection}{Treefall and succession}{17}{subsubsection*.29}%
+\contentsline {subsubsection}{Intraspecific variability}{18}{subsubsection*.30}%
+\contentsline {subsubsection}{Demography and fundamental trade-offs}{18}{subsubsection*.31}%
+\contentsline {subsubsection}{Functional traits: from fundamental trade-offs to ecological niches}{19}{subsubsection*.32}%
+\contentsline {subsection}{Adaptive evolution: from individual genomes to tree species}{20}{subsection*.33}%
+\contentsline {subsubsection}{Bridging ecology and evolution: ecological genomics}{20}{subsubsection*.34}%
+\contentsline {subsubsection}{The genomic basis of adaptation}{20}{subsubsection*.35}%
+\contentsline {subsubsection}{Individual microgeographic adaptations}{21}{subsubsection*.36}%
+\contentsline {subsubsection}{Species adaptive radiations}{21}{subsubsection*.37}%
+\contentsline {subsubsection}{Eco-evolutionary peculiarities of trees}{22}{subsubsection*.38}%
+\contentsline {subsection}{Study context: the long-term study site of Paracou in a coastal forest of the Guiana Shield}{23}{subsection*.39}%
+\contentsline {subsubsection}{The Guiana Shield}{23}{subsubsection*.40}%
+\contentsline {subsubsection}{The long-term study site of Paracou}{23}{subsubsection*.41}%
+\contentsline {subsection}{Study models: \emph {Symphonia globulifera} and \emph {Eschweilera} clade Parvifolia two species complexes of locally abundant trees}{24}{subsection*.42}%
+\contentsline {subsubsection}{\emph {Symphonia}}{24}{subsubsection*.43}%
+\contentsline {subsubsection}{\emph {Eschweilera}}{25}{subsubsection*.44}%
+\contentsline {subsection}{Aims and general plan}{26}{subsection*.45}%
+\contentsline {section}{References}{29}{figure.caption.46}%
