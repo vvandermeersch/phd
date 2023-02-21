@@ -1,0 +1,249 @@
+---
+output: 
+  stevetemplates::article:
+    fig_caption: true
+#bibliography: master.bib
+biblio-style: apsr
+title: "GAM calibration report"
+# thanks: "Replication files are available on the author's Github account (http://github.com/svmiller). **Current version**: `r format(Sys.time(), '%B %d, %Y')`; **Corresponding author**: svmille@clemson.edu."
+author:
+- name: Victor Van der Meersch
+  affiliation: CEFE, CNRS
+abstract: "This document provides detailed information about a specific correlative SDM. "
+# keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+#geometry: margin=1cm
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+header-includes:
+  - \usepackage{xcolor}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.6\textwidth, textfont=it, font=small]{caption}
+  - \usepackage{nopageno}
+  - \setlength{\voffset}{-0.4in}
+  - \geometry{top=1in, bottom=-1in, left=1.25in, right=1.25in}
+
+---
+
+```{r setup, include=FALSE}
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+
+source("C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
+
+library(AUC)
+library(ggplot2)
+library(colorspace)
+library(dplyr)
+library(sf)
+library(raster)
+library(rnaturalearth)
+library(ecospat)
+library(abind)
+library(Matrix)
+library(glmnet)
+library(dismo)
+library(mgcv)
+library(disdat)
+
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      cache.path = '_cache/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+
+```
+
+```{r data, include=FALSE}
+# model folder
+model_type <- "maxent"
+mod_dir <- file.path(wd, model_type)
+fit_file <- file.path(mod_dir, "fit", "fagus_sylvatica", "maxent_defpred_2022-06-14.rds")
+outfile <- readRDS(fit_file)
+
+# load all species presence/absence
+sp_data_dir <- "D:/species/processed"
+load(file.path(sp_data_dir, "fagus_sylvatica", "fagus_sylvatica_presabs.Rdata"))
+
+# # Covars
+# clim_data_dir <- "D:/climate/ERA5-Land/bioclim_format"
+# soil_data_dir <- "D:/soil/processed"
+# ## bioclim data from ERA5-Land
+# biovars_all <- list()
+# for(i in as.character(1970:2000)){
+#   load(paste0(clim_data_dir, "/biovars_", i, ".Rdata"))
+#   biovars_all <- append(biovars_all, list(biovars))
+# }
+# rm(biovars)
+# biovars_30y <- abind(biovars_all, along=3)
+# biovars_30y <- apply(biovars_30y, c(1,2), mean)
+# biovars_30y <- as.data.frame(biovars_30y)
+# biovars_30y$lat <- round(biovars_30y$lat,1)
+# biovars_30y$lon <- round(biovars_30y$lon,1)
+# ## soil data
+# load(file.path(soil_data_dir, "data_soil.Rdata"))
+
+
+# predictors
+wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+load(file.path(wd_pred, "predictors_data.Rdata"))
+
+europe_data <- predictors_data %>% 
+  dplyr::select(c("lon", "lat", all_of(outfile$covars)))
+
+## for pres/abs points
+presabs_data <- left_join(fagussylvatica_presabs, predictors_data, by = c("lon", "lat")) %>% 
+  dplyr::select(c("lon", "lat", "pres", all_of(outfile$covars)))
+
+
+
+
+```
+
+```{r gam_pred, eval = (model_type == "gam"), include=FALSE, eval=F}
+
+# Predictions with GAM
+europe_data$fitness <- outfile$europe_prediction
+presabs_data$fitness <- as.numeric(predict(outfile$model, presabs_data, type = "response"))
+
+```
+
+```{r lasso_pred, eval = (model_type == "lasso_glm"), include=FALSE, eval=F}
+
+
+# Predictions with Lasso GLM
+quad_obj <- make_quadratic(europe_data, cols = outfile$covars)
+europe_quad <- predict.make_quadratic(quad_obj, newdata = europe_data)
+new_vars <- names(europe_quad)[!(names(europe_quad) %in% c("pres", "lon", "lat"))]
+europe_sparse <- sparse.model.matrix(~. -1, europe_quad[, new_vars])
+europe_data$fitness <- as.numeric(predict(outfile$model, europe_sparse, type = "response", s = "lambda.min"))
+quad_obj <- make_quadratic(presabs_data, cols = outfile$covars)
+presabs_quad <- predict.make_quadratic(quad_obj, newdata = presabs_data)
+presabs_sparse <- sparse.model.matrix(~. -1, presabs_quad[, new_vars])
+presabs_data$fitness <- as.numeric(predict(outfile$model, presabs_sparse, type = "response", s = "lambda.min"))
+
+```
+
+```{r maxent_pred, eval = (model_type == "maxent"), include=FALSE, eval=T}
+
+# Predictions with Maxent
+europe_data$fitness <- predict(outfile$model, europe_data, args = c("outputformat=cloglog")) # all Europe
+presabs_data$fitness <- predict(outfile$model, presabs_data, args = c("outputformat=cloglog")) # only on pres/abs points
+
+```
+
+```{r calibration_points, include=FALSE}
+# Only on calibration points : below...
+# # Simulation only on calibration points
+# calsim_dir <- file.path(sim_dir, "calibration_points")
+# fitness_cal <- read_mean_outputvalue(calsim_dir, "Fitness")
+# 
+# # Best threshold maximizing Youden index
+# youden_index <- sensitivity(fitness_cal, factor(species_occurrence$pres))$measure +
+#   specificity(fitness_cal, factor(species_occurrence$pres))$measure -1
+# thresholds <- roc(fitness_cal, factor(species_occurrence$pres))$cutoffs
+# best_threshold <- thresholds[which(youden_index == max(youden_index))]
+
+# On every points
+youden_index <- sensitivity(presabs_data$fitness, as.factor(presabs_data$pres))$measure +
+  specificity(presabs_data$fitness, as.factor(presabs_data$pres))$measure -1
+thresholds <- roc(presabs_data$fitness, as.factor(presabs_data$pres))$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+
+
+
+
+
+
+```
+
+## 1. Insights on the calibration process
+
+Input data:  
+- Species : *F. sylvatica*   
+- `r nrow(outfile$occ_data[outfile$occ_data$pres == 1, ])` presence points and `r nrow(outfile$occ_data[outfile$occ_data$pres == 0, ])` background points  
+\
+Calibration performance:  
+- Runtime = `r outfile$runtime` seconds  
+- AUC on calibration points = `r round(outfile$auc_cal,3)` (warning: not significant, background points...)  
+- Discrimination metric: AUC on all presence/absence points = `r round(outfile$auc_tot,3)`  
+
+```{r calpoints_map, echo=FALSE, fig.height = 5, fig.width = 5, fig.align = "center", fig.cap = "Calibration points: presences points in green and background points in orange. Light green is species distribution area.", fig.pos="H"}
+
+# Europe map
+countries_EUForest <- c("Austria", "Belarus", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Rep.", "Denmark", "Estonia", "Finland", "France", "Germany",
+                        "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Moldova", "Netherlands", "Norway", "Poland", "Portugal", "Romania",
+                        "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "United Kingdom")
+other_countries <- c("Ukraine", "Bosnia and Herzegovina", "Republic of Serbia", "Macedonia", "Greece",
+                     "Kosovo", "Albania", "Montenegro")
+countries <- c(countries_EUForest, other_countries)
+world_map <- ne_countries(scale="medium",returnclass = 'sf')
+eu_map <- world_map %>% filter(sovereignt %in% countries)
+eu_map_cropped <- eu_map %>% 
+  st_crop(st_bbox(c(xmin = -12, xmax = 40, ymax = 71, ymin = 34), crs = st_crs(4326)))
+
+
+ggplot() + 
+  geom_sf(data = eu_map_cropped, fill = 'grey', alpha=0.1, color='grey', size = 0.1) +
+  geom_tile(data = outfile$occ_data[outfile$occ_data$pres == 0, ], aes(x = lon, y = lat), fill = "#D57A66", alpha=0.2) +
+  geom_tile(data= fagussylvatica_presabs[fagussylvatica_presabs$pres == 1,], aes(x = lon, y = lat), fill = "#8FD5A6", alpha=0.3) +
+  geom_tile(data = outfile$occ_data[outfile$occ_data$pres == 1, ], aes(x = lon, y = lat), fill = "#0C8346", alpha=1) +
+  theme_void() +
+  theme(legend.position="none") +
+  theme(plot.title = element_text(size=12))
+
+
+
+```
+
+
+## 2. Simulation at European scale
+
+
+```{r fitness_map, echo=FALSE, fig.height = 4.3, fig.width = 4.3, fig.align = "center", fig.cap = "Fitness map with calibrated parameter set", fig.pos="H"}
+
+ggplot(data=europe_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = fitness), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+```
+
+
+
+```{r presence_map, echo=FALSE, fig.height = 4.3, fig.width = 4.3, fig.align = "center", fig.cap = paste0("Species presence map with calibrated parameter set. AUC threshold maximizing Youden index = ", round(best_threshold,3), "."), fig.pos="H", eval=T}
+data_presence <- europe_data
+data_presence[data_presence$fitness < best_threshold, 'presence'] <- 0
+data_presence[data_presence$fitness >= best_threshold, 'presence'] <- 1
+
+ggplot(data=data_presence, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="none") +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49")
+
+```
+
+<!--
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+-->

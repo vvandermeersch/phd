@@ -1,0 +1,422 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+geometry: "left=1.5cm,right=1.5cm,top=1cm,bottom=1.5cm"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, echo = FALSE, include=FALSE)
+library(ggplot2)
+library(cowplot)
+library(Matrix)
+library(glmnet)
+library(dplyr)
+library(mgcv)
+library(randomForest)
+library(dismo)
+library(gbm)
+library(disdat)
+library(biomod2)
+
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+
+source(file.path(wd, "model_overview", "functions", "compute_predictions.R"))
+source(file.path(wd, "model_overview", "functions", "get_response_curve.R"))
+source(file.path(wd, "valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes", "prediction_helper.R"))
+load(file.path(wd, "predictors","predictors_data.Rdata"))
+
+species <- "fagus_sylvatica"
+
+```
+
+## Lasso GLM
+
+```{r lasso_glm}
+fit <- readRDS(file.path(wd, "lasso_glm", "fit", species, "lasso_glm_litpred_2022-12-14.rds"))
+```
+
+```{r lasso_glm_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```
+
+```{r lasso_glm_response_curves, fig.height = 6, fig.width = 6.5, fig.align = "center", include=TRUE}
+
+mintemp_curve <- get_response_curve("bio6", "Min. temp. coldest month", fit, predictors_data)
+gdd_curve <- get_response_curve("sum_apsep_GDD5", "GDD >5°C (April-September)", fit, predictors_data)
+wbal_curve <- get_response_curve("w_bal", "Water balance (June-July)", fit, predictors_data)
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+\newpage
+
+## GAM
+
+```{r gam}
+fit <- readRDS(file.path(wd, "gam", "fit", species, "gam_litpred_2022-12-14.rds"))
+```
+
+```{r gam_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```
+
+```{r gam_curves, fig.height = 6, fig.width = 6.5, fig.align = "center", include=TRUE}
+
+mintemp_curve <- get_response_curve("bio6", "Min. temp. coldest month", fit, predictors_data)
+gdd_curve <- get_response_curve("sum_apsep_GDD5", "GDD >5°C (April-September)", fit, predictors_data)
+wbal_curve <- get_response_curve("w_bal", "Water balance (June-July)", fit, predictors_data)
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+## Random Forest
+
+```{r rf}
+fit <- readRDS(file.path(wd, "random_forest", "fit", species, "random_forest_litpred_2022-12-14.rds"))
+```
+
+```{r rf_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```
+
+```{r rf_curves, fig.height = 6, fig.width = 6.5, fig.align = "center", include=TRUE}
+
+mintemp_curve <- get_response_curve("bio6", "Min. temp. coldest month", fit, predictors_data)
+gdd_curve <- get_response_curve("sum_apsep_GDD5", "GDD >5°C (April-September)", fit, predictors_data)
+wbal_curve <- get_response_curve("w_bal", "Water balance (June-July)", fit, predictors_data)
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+## BRT
+
+```{r brt}
+fit <- readRDS(file.path(wd, "brt", "fit", species, "brt_litpred_2022-12-14.rds"))
+```
+
+```{r brt_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```
+
+```{r brt_curves, fig.height = 6, fig.width = 6.5, fig.align = "center", include=TRUE}
+
+mintemp_curve <- get_response_curve("bio6", "Min. temp. coldest month", fit, predictors_data)
+gdd_curve <- get_response_curve("sum_apsep_GDD5", "GDD >5°C (April-September)", fit, predictors_data)
+wbal_curve <- get_response_curve("w_bal", "Water balance (June-July)", fit, predictors_data)
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+## MaxEnt
+
+```{r maxent}
+fit <- readRDS(file.path(wd, "maxent", "fit", species, "maxent_litpred_2022-12-14.rds"))
+```
+
+```{r maxent_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```
+
+```{r maxent_curves, fig.height = 6, fig.width = 6.5, fig.align = "center", include=TRUE}
+
+mintemp_curve <- get_response_curve("bio6", "Min. temp. coldest month", fit, predictors_data)
+gdd_curve <- get_response_curve("sum_apsep_GDD5", "GDD >5°C (April-September)", fit, predictors_data)
+wbal_curve <- get_response_curve("w_bal", "Water balance (June-July)", fit, predictors_data)
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+## Biomod
+
+```{r biomod}
+fit <- readRDS(file.path(wd, "biomod", "fit", species, "biomod_litpred_2022-12-19.rds"))
+```
+
+```{r biomod_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+fit$europe_prediction_s <- scales::rescale(fit$europe_prediction)
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction, prob_s = fit$europe_prediction_s)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob_s), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```
+
+```{r biomod_curve_data, fig.height = 6, fig.width = 6.5, fig.align = "center", include=FALSE}
+
+mintemp_curve <- get_response_curve("bio6", "Min. temp. coldest month", fit, predictors_data, wd = file.path(wd, "biomod", "fit", species))
+gdd_curve <- get_response_curve("sum_apsep_GDD5", "GDD >5°C (April-September)", fit, predictors_data, wd = file.path(wd, "biomod", "fit", species))
+wbal_curve <- get_response_curve("w_bal", "Water balance (June-July)", fit, predictors_data, wd = file.path(wd, "biomod", "fit", species))
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+```{r biomod_curves, fig.height = 6, fig.width = 6.5, fig.align = "center", include=TRUE}
+
+plot_grid(mintemp_curve, gdd_curve, wbal_curve,
+          ncol = 2)
+
+```
+
+## Custom ensemble
+
+```{r custom_ensemble}
+fit <- readRDS(file.path(wd, "custom_ensemble", "fit", species, "custom_ensemble_litpred_2022-12-14.rds"))
+```
+
+```{r custom_ensemble_maps, fig.height = 3.4, fig.width = 6.4, fig.align = "center", include=TRUE}
+map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                       prob = fit$europe_prediction)
+map_data[map_data$prob < fit$best_threshold, 'presence'] <- 0
+map_data[map_data$prob >= fit$best_threshold, 'presence'] <- 1
+
+prob_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = prob), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1), breaks = c(0,0.5,1)) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", 
+                               frame.linewidth = 0.3, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.position = "bottom", 
+        legend.key.height = unit(0.15, 'cm'), legend.key.width = unit(0.5, 'cm')) +
+  annotate("text", x = -10, y = 65, label = paste("AUC =", round(fit$auc_tot,2)), colour = 'darkgrey', hjust = 0)
+
+presence_map <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.position = 'none')
+
+# plot_grid(prob_map + theme(legend.position="none"), presence_map, get_legend(prob_map), "",
+#           rel_heights = c(20, 2), ncol = 2)
+
+
+plot_grid(prob_map + theme(legend.position="none"), presence_map,
+          ncol = 2)
+
+```

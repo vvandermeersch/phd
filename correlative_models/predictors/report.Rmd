@@ -1,0 +1,473 @@
+---
+output: 
+  stevetemplates::article:
+    fig_caption: true
+#bibliography: master.bib
+biblio-style: apsr
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+#geometry: margin=1cm
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+header-includes:
+  - \usepackage{xcolor}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.8\textwidth, textfont=it, font=small]{caption}
+  - \usepackage{nopageno}
+  - \setlength{\voffset}{-0.4in}
+  - \geometry{top=1in, bottom=-1in, left=1.25in, right=1.25in}
+
+---
+
+```{r setup, include=FALSE}
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_report"
+
+library(ggplot2)
+library(cowplot)
+library(dplyr)
+library(corrplot)
+
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      cache.path = '_cache/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+
+
+```
+
+```{r data, include=FALSE}
+# Simulation (at European scale) folder
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+
+# Load predictors
+load(file.path(wd, "predictors_data.Rdata"))
+
+```
+
+
+```{r predictors_map, echo=FALSE, fig.align = "center", fig.cap = "Default predictors: (A) maximum temperature of warmest month, (B) minimum temperature of coldest month, and (C) temperature seasonality (standard deviation). Custom predictors: (D) mean GDD between Mars and October, (E) number of days with Tmean<10 between November and February, and (F) last day of frost between January and July.", fig.pos="H", fig.height = 9}
+
+gdd <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = sum_GDD), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#8FAF5C", limits=c(300,6000)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+endodormance <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_10deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#9692BF", limits=c(0,121)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+last_frost <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = lastd_frost), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,208)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+bio5 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = bio5), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#EF9935", limits=c(2,41)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+bio6 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = bio6), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(high = "#EBEBD3", low = "#13C4FF", limits=c(-21,12), rev) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+bio4 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = bio4/100), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#EAC5D8", limits=c(2,12)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+
+
+plot_grid(bio5,
+          gdd,
+          bio6,
+          endodormance,
+          bio4,
+          last_frost,
+          ncol=2,
+          labels = c("(A)", "(D)", "(B)", "(E)", "(C)", "(F)"),
+          label_size = 10)
+
+```
+
+```{r new_predictors_map, echo=FALSE, fig.align = "center", fig.cap = "Custom predictors: (A) mean GDD between Mars and October, (B) number of days with Tmean<10 between November and February, and (C) last day of frost between January and July. New custom predictors: (D) mean GDD between Mars and May, (E) mean GDD between June and September, (F) number of days with Tmin<-5 between April and May, and (G) number of days with Tmin<0 between April and May.", fig.pos="H", fig.height = 9}
+
+gdd <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = sum_GDD), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#8FAF5C", limits=c(300,6000)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+endodormance <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_10deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#9692BF", limits=c(0,121)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+last_frost <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = lastd_frost), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,208)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+leaf_gdd <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = sum_leaf_GDD), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#8FAF5C", limits=c(4,1641)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+fruit_gdd <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = sum_fruit_GDD), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#8FAF5C", limits=c(279,3720)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+frost_days_5 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_neg5deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,51)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+frost_days_0 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_neg0deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,60)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+
+
+plot_grid(gdd,
+          leaf_gdd,
+          endodormance,
+          fruit_gdd,
+          last_frost,
+          frost_days_5,
+          "",
+          frost_days_0,
+          ncol=2,
+          labels = c("(A)", "(D)", "(B)", "(E)", "(C)", "(F)", "", "(G)"),
+          label_size = 10)
+
+```
+
+```{r neeew_predictors_map, echo=FALSE, fig.align = "center", fig.cap = "(A) mean GDD between Mars and October, (B) number of days with Tmean<10 between November and February, (C) Number of days with Tmean>10C (Mar-Oct), and (D) Number of days with Tmean<5C (Nov-Feb).", fig.pos="H", fig.height = 7}
+
+growingdays <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_sup10deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#8FAF5C", limits=c(0,245)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+endodormance5 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_5deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#9692BF", limits=c(0,121)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+
+
+plot_grid(gdd,
+          growingdays,
+          endodormance,
+          endodormance5,
+          ncol=2,
+          labels = c("(A)", "(C)", "(B)", "(D)"),
+          label_size = 10)
+
+```
+
+```{r new_frost_predictors_map, echo=FALSE, fig.align = "center", fig.cap = "Just a test :-)", fig.pos="H", fig.height = 9, eval= F}
+
+frost_days_5 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_neg5deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,51)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+frost_days_0 <- ggplot(data=predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = nd_neg0deg), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,60)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+frost_predictors_data <- data.frame(
+  lat = predictors_data$lat,
+  lon = predictors_data$lon,
+  frost_weeks_0 = predictors_data$nd_neg0deg %/% 7)
+
+
+frost_weeks_0 <- ggplot(data=frost_predictors_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = frost_weeks_0), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#7E9FC2", limits=c(0,8)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+
+
+plot_grid(frost_days_5,
+          frost_weeks_0,
+          frost_days_0,
+          ncol=2,
+          labels = c("(A)", "(C)", "(B)"),
+          label_size = 10)
+
+```
+
+```{r corr_all, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of all predictors.", fig.pos="H", fig.height = 15, eval = T}
+
+bc_predictors <- c("bio1", "bio5", "bio6", "bio4", "bio12", "bio14", "bio13", "bio15")
+bc_fullnames <- c("Annual mean temperature", "Max. temp. warmest month", "Min. temp. coldest month", "Temperature seasonality", 
+                    "Annual precipitation", "Prec. of driest month", "Prec. of wettest month", "Precipitation seasonality")
+soil_predictors <- c("WHC", "bld", "pH", "nitrogen", "carbon")
+soil_fullnames <- c("Water holding cap.", "Bulk density", "pH", "Nitrogen", "Carbon")
+cc_predictors <- c("sum_GDD", "sum_GDD5", "sum_apsep_GDD5",
+                   "sum_leaf_GDD", "sum_fruit_GDD", "nd_sup10deg",
+                   "nd_10deg", "nd_5deg", 
+                   "nd_neg5deg", "nd_neg0deg",
+                   "nd_summerfrost",
+                   "lastd_frost",  "w_bal")
+cc_fullnames <- c("GDD (Mar-Oct)", "GDD>5 (Mar-Oct)", "GDD>5 (Apr-Sep)","GDD (Mar-May)", "GDD (Jun-Sep)", "Num. of days with Tmean>10C (Mar-Oct)",
+                  "Num. of days with Tmean<10C (Nov-Feb)", "Num. of days with Tmean<5C (Nov-Feb)", 
+                  "Num. of days with Tmin<-5C (April-May)", "Num. of days with Tmin<0C (April-May)",
+                  "Num. of days of summer frost",
+                  "Last frost day (Jan-Jul)","Water balance (Jun-Jul)")
+predictors <- c(bc_predictors, soil_predictors, cc_predictors)
+predictors_fullnames <- c(bc_fullnames, soil_fullnames, cc_fullnames)
+predictors_names <- data.frame(predictors, predictors_fullnames)
+
+# # all predictors
+# predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+# mat_corr <- cor(predictors_data_cor) 
+# colnames(mat_corr) <- predictors_fullnames
+# 
+# corrplot(mat_corr, method="color",   
+#          type="upper",  
+#          addCoef.col = "black", # ajout du coefficient de correlation
+#          tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+#          diag = TRUE)
+
+
+```
+
+```{r corr_default, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of default predictors.", fig.pos="H", fig.height = 6, eval = T}
+
+predictors <- c("bio1","bio5", "bio6", "bio4", "bio12", "bio13", "bio14", "bio15", "pH", "bld", "nitrogen", "carbon")
+
+# all predictors
+predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+mat_corr <- cor(predictors_data_cor) 
+colnames(mat_corr) <- t(left_join(data.frame(predictors), predictors_names) %>% dplyr::select(predictors_fullnames))
+
+corrplot(mat_corr, method="color",   
+         type="upper",  
+         addCoef.col = "black", # ajout du coefficient de correlation
+         tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+         diag = TRUE)
+
+
+```
+
+```{r corr_default_sel, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of selected default predictors.", fig.pos="H", fig.height = 6, eval = T}
+
+predictors <- c("bio5", "bio6", "bio4", "bio13", "bio14", "bio15", "pH", "bld", "nitrogen", "carbon")
+
+# all predictors
+predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+mat_corr <- cor(predictors_data_cor) 
+colnames(mat_corr) <- t(left_join(data.frame(predictors), predictors_names) %>% dplyr::select(predictors_fullnames))
+
+corrplot(mat_corr, method="color",   
+         type="upper",  
+         addCoef.col = "black", # ajout du coefficient de correlation
+         tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+         diag = TRUE)
+
+
+```
+
+```{r corr_custom, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of custom predictors.", fig.pos="H", fig.height = 6, eval = T}
+
+predictors <- c("WHC","sum_GDD", "sum_leaf_GDD", "nd_sup10deg", "sum_fruit_GDD", "nd_10deg", "nd_5deg", "nd_neg5deg", "nd_neg0deg", "lastd_frost",  "w_bal")
+
+# all predictors
+predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+mat_corr <- cor(predictors_data_cor) 
+colnames(mat_corr) <- t(left_join(data.frame(predictors), predictors_names) %>% dplyr::select(predictors_fullnames))
+
+corrplot(mat_corr, method="color",   
+         type="upper",  
+         addCoef.col = "black", # ajout du coefficient de correlation
+         tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+         diag = TRUE)
+
+
+```
+
+```{r corr_custom_sel, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of selected custom predictors.", fig.pos="H", fig.height = 6, eval = T}
+
+predictors <- c("WHC","sum_GDD", "nd_10deg", "nd_neg5deg", "w_bal", "bio6")
+
+# all predictors
+predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+mat_corr <- cor(predictors_data_cor) 
+colnames(mat_corr) <- t(left_join(data.frame(predictors), predictors_names) %>% dplyr::select(predictors_fullnames))
+
+corrplot(mat_corr, method="color",   
+         type="upper",  
+         addCoef.col = "black", # ajout du coefficient de correlation
+         tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+         diag = TRUE)
+
+
+```
+
+```{r corr_custom_sel2, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of selected custom predictors.", fig.pos="H", fig.height = 6, eval = T}
+
+predictors <- c("WHC","sum_GDD", "nd_sup10deg", "nd_5deg", "nd_neg5deg", "w_bal")
+
+# all predictors
+predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+mat_corr <- cor(predictors_data_cor) 
+colnames(mat_corr) <- t(left_join(data.frame(predictors), predictors_names) %>% dplyr::select(predictors_fullnames))
+
+corrplot(mat_corr, method="color",   
+         type="upper",  
+         addCoef.col = "black", # ajout du coefficient de correlation
+         tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+         diag = TRUE)
+
+
+```
+
+
+```{r corr_lit, echo=FALSE, fig.align = "center", fig.cap = "Correlogram of selected lit. predictors.", fig.height = 8, eval = T}
+
+predictors <- c("bio6", "nd_summerfrost", "bio12", "w_bal", "sum_GDD5", "sum_apsep_GDD5", "WHC", "pH", "carbon")
+
+# all predictors
+predictors_data_cor <- predictors_data %>% dplyr::select(all_of(predictors))
+mat_corr <- cor(predictors_data_cor, method = "pearson") 
+colnames(mat_corr) <- t(left_join(data.frame(predictors), predictors_names) %>% dplyr::select(predictors_fullnames))
+
+corrplot(mat_corr, method="color",   
+         type="upper",  
+         addCoef.col = "black", # ajout du coefficient de correlation
+         tl.col="black", tl.srt=45, #rotation des etiquettes de textes
+         diag = TRUE)
+
+
+```
+
+<!--
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+-->

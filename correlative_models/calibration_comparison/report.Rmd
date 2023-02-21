@@ -1,0 +1,343 @@
+---
+output: 
+  stevetemplates::article:
+    fig_caption: true
+#bibliography: master.bib
+biblio-style: apsr
+#title: "CSDM calibration comparison"
+# thanks: "Replication files are available on the author's Github account (http://github.com/svmiller). **Current version**: `r format(Sys.time(), '%B %d, %Y')`; **Corresponding author**: svmille@clemson.edu."
+#author:
+#- name: Victor Van der Meersch
+#  affiliation: CEFE, CNRS
+# abstract: "This document provides some insights to compare different correlative models."
+# keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+#geometry: margin=1cm
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+header-includes:
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.8\textwidth, textfont=it, font=small]{caption}
+  - \usepackage{nopageno}
+  - \setlength{\voffset}{-0.4in}
+  - \geometry{top=1in, bottom=-1in, left=1.25in, right=1.25in}
+
+---
+
+```{r setup, include=FALSE}
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+
+source("C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
+
+library(AUC)
+library(ggplot2)
+library(colorspace)
+library(dplyr)
+library(ecospat)
+library(abind)
+library(Matrix)
+library(glmnet)
+library(dismo)
+library(mgcv)
+library(disdat)
+library(cowplot)
+library(randomForest)
+
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+
+```
+
+```{r data, include=FALSE}
+sp_name <- 'fagus_sylvatica'
+
+# model folders
+model_types <- c("gam", "gam",
+                 "lasso_glm", "lasso_glm",
+                 "maxent", "maxent",
+                 "random_forest", "random_forest",
+                 "brt", "brt",
+                 
+                 "gam", "gam",
+                 "lasso_glm", "lasso_glm",
+                 "random_forest", "random_forest",
+                 "brt", "brt",
+                 
+                 "biomod", "biomod",
+                 "custom_ensemble", "custom_ensemble")
+model_names <- c("gam_defpred_2022-06-14.rds", "gam_custpred_2022-06-14.rds",
+                 "lasso_glm_defpred_2022-06-14.rds", "lasso_glm_custpred_2022-06-14.rds",
+                 "maxent_defpred_2022-06-14.rds", "maxent_custpred_2022-06-14.rds",
+                 "random_forest_defpred_2022-06-14.rds", "random_forest_custpred_2022-06-14.rds",
+                 "brt_defpred_2022-06-14.rds", "brt_custpred_2022-06-14.rds",
+                 
+                 "gam_pa_defpred_2022-06-14.rds", "gam_pa_custpred_2022-06-14.rds",
+                 "lasso_glm_pa_defpred_2022-06-14.rds", "lasso_glm_pa_custpred_2022-06-14.rds",
+                 "random_forest_pa_defpred_2022-06-14.rds", "random_forest_pa_custpred_2022-06-14.rds",
+                 "brt_pa_defpred_2022-06-14.rds", "brt_pa_custpred_2022-06-14.rds",
+                 
+                 "biomod_defpred_2022-06-14.rds", "biomod_custpred_2022-06-14.rds",
+                 "custom_ensemble_defpred_2022-06-14.rds", "custom_ensemble_custpred_2022-06-14.rds"
+                 )
+model_preds <- c(rep(c("default", "custom"), 11))
+
+model_data <- c(rep("p-o", 10),
+                rep("p/a", 8),
+                rep("p-o ensemble", 4))
+
+fitness <- c()
+auc <- c()
+
+
+# predictors
+wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+load(file.path(wd_pred, "predictors_data.Rdata"))
+
+
+```
+
+```{r compute_predictions, include=FALSE, cache = T, eval=F}
+
+# not used anymore
+
+for(i in 1:length(model_names)){
+  # load fit file
+  mod_dir <- file.path(wd, model_types[i])
+  fit_file <- file.path(mod_dir, "fit", sp_name, model_names[i])
+  outfile <- readRDS(fit_file)
+  # load predictors
+  europe_data <- predictors_data %>%
+    dplyr::select(c("lon", "lat", all_of(outfile$covars))) %>%
+    na.omit()
+  if(model_types[i] == 'gam'){
+    # normalizing
+    j <- 1
+    for(v in outfile$covars){
+      europe_data[, v] <- (europe_data[, v] - outfile$meanv_l[j]) / outfile$sdv_l[j]
+      j <- j+1
+    }
+    fitness[i] <-  list(as.numeric(predict(outfile$model, europe_data, type = "response")))
+  }
+  if(model_types[i] == 'lasso_glm'){
+    quad_obj <- make_quadratic(europe_data, cols = outfile$covars)
+    europe_quad <- predict.make_quadratic(quad_obj, newdata = europe_data)
+    new_vars <- names(europe_quad)[!(names(europe_quad) %in% c("pres", "lon", "lat"))]
+    europe_sparse <- sparse.model.matrix(~. -1, europe_quad[, new_vars])
+    fitness[i] <- list(as.numeric(predict(outfile$model, europe_sparse, 
+                                              type = "response", s = "lambda.min")))
+  }
+  if(model_types[i] == 'maxent'){
+    fitness[i] <- list(predict(outfile$model, europe_data, args = c("outputformat=cloglog")))
+  }
+  if(model_types[i] == 'random_forest'){
+    # normalizing
+    j <- 1
+    for(v in outfile$covars){
+      europe_data[, v] <- (europe_data[, v] - outfile$meanv_l[j]) / outfile$sdv_l[j]
+      j <- j+1
+    }
+    fitness[i] <- list(as.numeric(predict(outfile$model, europe_data, type = "prob")[,"1"]))
+  }
+  auc[i] <- outfile$auc_tot
+}
+
+models <- list(model_types, model_preds, fitness, auc)
+names(models) <- c("type", "predictors", 'fitness', "auc")
+
+
+```
+
+```{r load_predictions, include=FALSE, cache = T, eval=T}
+
+for(i in 1:length(model_names)){
+  # load fit file
+  mod_dir <- file.path(wd, model_types[i])
+  fit_file <- file.path(mod_dir, "fit", sp_name, model_names[i])
+  outfile <- readRDS(fit_file)
+  
+  fitness[i] <- list(outfile$europe_prediction)
+  auc[i] <- outfile$auc_tot
+}
+
+models <- list(model_types, model_preds, model_data, fitness, auc)
+names(models) <- c("type", "predictors", "data", 'fitness', "auc")
+
+
+```
+
+```{r fitness_maps, echo=FALSE, cache = T}
+
+europe_maps <- list()
+
+for(i in 1:10){
+  map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                         fitness = models$fitness[i])
+  names(map_data) <- c("lat", "lon", "fitness")
+  
+  plot <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+    geom_tile(aes(fill = fitness), color = NA) +
+    theme_void() +
+    theme(legend.position="bottom") +
+    theme(legend.title=element_blank()) +
+    ylab("") +
+    xlab("") +
+    scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+    theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm')) +
+    annotate("text", x = -7, y = 65, label = paste("AUC =", parse_number(rds)), colour = 'darkgrey') 
+  
+  assign(paste0("p", i), plot)
+
+}
+
+
+
+```
+
+```{r fitness_pa_maps, echo=FALSE, cache = T}
+
+europe_maps <- list()
+
+for(i in 11:18){
+  map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                         fitness = models$fitness[i])
+  names(map_data) <- c("lat", "lon", "fitness")
+  
+  plot <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+    geom_tile(aes(fill = fitness), color = NA) +
+    theme_void() +
+    theme(legend.position="bottom") +
+    theme(legend.title=element_blank()) +
+    ylab("") +
+    xlab("") +
+    scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+    theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm')) +
+    annotate("text", x = -7, y = 65, label = paste("AUC =", round(models$auc[i], 2)), colour = 'darkgrey') 
+  
+  assign(paste0("p", i), plot)
+
+}
+
+
+
+```
+
+```{r fitness_ensemble, echo=FALSE, cache = T}
+
+europe_maps <- list()
+
+for(i in 19:22){
+  map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                         fitness = models$fitness[i])
+  names(map_data) <- c("lat", "lon", "fitness")
+  
+  if(models$type[i] == "biomod"){
+    map_data$fitness <- scales::rescale(map_data$fitness)
+  }
+  
+  plot <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+    geom_tile(aes(fill = fitness), color = NA) +
+    theme_void() +
+    theme(legend.position="bottom") +
+    theme(legend.title=element_blank()) +
+    ylab("") +
+    xlab("") +
+    scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+    theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm')) +
+    annotate("text", x = -7, y = 65, label = paste("AUC =", round(models$auc[i], 2)), colour = 'darkgrey') 
+  
+  assign(paste0("p", i), plot)
+
+}
+
+
+
+```
+
+```{r plot_reg_grid, echo=FALSE, fig.align = "center", fig.cap = "Fagus sylvatica fitness maps as predicted by GAM, Lasso GLM and MaxEnt models with default predictors (respectively A, C, E) and custom predictors (respectively B, D, F). Calibration data was \\textbf{presence-only data}.", fig.pos="H", , fig.height = 8}
+
+plot_grid(
+  plot_grid(p1 + theme(legend.position = "none"),
+            p2 + theme(legend.position = "none"), 
+            p3 + theme(legend.position = "none"), 
+            p4 + theme(legend.position = "none"), 
+            p5 + theme(legend.position = "none"), 
+            p6 + theme(legend.position = "none"),
+            ncol=2,
+            labels = c("(A)", "(B)", "(C)", "(D)", "(E)", "(F)"),
+            label_size = 10),
+  get_legend(p1),
+  ncol = 1,
+  rel_heights = c(20,1)
+
+)
+
+
+```
+
+```{r plot_grid, echo=FALSE, fig.align = "center", fig.cap = "Fagus sylvatica fitness maps as predicted by Random Forest, Boosted Regression Tree, Biomod and Custom Ensemble models with default predictors (respectively A, C, E, G) and custom predictors (respectively B, D, F, H). Calibration data was \\textbf{presence-only data}.", fig.pos="H", , fig.height = 9.5}
+
+plot_grid(
+  plot_grid(p7 + theme(legend.position = "none"),
+            p8 + theme(legend.position = "none"),
+            p9 + theme(legend.position = "none"),
+            p10 + theme(legend.position = "none"),
+            p19 + theme(legend.position = "none"), 
+            p20 + theme(legend.position = "none"), 
+            p21 + theme(legend.position = "none"), 
+            p22 + theme(legend.position = "none"),
+            ncol=2,
+            labels = c("(A)", "(B)", "(C)", "(D)", "(E)", "(F)", "(G)", "(H)"),
+            label_size = 10),
+  get_legend(p1),
+  ncol = 1,
+  rel_heights = c(20,1)
+
+)
+
+
+```
+
+
+```{r plot_pa_grid, echo=FALSE, fig.align = "center", fig.cap = "Fagus sylvatica fitness maps as predicted by GAM, Lasso GLM Random Forest and Boosted Regression Tree models with default predictors (respectively A, C, E, G) and custom predictors (respectively B, D, F, H). Calibration data was \\textbf{presence/pseudo-absence data}.", fig.pos="H", , fig.height = 9.5}
+
+plot_grid(
+  plot_grid(p11 + theme(legend.position = "none"), 
+            p12 + theme(legend.position = "none"), 
+            p13 + theme(legend.position = "none"), 
+            p14 + theme(legend.position = "none"),
+            p15 + theme(legend.position = "none"), 
+            p16 + theme(legend.position = "none"), 
+            p17 + theme(legend.position = "none"), 
+            p18 + theme(legend.position = "none"),
+            ncol=2,
+            labels = c("(A)", "(B)", "(C)", "(D)", "(E)", "(F)", "(G)", "(H)"),
+            label_size = 10),
+  get_legend(p1),
+  ncol = 1,
+  rel_heights = c(20,1)
+)
+
+
+```
+
+<!--
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+-->

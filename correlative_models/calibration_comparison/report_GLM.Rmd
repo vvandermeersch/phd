@@ -1,0 +1,173 @@
+---
+output: 
+  stevetemplates::article:
+    fig_caption: true
+#bibliography: master.bib
+biblio-style: apsr
+#title: "Lasso GLM comparison with different predictors"
+#author:
+#- name: Victor Van der Meersch
+#  affiliation: CEFE, CNRS
+# abstract: "This document provides some insights to compare different correlative models."
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+#geometry: margin=1cm
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+header-includes:
+  - \usepackage{xcolor}
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.8\textwidth, textfont=it, font=small]{caption}
+  - \usepackage{nopageno}
+  - \setlength{\voffset}{-0.4in}
+  - \geometry{top=1in, bottom=-1in, left=1.25in, right=1.25in}
+
+---
+
+```{r setup, include=FALSE}
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+
+source("C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
+
+library(AUC)
+library(ggplot2)
+library(colorspace)
+library(dplyr)
+library(ecospat)
+library(abind)
+library(Matrix)
+library(glmnet)
+library(dismo)
+library(mgcv)
+library(disdat)
+library(cowplot)
+library(randomForest)
+library(readr)
+
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+
+```
+
+```{r data, include=FALSE}
+sp_name <- 'fagus_sylvatica'
+
+# model folders
+model_types <- c("lasso_glm", "lasso_glm",
+                 "lasso_glm", "lasso_glm",
+                 "lasso_glm", "lasso_glm"
+                 )
+model_names <- c("lasso_glm_defpred_2022-06-28.rds", "lasso_glm_custpred_all_2022-06-28.rds",
+                 "lasso_glm_custpred_wo_WHC_2022-06-28.rds", "lasso_glm_custpred_wo_tmin_5_2022-06-28.rds",
+                 "lasso_glm_custpred_w_bio6_2022-06-28.rds", "lasso_glm_pa_litpred_2022-12-06.rds"
+                 )
+model_preds <- c("Default", "Custom", "Custom w/o WHC", "Custom w/o Tmin<-5", "Custom + bio6", "Lit.")
+
+model_data <- c(rep("p-o", 5), "p/a")
+
+fitness <- c()
+auc <- c()
+
+
+# predictors
+wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+load(file.path(wd_pred, "predictors_data.Rdata"))
+
+
+```
+
+
+
+```{r load_predictions, include=FALSE, cache = T, eval=T}
+
+for(i in 1:length(model_names)){
+  # load fit file
+  mod_dir <- file.path(wd, model_types[i])
+  fit_file <- file.path(mod_dir, "fit", sp_name, model_names[i])
+  outfile <- readRDS(fit_file)
+  
+  fitness[i] <- list(outfile$europe_prediction)
+  auc[i] <- outfile$auc_tot
+}
+
+models <- list(model_types, model_preds, model_data, fitness, auc)
+names(models) <- c("type", "predictors", "data", 'fitness', "auc")
+
+
+```
+
+```{r fitness_maps, echo=FALSE, cache = T}
+
+europe_maps <- list()
+
+for(i in 1:length(model_names)){
+  map_data <- data.frame(lat = predictors_data$lat, lon = predictors_data$lon,
+                         fitness = models$fitness[i])
+  names(map_data) <- c("lat", "lon", "fitness")
+  
+  plot <- ggplot(data=map_data, aes(x = lon, y = lat)) + 
+    geom_tile(aes(fill = fitness), color = NA) +
+    theme_void() +
+    theme(legend.position="bottom") +
+    theme(legend.title=element_blank()) +
+    ylab("") +
+    xlab("") +
+    scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+    theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm')) +
+    annotate("text", x = -10, y = 68, label = model_preds[i], colour = 'darkgrey', hjust = 0, size = 3.5) +
+    annotate("text", x = -10, y = 65, label = paste("AUC =", round(auc[i],2)), colour = 'darkgrey', hjust = 0)
+    
+    
+    
+    
+  
+  assign(paste0("p", i), plot)
+
+}
+
+
+
+```
+
+
+```{r plot_reg_grid, echo=FALSE, fig.align = "center", fig.cap = "Fagus sylvatica fitness maps as predicted by Lasso GLM with (A) default predictors, (B) all custom predictors, (C) custom predictors except WHC, (D) custom predictors except ndays with Tmin<-5, (E) custom predictors and bio6 variable. Calibration data was \\textbf{presence-only data}.", fig.pos="H", , fig.height = 9}
+
+plot_grid(
+  plot_grid(p1 + theme(legend.position = "none"),
+            p2 + theme(legend.position = "none"), 
+            p3 + theme(legend.position = "none"), 
+            p4 + theme(legend.position = "none"), 
+            p5 + theme(legend.position = "none"), 
+            p6 + theme(legend.position = "none"), 
+            ncol=2,
+            labels = c("(A)", "(B)", "(C)", "(D)", "(E)", "(F)"),
+            label_size = 10),
+  get_legend(p1),
+  ncol = 1,
+  rel_heights = c(20,1)
+
+)
+
+
+```
+
+
+
+<!--
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+-->
