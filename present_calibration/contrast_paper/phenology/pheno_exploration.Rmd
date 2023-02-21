@@ -1,0 +1,501 @@
+---
+output:
+  pdf_document: default
+geometry: "left=1cm,right=1cm,top=1cm,bottom=1.5cm"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  
+---
+
+## Leaf unfolding date across Europe, *PEP725* and *TEMPO* databases (1970-2000)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/contrast_paper/phenology"
+source(file.path(wd, "pep725andtempo_exploration.R"))
+
+```
+
+```{r pep725_map, include=TRUE, fig.height = 4, fig.width = 8, fig.align = "center", fig.cap = "PEP725 data, 5 observations min., BBCH = 11.", fig.pos="H", fig.showtext=TRUE}
+
+
+pep725_3obsmin_map
+
+
+```
+
+```{r tempo_map, include=TRUE, fig.height = 4, fig.width = 8, fig.align = "center", fig.cap = "TEMPO data, 5 observations min., BBCH = 9:15.", fig.pos="H", fig.showtext=TRUE}
+
+
+tempo_3obsmin_map
+
+
+```
+
+\newpage
+
+```{r raster_map, include=TRUE, fig.height = 6, fig.width = 10, fig.align = "center", fig.cap = "PEP725 and TEMPO data, projected on ERA5Land grid", fig.pos="H", fig.showtext=TRUE}
+
+raster_map
+
+```
+
+\newpage
+
+## Comparison of forward and first best calibration
+
+```{r pheno_forward, include=FALSE}
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+source(file.path(wd, "functions", "read_species_file.R"))
+source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
+
+# Way to get lat/lon
+climate_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed"
+alt_file <- paste0(climate_folder, "/ERA5LAND_", "Altitude.fit")
+alt <- fread(alt_file, showProgress=F)
+colnames(alt) <- c("lat", "lon", "alt")
+alt$lat <- round(alt$lat, 1)
+alt$lon <- round(alt$lon, 1)
+alt$points <- as.numeric(rownames(alt))
+
+forward_sim_folder <- "D:/simulations/phenofit/forward"
+phenofit_forward_calibration <- "fagus_sylvatica/EvolLett2019"
+unfoldingdate <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "LeafUnfoldingDate.txt"))
+forward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(unfoldingdate))
+
+records_all_r_df$x <- round(records_all_r_df$x, 1)
+records_all_r_df$y <- round(records_all_r_df$y, 1)
+forward_comparison <- left_join(forward_unfoldingdate, records_all_r_df[-3], by = c("lat" = "y", "lon" = "x"))
+
+forward_comparison <- na.omit(forward_comparison)
+
+forward_rmse <- sqrt(mean((forward_comparison$MEAN_DAY - forward_comparison$date)^2))
+
+forward_comparison$rmse <- apply(forward_comparison,1, function(i){
+  sqrt(mean((i['MEAN_DAY'] - i['date'])^2))
+})
+
+
+forward_comp_map <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = forward_comparison, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,80), 
+                       midpoint = 40, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(forward_rmse), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+```
+
+```{r pheno_backward, include=FALSE}
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+source(file.path(wd, "functions", "read_species_file.R"))
+source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
+
+sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data'
+phenofit_best_calibrations <- c("subset4_rep1", "subset5_rep2", "subset10_rep10", "subset4_rep3", "subset8_rep2")
+best_unfoldingdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "LeafUnfoldingDate.txt"))
+backward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_unfoldingdate))
+
+records_all_r_df$x <- round(records_all_r_df$x, 1)
+records_all_r_df$y <- round(records_all_r_df$y, 1)
+backward_comparison <- left_join(backward_unfoldingdate, records_all_r_df[-3], by = c("lat" = "y", "lon" = "x"))
+
+backward_comparison <- na.omit(backward_comparison)
+
+backward_rmse = sqrt(mean((backward_comparison$MEAN_DAY - backward_comparison$date)^2))
+
+backward_comparison$rmse <- apply(backward_comparison,1, function(i){
+  sqrt(mean((i['MEAN_DAY'] - i['date'])^2))
+})
+
+
+backward_comp_map <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = backward_comparison, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,80), 
+                       midpoint = 40, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(backward_rmse), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+backward_comp_map_true <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = backward_comparison, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,154), 
+                       midpoint = 75, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(backward_rmse), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+
+```
+
+
+```{r forward_comp, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - forward dates", fig.pos="H", fig.showtext=TRUE}
+
+forward_comp_map
+
+```
+
+```{r bacwkard_comp, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - backward dates", fig.pos="H", fig.showtext=TRUE}
+
+backward_comp_map
+
+```
+
+```{r hist, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "Histogram of RMSE", fig.pos="H", fig.showtext=TRUE}
+
+
+data <- data.frame(
+  type = c( rep("Forward", nrow(forward_comparison)), rep("Backward", nrow(forward_comparison)) ),
+  value = c( forward_comparison$rmse, backward_comparison$rmse )
+)
+
+ggplot(data, aes(x=value, fill=type)) +
+    geom_histogram(binwidth=1, color="#e9ecef", alpha=0.5, position = 'identity') +
+    scale_fill_manual(values=c("#69b3a2", "#404080")) +
+  theme_minimal() +
+    labs(fill="") +
+  xlim(0,80) +
+  xlab("RMSE") +
+  ylab("")
+
+```
+
+```{r bacwkard_comp_true, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - backward dates, full range legend", fig.pos="H", fig.showtext=TRUE}
+
+backward_comp_map_true
+
+```
+
+
+## Comparison of forward and second best calibration
+
+```{r pheno_backward2, include=FALSE}
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+source(file.path(wd, "functions", "read_species_file.R"))
+source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
+
+sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data'
+phenofit_best_calibrations <- c("subset4_rep1", "subset5_rep2", "subset10_rep10", "subset4_rep3", "subset8_rep2")
+best_unfoldingdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "LeafUnfoldingDate.txt"))
+backward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_unfoldingdate))
+
+records_all_r_df$x <- round(records_all_r_df$x, 1)
+records_all_r_df$y <- round(records_all_r_df$y, 1)
+backward_comparison2 <- left_join(backward_unfoldingdate, records_all_r_df[-3], by = c("lat" = "y", "lon" = "x"))
+
+backward_comparison2 <- na.omit(backward_comparison2)
+
+backward_rmse2 = sqrt(mean((backward_comparison2$MEAN_DAY - backward_comparison2$date)^2))
+
+backward_comparison2$rmse <- apply(backward_comparison2,1, function(i){
+  sqrt(mean((i['MEAN_DAY'] - i['date'])^2))
+})
+
+
+backward_comp_map2 <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = backward_comparison2, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,61), 
+                       midpoint = 30, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(backward_rmse2), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+backward_comp_map_true2 <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = backward_comparison2, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,130), 
+                       midpoint = 65, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(backward_rmse2), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+
+```
+
+```{r pheno_forward2, include=FALSE}
+forward_comp_map <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = forward_comparison, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,61), 
+                       midpoint = 30, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(forward_rmse, 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+```
+
+```{r forward_comp2, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - forward dates", fig.pos="H", fig.showtext=TRUE}
+
+forward_comp_map
+
+```
+
+```{r bacwkard_comp2, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - backward dates", fig.pos="H", fig.showtext=TRUE}
+
+backward_comp_map2
+
+```
+
+```{r hist2, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "Histogram of RMSE", fig.pos="H", fig.showtext=TRUE}
+
+
+data <- data.frame(
+  type = c( rep("Forward", nrow(forward_comparison)), rep("Backward", nrow(forward_comparison)) ),
+  value = c( forward_comparison$rmse, backward_comparison2$rmse )
+)
+
+ggplot(data, aes(x=value, fill=type)) +
+    geom_histogram(binwidth=1, color="#e9ecef", alpha=0.5, position = 'identity') +
+    scale_fill_manual(values=c("#69b3a2", "#404080")) +
+  theme_minimal() +
+    labs(fill="") +
+  xlim(0,61) +
+  xlab("RMSE") +
+  ylab("")
+
+```
+
+```{r bacwkard_comp_true2, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - backward dates, full range legend", fig.pos="H", fig.showtext=TRUE}
+
+backward_comp_map_true2
+
+```
+
+## Comparison of forward and third best calibration
+
+```{r pheno_backward3, include=FALSE}
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+source(file.path(wd, "functions", "read_species_file.R"))
+source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
+
+sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data'
+phenofit_best_calibrations <- c("subset4_rep1", "subset5_rep2", "subset10_rep10", "subset4_rep3", "subset8_rep2")
+best_unfoldingdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "LeafUnfoldingDate.txt"))
+backward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_unfoldingdate))
+
+records_all_r_df$x <- round(records_all_r_df$x, 1)
+records_all_r_df$y <- round(records_all_r_df$y, 1)
+backward_comparison3 <- left_join(backward_unfoldingdate, records_all_r_df[-3], by = c("lat" = "y", "lon" = "x"))
+
+backward_comparison3 <- na.omit(backward_comparison3)
+
+backward_rmse3 = sqrt(mean((backward_comparison3$MEAN_DAY - backward_comparison3$date)^2))
+
+backward_comparison3$rmse <- apply(backward_comparison3,1, function(i){
+  sqrt(mean((i['MEAN_DAY'] - i['date'])^2))
+})
+
+
+backward_comp_map3 <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = backward_comparison3, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,80), 
+                       midpoint = 40, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(backward_rmse3), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+backward_comp_map_true3 <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = backward_comparison3, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,202), 
+                       midpoint = 100, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(backward_rmse3), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+
+```
+
+```{r pheno_forward3, include=FALSE}
+forward_comp_map <- ggplot() +
+  geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
+  geom_raster(data = forward_comparison, aes(x = lon, y = lat, fill = rmse)) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient2(name = stringr::str_wrap("RMSE", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(0,80), 
+                       midpoint = 40, na.value = NA,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", 
+                                               frame.linewidth = 0.5, ticks = FALSE)) +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm')) +
+  ylim(41,60) +
+  xlim(-9,20) +
+  annotate("text", x = -2, y = 60, label = paste("RMSE =", round(max(forward_rmse), 2)),
+           colour = 'black', size = 3.6, fontface = "bold")
+
+```
+
+```{r forward_comp3, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - forward dates", fig.pos="H", fig.showtext=TRUE}
+
+forward_comp_map
+
+```
+
+```{r bacwkard_comp3, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - backward dates", fig.pos="H", fig.showtext=TRUE}
+
+backward_comp_map3
+
+```
+
+```{r hist3, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "Histogram of RMSE", fig.pos="H", fig.showtext=TRUE}
+
+
+data <- data.frame(
+  type = c( rep("Forward", nrow(forward_comparison)), rep("Backward", nrow(forward_comparison)) ),
+  value = c( forward_comparison$rmse, backward_comparison3$rmse )
+)
+
+ggplot(data, aes(x=value, fill=type)) +
+    geom_histogram(binwidth=1, color="#e9ecef", alpha=0.5, position = 'identity') +
+    scale_fill_manual(values=c("#69b3a2", "#404080")) +
+  theme_minimal() +
+    labs(fill="") +
+  xlim(0,80) +
+  xlab("RMSE") +
+  ylab("")
+
+```
+
+```{r bacwkard_comp_true3, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "RMSE - backward dates, full range legend", fig.pos="H", fig.showtext=TRUE}
+
+backward_comp_map_true3
+
+```
+
+## Histogram
+
+```{r hist4, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "Histogram of RMSE", fig.pos="H", fig.showtext=TRUE}
+
+
+data <- data.frame(
+  type = c( rep("Forward", nrow(forward_comparison)), rep("Backward 1st", nrow(forward_comparison)), rep("Backward 2nd", nrow(forward_comparison)), rep("Backward 3rd", nrow(forward_comparison)) ),
+  value = c( forward_comparison$rmse, backward_comparison$rmse, backward_comparison2$rmse, backward_comparison3$rmse )
+)
+
+ggplot(data, aes(x=value, fill=type)) +
+    geom_histogram(binwidth=1, color="#e9ecef", alpha=0.5, position = 'identity') +
+    scale_fill_manual(values=c("#7E5A9B", "#B288C0", "#E4B7E5", "#69b3a2")) +
+  theme_minimal() +
+    labs(fill="") +
+  xlim(0,80) +
+  xlab("RMSE") +
+  ylab("")
+
+```
+
+
+
+```{r hist5, include=TRUE, fig.height = 5, fig.width = 10, fig.align = "center", fig.cap = "Histogram of RMSE", fig.pos="H", fig.showtext=TRUE}
+
+
+data <- data.frame(
+  type = c( rep("Forward", nrow(forward_comparison)), rep("Backward 1st", nrow(forward_comparison)), rep("Backward 2nd", nrow(forward_comparison)), rep("Backward 3rd", nrow(forward_comparison)) ),
+  value = c( forward_comparison$rmse, backward_comparison$rmse, backward_comparison2$rmse, backward_comparison3$rmse )
+)
+
+ggplot(data, aes(x=value, fill=type)) +
+    geom_histogram(binwidth=1, color="#e9ecef", alpha=0.5, position = 'identity') +
+    scale_fill_manual(values=c("#6699CC", "#69b3a2", "#B288C0",  "#E1B07E")) +
+  theme_minimal() +
+    labs(fill="") +
+  xlim(0,80) +
+  xlab("RMSE") +
+  ylab("")
+
+```

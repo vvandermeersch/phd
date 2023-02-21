@@ -1,0 +1,10 @@
+# File for Phenofit4 CommandScript
+# Generated with Rstudio (time: 2022-03-11 07:19:27, user: vandermeersch)
+					
+speciesInputDir =
+climateInputDir =
+outputDir = C:/Users/vandermeersch/Documents/CEFE/thesis/calibration/climate_data/visualise/output
+quietMode = true
+					
+# speciesFileName	climateFolderName	climateScenario	startingYear	endingYear
+C:/Users/vandermeersch/Documents/CEFE/thesis/calibration/phenofit/run/Fagus_sylvatica_backward.species	D:/climate/ERA5-Land/phenofit_format/transformed	ERA5LAND	1970	2000

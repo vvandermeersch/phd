@@ -1,0 +1,1321 @@
+---
+output:
+  pdf_document: default
+geometry: "left=1cm,right=1cm,top=1cm,bottom=1.5cm"
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  
+---
+
+## Contrasts between forward and backward calibrations, *Abies alba*
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+library(ggplot2)
+library(cowplot)
+library(dplyr)
+library(AUC)
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+source(file.path(wd, "functions", "read_species_file.R"))
+source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
+
+# Way to get lat/lon
+climate_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed"
+alt_file <- paste0(climate_folder, "/ERA5LAND_", "Altitude.fit")
+alt <- fread(alt_file, showProgress=F)
+colnames(alt) <- c("lat", "lon", "alt")
+alt$lat <- round(alt$lat, 1)
+alt$lon <- round(alt$lon, 1)
+alt$points <- as.numeric(rownames(alt))
+
+
+```
+
+```{r phenofit_species, include=FALSE}
+
+sim_folder <- 'D:/simulations/phenofit/backward/abies_alba/paper_data'
+
+forward_sim_folder <- "D:/simulations/phenofit/forward"
+
+# Fagus sylvatica
+# phenofit_best_calibrations <- c("subset4_rep1", "subset5_rep2", "subset10_rep10", "subset4_rep3", "subset8_rep2")
+# phenofit_forward_calibration <- "fagus_sylvatica/EvolLett2019"
+
+# Quercus ilex
+# phenofit_best_calibrations <- c("subset1_rep1", "subset2_rep2", "subset1_rep5", "subset2_rep5", "subset2_rep4")
+# phenofit_forward_calibration <- "quercus_ilex/FTauc/modcode"
+
+# Abies alba
+phenofit_best_calibrations <- c("subset2_rep5", "subset2_rep2", "subset1_rep4", "subset2_rep4", "subset2_rep1")
+phenofit_forward_calibration <- "abies_alba/VVanderMeersch2"
+
+# Species true presence/absence
+sp_folder <- "D:/species/processed"
+species_presabs <- readRDS(file.path(sp_folder, "abies_alba/abies_alba_presabs_woUkraine.rds"))
+
+
+
+```
+
+```{r unfoldingdates, include=FALSE}
+best_unfoldingdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "LeafUnfoldingDate.txt"))
+backward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_unfoldingdate))
+backward_unfoldingdate[backward_unfoldingdate$date > 250, "date"] <- NA
+backward_unfolding_map_1 <- ggplot(data=backward_unfoldingdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf unfolding day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(0.7, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_unfoldingdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "LeafUnfoldingDate.txt"))
+backward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_unfoldingdate))
+backward_unfoldingdate[backward_unfoldingdate$date > 250, "date"] <- NA # 21 june
+backward_unfolding_map_2 <- ggplot(data=backward_unfoldingdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf unfolding day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(0.7, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_unfoldingdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "LeafUnfoldingDate.txt"))
+backward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_unfoldingdate))
+backward_unfoldingdate[backward_unfoldingdate$date > 250, "date"] <- NA # 21 june
+backward_unfolding_map_3 <- ggplot(data=backward_unfoldingdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf unfolding day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(0.7, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+unfoldingdate <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "LeafUnfoldingDate.txt"))
+forward_unfoldingdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(unfoldingdate))
+forward_unfoldingdate[forward_unfoldingdate$date > 250, "date"] <- NA
+forward_unfolding_map <- ggplot(data=forward_unfoldingdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r floweringdates, include=FALSE}
+best_floweringdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "FloweringDate.txt"))
+backward_floweringdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_floweringdate))
+backward_floweringdate[backward_floweringdate$date > 250, "date"] <- NA # 31st october
+backward_flowering_map_1 <- ggplot(data=backward_floweringdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Flowering day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_floweringdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "FloweringDate.txt"))
+backward_floweringdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_floweringdate))
+backward_floweringdate[backward_floweringdate$date > 250, "date"] <- NA # 31st october
+backward_flowering_map_2 <- ggplot(data=backward_floweringdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Flowering day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_floweringdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "FloweringDate.txt"))
+backward_floweringdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_floweringdate))
+backward_floweringdate[backward_floweringdate$date > 250, "date"] <- NA # 31st october
+backward_flowering_map_3 <- ggplot(data=backward_floweringdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Flowering day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+floweringdate <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "FloweringDate.txt"))
+forward_floweringdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(floweringdate))
+forward_floweringdate[forward_floweringdate$date > 250, "date"] <- NA # 31st october
+forward_flowering_map <- ggplot(data=forward_floweringdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140,250), 
+                       midpoint = 200,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r maturationdates, include=FALSE}
+best_maturationdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "FruitMaturationDate.txt"))
+backward_maturationdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_maturationdate))
+backward_maturationdate[backward_maturationdate$date > 365, "date"] <- NA 
+backward_maturation_map_1 <- ggplot(data=backward_maturationdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit maturation day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140, 365), 
+                       midpoint = 250,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_maturationdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "FruitMaturationDate.txt"))
+backward_maturationdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_maturationdate))
+backward_maturationdate[backward_maturationdate$date > 365, "date"] <- NA 
+backward_maturation_map_2 <- ggplot(data=backward_maturationdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit maturation day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140, 365), 
+                       midpoint = 250,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_maturationdate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "FruitMaturationDate.txt"))
+backward_maturationdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_maturationdate))
+backward_maturationdate[backward_maturationdate$date > 365, "date"] <- NA 
+backward_maturation_map_3 <- ggplot(data=backward_maturationdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit maturation day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140, 365), 
+                       midpoint = 250,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+maturationdate <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "FruitMaturationDate.txt"))
+forward_maturationdate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(maturationdate))
+forward_maturationdate[forward_maturationdate$date > 365, "date"] <- NA
+forward_maturation_map <- ggplot(data=forward_maturationdate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(140, 365), 
+                       midpoint = 250,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r leafsenescencedates, include=FALSE}
+best_leafsenescencedate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "LeafSenescenceDate.txt"))
+backward_leafsenescencedate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_leafsenescencedate))
+backward_leafsenescencedate[backward_leafsenescencedate$date > 365, "date"] <- NA # 31st october
+backward_leafsenescence_map_1 <- ggplot(data=backward_leafsenescencedate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf Senescence day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(260,max(backward_leafsenescencedate$date)), 
+                       midpoint = 310,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_leafsenescencedate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "LeafSenescenceDate.txt"))
+backward_leafsenescencedate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_leafsenescencedate))
+backward_leafsenescencedate[backward_leafsenescencedate$date > 365, "date"] <- NA # 31st october
+backward_leafsenescence_map_2 <- ggplot(data=backward_leafsenescencedate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf Senescence day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(260,max(backward_leafsenescencedate$date)), 
+                       midpoint = 310,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_leafsenescencedate <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "LeafSenescenceDate.txt"))
+backward_leafsenescencedate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_leafsenescencedate))
+backward_leafsenescencedate[backward_leafsenescencedate$date > 365, "date"] <- NA # 31st october
+backward_leafsenescence_map_3 <- ggplot(data=backward_leafsenescencedate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf Senescence day", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(260,max(backward_leafsenescencedate$date)), 
+                       midpoint = 310,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+leafsenescencedate <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "LeafSenescenceDate.txt"))
+forward_leafsenescencedate <- data.frame(lat= alt$lat, lon =alt$lon, date = t(leafsenescencedate))
+forward_leafsenescencedate[forward_leafsenescencedate$date > 365, "date"] <- NA # 31st october
+forward_leafsenescence_map <- ggplot(data=forward_leafsenescencedate, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#0A9396", mid ="#e9d8a6", high = "#bb3e03", 
+                       limits = c(260,max(forward_leafsenescencedate$date)), 
+                       midpoint = 310,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r survival, include=FALSE }
+best_survival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "Survival.txt"))
+backward_survival_1 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_survival))
+backward_survival_map_1 <- ggplot(data=backward_survival_1, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_survival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "Survival.txt"))
+backward_survival_2 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_survival))
+backward_survival_map_2 <- ggplot(data=backward_survival_2, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_survival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "Survival.txt"))
+backward_survival_3 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_survival))
+backward_survival_map_3 <- ggplot(data=backward_survival_3, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+survival <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "Survival.txt"))
+forward_survival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(survival))
+forward_survival_map <- ggplot(data=forward_survival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r drougthsurvival, include=FALSE }
+best_droughtsurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "DroughtSurvival.txt"))
+backward_droughtsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_droughtsurvival))
+backward_droughtsurvival_map_1 <- ggplot(data=backward_droughtsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Drought Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_droughtsurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "DroughtSurvival.txt"))
+backward_droughtsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_droughtsurvival))
+backward_droughtsurvival_map_2 <- ggplot(data=backward_droughtsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Drought Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_droughtsurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "DroughtSurvival.txt"))
+backward_droughtsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_droughtsurvival))
+backward_droughtsurvival_map_3 <- ggplot(data=backward_droughtsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Drought Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+droughtsurvival <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "DroughtSurvival.txt"))
+forward_droughtsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(droughtsurvival))
+forward_droughtsurvival_map <- ggplot(data=forward_droughtsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r carbonsurvival, include=FALSE }
+best_carbonsurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "CarbonSurvival.txt"))
+backward_carbonsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_carbonsurvival))
+backward_carbonsurvival_map_1 <- ggplot(data=backward_carbonsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Drought Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_carbonsurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "CarbonSurvival.txt"))
+backward_carbonsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_carbonsurvival))
+backward_carbonsurvival_map_2 <- ggplot(data=backward_carbonsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Drought Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_carbonsurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "CarbonSurvival.txt"))
+backward_carbonsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_carbonsurvival))
+backward_carbonsurvival_map_3 <- ggplot(data=backward_carbonsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Drought Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+carbonsurvival <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "CarbonSurvival.txt"))
+forward_carbonsurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(carbonsurvival))
+forward_carbonsurvival_map <- ggplot(data=forward_carbonsurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r temperaturesurvival, include=FALSE }
+best_temperaturesurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "TempSurvival.txt"))
+backward_temperaturesurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_temperaturesurvival))
+backward_temperaturesurvival_map_1 <- ggplot(data=backward_temperaturesurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Temperature Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_temperaturesurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "TempSurvival.txt"))
+backward_temperaturesurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_temperaturesurvival))
+backward_temperaturesurvival_map_2 <- ggplot(data=backward_temperaturesurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Temperature Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_temperaturesurvival <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "TempSurvival.txt"))
+backward_temperaturesurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_temperaturesurvival))
+backward_temperaturesurvival_map_3 <- ggplot(data=backward_temperaturesurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Temperature Survival index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+ temperaturesurvival <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "TempSurvival.txt"))
+forward_temperaturesurvival <- data.frame(lat= alt$lat, lon =alt$lon, date = t(temperaturesurvival))
+forward_temperaturesurvival_map <- ggplot(data=forward_temperaturesurvival, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r fitness, include=FALSE }
+best_fitness <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "Fitness.txt"))
+backward_fitness_1 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_fitness))
+backward_fitness_map_1 <- ggplot(data=backward_fitness_1, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fitness index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_fitness <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "Fitness.txt"))
+backward_fitness_2 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_fitness))
+backward_fitness_map_2 <- ggplot(data=backward_fitness_2, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fitness index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_fitness <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "Fitness.txt"))
+backward_fitness_3 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_fitness))
+backward_fitness_map_3 <- ggplot(data=backward_fitness_3, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fitness index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+fitness <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "Fitness.txt"))
+forward_fitness <- data.frame(lat= alt$lat, lon =alt$lon, date = t(fitness))
+forward_fitness_map <- ggplot(data=forward_fitness, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r leafindex, include=FALSE }
+best_leafindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "LeafIndex.txt"))
+backward_leafindex <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_leafindex))
+backward_leafindex_map_1 <- ggplot(data=backward_leafindex, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_leafindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "LeafIndex.txt"))
+backward_leafindex <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_leafindex))
+backward_leafindex_map_2 <- ggplot(data=backward_leafindex, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_leafindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "LeafIndex.txt"))
+backward_leafindex <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_leafindex))
+backward_leafindex_map_3 <- ggplot(data=backward_leafindex, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Leaf index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+leafindex <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "LeafIndex.txt"))
+forward_leafindex <- data.frame(lat= alt$lat, lon =alt$lon, date = t(leafindex))
+forward_leafindex_map <- ggplot(data=forward_leafindex, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r fruitindex, include=FALSE }
+best_fruitindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "FruitIndex.txt"))
+backward_fruitindex_1 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_fruitindex))
+backward_fruitindex_map_1 <- ggplot(data=backward_fruitindex_1, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_fruitindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "FruitIndex.txt"))
+backward_fruitindex_2 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_fruitindex))
+backward_fruitindex_map_2 <- ggplot(data=backward_fruitindex_2, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_fruitindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "FruitIndex.txt"))
+backward_fruitindex_3 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_fruitindex))
+backward_fruitindex_map_3 <- ggplot(data=backward_fruitindex_3, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+fruitindex <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "FruitIndex.txt"))
+forward_fruitindex <- data.frame(lat= alt$lat, lon =alt$lon, date = t(fruitindex))
+forward_fruitindex_map <- ggplot(data=forward_fruitindex, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r maturationindex, include=FALSE }
+best_maturationindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "MaturationIndex.txt"))
+backward_maturationindex_1 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_maturationindex))
+backward_maturationindex_map_1 <- ggplot(data=backward_maturationindex_1, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_maturationindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "MaturationIndex.txt"))
+backward_maturationindex_2 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_maturationindex))
+backward_maturationindex_map_2 <- ggplot(data=backward_maturationindex_2, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+best_maturationindex <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "MaturationIndex.txt"))
+backward_maturationindex_3 <- data.frame(lat= alt$lat, lon =alt$lon, date = t(best_maturationindex))
+backward_maturationindex_map_3 <- ggplot(data=backward_maturationindex_3, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("Fruit index", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "bottom", 
+        legend.key.height = unit(0.2, 'cm'), legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+maturationindex <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "MaturationIndex.txt"))
+forward_maturationindex <- data.frame(lat= alt$lat, lon =alt$lon, date = t(maturationindex))
+forward_maturationindex_map <- ggplot(data=forward_maturationindex, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = date), color = NA) +
+  theme_void() +
+  scale_fill_gradient2(name = stringr::str_wrap("", width = 30), 
+                       low = "#bb3e03", mid ="#e9d8a6", high = "#0A9396", 
+                       limits = c(0,1), 
+                       midpoint = 0.5,
+                       guide = guide_colourbar(title.position = "top", frame.colour = "black", frame.linewidth = 0.5, ticks = FALSE),
+                       na.value = "grey50") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.7, 'cm'), legend.key.width = unit(0.2, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G"))
+
+```
+
+```{r date_plots, include=TRUE, fig.height = 8, fig.width = 8, fig.align = "center", fig.cap = "Comparison of phenological dates computed by the models.", fig.pos="H", fig.showtext=TRUE}
+
+
+p <- plot_grid(
+          "", "", "", "", "", "",
+          "", forward_unfolding_map + theme(legend.position = 'none'), backward_unfolding_map_1 + theme(legend.position = 'none'), 
+          backward_unfolding_map_2 + theme(legend.position = 'none'), backward_unfolding_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_unfolding_map),
+          "", forward_flowering_map + theme(legend.position = 'none'), backward_flowering_map_1 + theme(legend.position = 'none'), 
+          backward_flowering_map_2 + theme(legend.position = 'none'), backward_flowering_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_flowering_map),
+          "", forward_maturation_map + theme(legend.position = 'none'), backward_maturation_map_1 + theme(legend.position = 'none'), 
+          backward_maturation_map_2 + theme(legend.position = 'none'), backward_maturation_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_maturation_map),
+          "", forward_leafsenescence_map + theme(legend.position = 'none'), backward_leafsenescence_map_1 + theme(legend.position = 'none'), 
+          backward_leafsenescence_map_2 + theme(legend.position = 'none'), backward_leafsenescence_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_leafsenescence_map),
+          rel_widths = c(0.07, 5, 5, 5, 5, 1),
+          rel_heights = c(1, 5, 5, 5, 5),
+          ncol = 6, nrow = 5,
+          hjust = 0, vjust = 1, align = "h", label_size = 12,
+          label_colour = "#495057")
+
+ggdraw(p) +
+  draw_label("Forward parameters", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.13,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Three best optimized parameter sets", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.59,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Leaf unfolding", color = "#495057", size = 10, angle = 90, y = 0.84, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Flowering", color = "#495057", size = 10, angle = 90, y = 0.6, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Fruit maturation", color = "#495057", size = 10, angle = 90, y = 0.36, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Senescence", color = "#495057", size = 10, angle = 90, y = 0.12, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic")
+
+
+```
+
+```{r survival_plots_old, include=TRUE, fig.height = 6, fig.width = 8, fig.align = "center", fig.cap = "Comparison of survival indices computed by the models.", eval= F, fig.pos="H", fig.showtext=TRUE}
+
+
+p <- plot_grid(
+          "", "", "", "", "", "",
+          "", forward_carbonsurvival_map + theme(legend.position = 'none'), backward_carbonsurvival_map_1 + theme(legend.position = 'none'), 
+          backward_carbonsurvival_map_2 + theme(legend.position = 'none'), backward_carbonsurvival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_carbonsurvival_map),
+          "", forward_droughtsurvival_map + theme(legend.position = 'none'), backward_droughtsurvival_map_1 + theme(legend.position = 'none'), 
+          backward_droughtsurvival_map_2 + theme(legend.position = 'none'), backward_droughtsurvival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_droughtsurvival_map),
+          "", forward_survival_map + theme(legend.position = 'none'), backward_survival_map_1 + theme(legend.position = 'none'), 
+          backward_survival_map_2 + theme(legend.position = 'none'), backward_survival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_survival_map),
+          rel_widths = c(0.07, 5, 5, 5, 5, 1),
+          rel_heights = c(1, 5, 5, 5),
+          ncol = 6, nrow = 4,
+          hjust = 0, vjust = 1, align = "h", label_size = 12,
+          label_colour = "#495057")
+
+ggdraw(p) +
+  draw_label("Forward parameters", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.13,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Three best optimized parameter sets", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.59,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Carbon survival", color = "#495057", size = 10, angle = 90, y = 0.8, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Drought survival", color = "#495057", size = 10, angle = 90, y = 0.48, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Survival", color = "#495057", size = 10, angle = 90, y = 0.15, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic")
+
+
+```
+
+```{r survival_plots, include=TRUE, fig.height = 8, fig.width = 8, fig.align = "center", fig.cap = "Comparison of survival indices computed by the models.", eval= T, fig.pos="H", fig.showtext=TRUE}
+
+
+p <- plot_grid(
+          "", "", "", "", "", "",
+          "", forward_carbonsurvival_map + theme(legend.position = 'none'), backward_carbonsurvival_map_1 + theme(legend.position = 'none'), 
+          backward_carbonsurvival_map_2 + theme(legend.position = 'none'), backward_carbonsurvival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_carbonsurvival_map),
+          "", forward_droughtsurvival_map + theme(legend.position = 'none'), backward_droughtsurvival_map_1 + theme(legend.position = 'none'), 
+          backward_droughtsurvival_map_2 + theme(legend.position = 'none'), backward_droughtsurvival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_droughtsurvival_map),
+          "", forward_temperaturesurvival_map + theme(legend.position = 'none'), backward_temperaturesurvival_map_1 + theme(legend.position = 'none'),
+          backward_temperaturesurvival_map_2 + theme(legend.position = 'none'), backward_temperaturesurvival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_temperaturesurvival_map),
+          "", forward_survival_map + theme(legend.position = 'none'), backward_survival_map_1 + theme(legend.position = 'none'), 
+          backward_survival_map_2 + theme(legend.position = 'none'), backward_survival_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_survival_map),
+           rel_widths = c(0.07, 5, 5, 5, 5, 1),
+          rel_heights = c(1, 5, 5, 5, 5),
+          ncol = 6, nrow = 5,
+          hjust = 0, vjust = 1, align = "h", label_size = 12,
+          label_colour = "#495057")
+
+
+
+ggdraw(p) +
+  draw_label("Forward parameters", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.13,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Three best optimized parameter sets", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.59,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Carbon survival", color = "#495057", size = 10, angle = 90, y = 0.84, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Drought survival", color = "#495057", size = 10, angle = 90, y = 0.6, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Temperature survival", color = "#495057", size = 10, angle = 90, y = 0.36, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Survival", color = "#495057", size = 10, angle = 90, y = 0.12, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic")
+
+
+```
+
+
+```{r index_plots, include=TRUE, fig.height = 8, fig.width = 8, fig.align = "center", fig.cap = "Comparison of phenological indices computed by the models.", fig.pos="H", fig.showtext=TRUE}
+
+
+p <- plot_grid(
+          "", "", "", "", "", "",
+          "", forward_leafindex_map + theme(legend.position = 'none'), backward_leafindex_map_1 + theme(legend.position = 'none'), 
+          backward_leafindex_map_2 + theme(legend.position = 'none'), backward_leafindex_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_leafindex_map),
+          "", forward_fruitindex_map + theme(legend.position = 'none'), backward_fruitindex_map_1 + theme(legend.position = 'none'), 
+          backward_fruitindex_map_2 + theme(legend.position = 'none'), backward_fruitindex_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_fruitindex_map),
+          "", forward_maturationindex_map + theme(legend.position = 'none'), backward_maturationindex_map_1 + theme(legend.position = 'none'), 
+          backward_maturationindex_map_2 + theme(legend.position = 'none'), backward_maturationindex_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_maturationindex_map),
+          "", forward_fitness_map + theme(legend.position = 'none'), backward_fitness_map_1 + theme(legend.position = 'none'), 
+          backward_fitness_map_2 + theme(legend.position = 'none'), backward_fitness_map_3 + theme(legend.position = 'none'),
+          get_legend(forward_fitness_map),
+          rel_widths = c(0.07, 5, 5, 5, 5, 1),
+          rel_heights = c(1, 5, 5, 5, 5),
+          ncol = 6, nrow = 5,
+          hjust = 0, vjust = 1, align = "h", label_size = 12,
+          label_colour = "#495057")
+
+ggdraw(p) +
+  draw_label("Forward parameters", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.13,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Three best optimized parameter sets", color = "#495057", size = 10, angle = 0, y = 0.97, x = 0.59,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Leaf index", color = "#495057", size = 10, angle = 90, y = 0.84, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Fruit index", color = "#495057", size = 10, angle = 90, y = 0.6, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Maturation index", color = "#495057", size = 10, angle = 90, y = 0.36, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Fitness index", color = "#495057", size = 10, angle = 90, y = 0.12, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic")
+
+
+```
+
+```{r limiting_factors, include=FALSE }
+
+lcol <- "#EBEBD3"
+hcol <- "#488B49"
+
+
+forward_lim_factors <- cbind(forward_survival, forward_fruitindex$date, forward_maturationindex$date, forward_fitness$date)
+names(forward_lim_factors) <- c("lat", "lon", "survival", "fruit index", "maturation index", "fitness")
+# find limiting factor
+forward_lim_factors$lim_factor <- factor(c("Survival", "Fruit index", "Maturation index")[max.col(-sapply(
+    forward_lim_factors[c("survival", "fruit index", "maturation index")], \(x) as.numeric(x)), "first")], levels = c("Survival", "Fruit index", "Maturation index"))
+# best pres/abs threshold
+fitness_presabs <- read_mean_outputvalue_phenofit(file.path(forward_sim_folder, phenofit_forward_calibration, "Fitness.txt"), 
+                                                  points = species_presabs)
+youden_index <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure +
+  specificity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+forward_lim_factors$pres <- 0
+forward_lim_factors[forward_lim_factors$fitness >= best_threshold, "pres"]  <- 1
+# presence map
+forward_pres_map <- ggplot(data=forward_lim_factors, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = pres), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = lcol, high = hcol, limits = c(0,1), breaks = c(0,0.5,1), na.value = "#B5BEC6") +
+  theme(legend.position = "none")
+# limiting factor map
+forward_lim_map <- ggplot() + 
+  geom_raster(data=forward_lim_factors[forward_lim_factors$pres == 1,], 
+              aes(x = lon, y = lat), fill = lcol, color = NA) +
+  geom_raster(data=forward_lim_factors[forward_lim_factors$pres == 0,], 
+              aes(x = lon, y = lat, fill = lim_factor), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_manual(values = c("#C98263", "#C4627E", "#80536A"), breaks = c("Survival", "Fruit index", "Maturation index"),
+                    name = "Limiting factor") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.3, 'cm'), legend.key.width = unit(0.3, 'cm'),
+        legend.spacing.y = unit(0.3, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G")) +
+  guides(fill = guide_legend(byrow = TRUE))
+
+
+backward_lim_factors_1 <- cbind(backward_survival_1, backward_fruitindex_1$date, backward_maturationindex_1$date, backward_fitness_1$date)
+names(backward_lim_factors_1) <- c("lat", "lon", "survival", "fruit index", "maturation index", "fitness")
+backward_lim_factors_1$lim_factor <- factor(c("Survival", "Fruit index", "Maturation index")[max.col(-sapply(
+    backward_lim_factors_1[c("survival", "fruit index", "maturation index")], \(x) as.numeric(x)), "first")], levels = c("Survival", "Fruit index", "Maturation index"))
+# best pres/abs threshold
+fitness_presabs <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[1], 
+                                                               "Fitness.txt"), 
+                                                  points = species_presabs)
+youden_index <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure +
+  specificity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+backward_lim_factors_1 $pres <- 0
+backward_lim_factors_1[backward_lim_factors_1$fitness >= best_threshold, "pres"]  <- 1
+# presence map
+backward_pres_map_1 <- ggplot(data=backward_lim_factors_1, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = pres), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = lcol, high = hcol, limits = c(0,1), breaks = c(0,0.5,1), na.value = "#B5BEC6") +
+  theme(legend.position = "none")
+# limiting factor map
+backward_lim_map_1 <- ggplot() + 
+  geom_raster(data=backward_lim_factors_1[backward_lim_factors_1$pres == 1,], 
+              aes(x = lon, y = lat), fill = lcol, color = NA) +
+  geom_raster(data=backward_lim_factors_1[backward_lim_factors_1$pres == 0,], 
+              aes(x = lon, y = lat, fill = lim_factor), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_manual(values = c("#C98263", "#C4627E", "#80536A"), breaks = c("Survival", "Fruit index", "Maturation index"),
+                    name = "Limiting factor") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.3, 'cm'), legend.key.width = unit(0.3, 'cm'),
+        legend.spacing.y = unit(0.3, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G")) +
+  guides(fill = guide_legend(byrow = TRUE))
+
+
+backward_lim_factors_2 <- cbind(backward_survival_2, backward_fruitindex_2$date, backward_maturationindex_2$date, backward_fitness_2$date)
+names(backward_lim_factors_2) <- c("lat", "lon", "survival", "fruit index", "maturation index", "fitness")
+backward_lim_factors_2$lim_factor <- factor(c("Survival", "Fruit index", "Maturation index")[max.col(-sapply(
+    backward_lim_factors_2[c("survival", "fruit index", "maturation index")], \(x) as.numeric(x)), "first")], levels = c("Survival", "Fruit index", "Maturation index"))
+# best pres/abs threshold
+fitness_presabs <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[2], 
+                                                               "Fitness.txt"), 
+                                                  points = species_presabs)
+youden_index <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure +
+  specificity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+backward_lim_factors_2$pres <- 0
+backward_lim_factors_2[backward_lim_factors_2$fitness >= best_threshold, "pres"]  <- 1
+# presence map
+backward_pres_map_2 <- ggplot(data=backward_lim_factors_2, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = pres), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = lcol, high = hcol, limits = c(0,1), breaks = c(0,0.5,1), na.value = "#B5BEC6") +
+  theme(legend.position = "none")
+# limiting factor map
+backward_lim_map_2 <- ggplot() + 
+  geom_raster(data=backward_lim_factors_2[backward_lim_factors_2$pres == 1,], 
+              aes(x = lon, y = lat), fill = lcol, color = NA) +
+  geom_raster(data=backward_lim_factors_2[backward_lim_factors_2$pres == 0,], 
+              aes(x = lon, y = lat, fill = lim_factor), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_manual(values = c("#C98263", "#C4627E", "#80536A"), breaks = c("Survival", "Fruit index", "Maturation index"),
+                    name = "Limiting factor") +
+  theme(legend.title.align = 0.5, legend.direction = "vertical", legend.position = "right", 
+        legend.key.height = unit(0.3, 'cm'), legend.key.width = unit(0.3, 'cm'),
+        legend.spacing.y = unit(0.3, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G")) +
+  guides(fill = guide_legend(byrow = TRUE))
+
+
+backward_lim_factors_3 <- cbind(backward_survival_3, backward_fruitindex_3$date, backward_maturationindex_3$date, backward_fitness_3$date)
+names(backward_lim_factors_3) <- c("lat", "lon", "survival", "fruit index", "maturation index", "fitness")
+backward_lim_factors_3$lim_factor <- factor(c("Survival", "Fruit index", "Maturation index")[max.col(-sapply(
+    backward_lim_factors_3[c("survival", "fruit index", "maturation index")], \(x) as.numeric(x)), "first")], levels = c("Survival", "Fruit index", "Maturation index"))
+# best pres/abs threshold
+fitness_presabs <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), 
+                                                               phenofit_best_calibrations[3], 
+                                                               "Fitness.txt"), 
+                                                  points = species_presabs)
+youden_index <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure +
+  specificity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(fitness_presabs, as.factor(species_presabs$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+backward_lim_factors_3$pres <- 0
+backward_lim_factors_3[backward_lim_factors_3$fitness >= best_threshold, "pres"]  <- 1
+# presence map
+backward_pres_map_3 <- ggplot(data=backward_lim_factors_3, aes(x = lon, y = lat)) + 
+  geom_raster(aes(fill = pres), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = lcol, high = hcol, limits = c(0,1), breaks = c(0,0.5,1), na.value = "#B5BEC6") +
+  theme(legend.position = "none")
+# limiting factor map
+backward_lim_map_3 <- ggplot() + 
+  geom_raster(data=backward_lim_factors_3[backward_lim_factors_3$pres == 1,], 
+              aes(x = lon, y = lat), fill = lcol, color = NA) +
+  geom_raster(data=backward_lim_factors_3[backward_lim_factors_3$pres == 0,], 
+              aes(x = lon, y = lat, fill = lim_factor), color = NA) +
+  theme_void() +
+  ylab("") +
+  xlab("") +
+  scale_fill_manual(values = c("#C98263", "#C4627E", "#80536A"), breaks = c("Survival", "Fruit index", "Maturation index"),
+                    name = "") +
+  theme(legend.title.align = 0.5, legend.direction = "horizontal", legend.position = "right", 
+        legend.key.height = unit(0.3, 'cm'), legend.key.width = unit(0.3, 'cm'),
+        legend.spacing.y = unit(0.3, 'cm'),
+        legend.title = element_text(family = "Linux Libertine G", size = 9),
+        legend.text = element_text(family = "Linux Libertine G")) +
+  guides(fill = guide_legend(byrow = TRUE))
+
+```
+
+```{r limfactors_plots, include=TRUE, fig.height = 4.6, fig.width = 8, fig.align = "center", fig.cap = "Species distribution maps obtained with the models, and main limiting factor for the species absence.", fig.pos="H", fig.showtext=TRUE}
+
+
+p <- plot_grid(
+          "", "", "", "", "", "",
+          "", forward_pres_map + theme(legend.position = 'none'), backward_pres_map_1 + theme(legend.position = 'none'), 
+          backward_pres_map_2 + theme(legend.position = 'none'), backward_pres_map_3 + theme(legend.position = 'none'),
+          "",
+          "", forward_lim_map + theme(legend.position = 'none'), backward_lim_map_1 + theme(legend.position = 'none'), 
+          backward_lim_map_2 + theme(legend.position = 'none'), backward_lim_map_3 + theme(legend.position = 'none'),
+          "",
+          rel_widths = c(0.07, 5, 5, 5, 5, 1),
+          rel_heights = c(1, 5, 5),
+          ncol = 6, nrow = 3,
+          hjust = 0, vjust = 1, align = "h", label_size = 12,
+          label_colour = "#495057")
+
+p_wlegend <- plot_grid(p,
+                       get_legend(backward_lim_map_3),
+                       ncol = 1,
+                       rel_heights = c(10, 0.5))
+
+ggdraw(p_wlegend) +
+  draw_label("Forward parameters", color = "#495057", size = 10, angle = 0, y = 0.94, x = 0.13,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Three best optimized parameter sets", color = "#495057", size = 10, angle = 0, y = 0.94, x = 0.59,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Presence", color = "#495057", size = 10, angle = 90, y = 0.7, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic") +
+  draw_label("Limiting factor", color = "#495057", size = 10, angle = 90, y = 0.25, x = 0.01,
+             fontfamily = "Linux Libertine G", fontface = "italic")
+
+
+```
+
+

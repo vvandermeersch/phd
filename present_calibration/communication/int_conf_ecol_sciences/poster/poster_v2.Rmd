@@ -1,0 +1,145 @@
+---
+title: "A novel method to estimate process-based model parameters from species distribution data"
+author: ["<span class=\"presenter\">Victor Van der Meersch</span>, Isabelle Chuine<ol class=\"affiliations\">CEFE, CNRS, Université de Montpellier - victor.vandermeersch@cefe.cnrs.fr</ol>"]
+output:
+  drposter::drposter_poster:
+    fill_page: FALSE
+    self_contained: FALSE
+    export_pdf: TRUE
+    css: custom_css/drposter.css
+csl: nature.csl
+references:
+- id: dormann
+  title: '1. Dormann, C. F. et al. 2012. *Correlation and process in species distribution models: Bridging a dichotomy*. Journal of Biogeography 39: 2119–2131.'
+- id: cmaes
+  title: '2. Hansen, N. and Ostermeier, A. 2001. *Completely derandomized self-adaptation in evolution strategies*. Evolutionary Computation 9: 159–195.'
+- id: phenofit
+  title: '3. Chuine, I. and Beaubien, E. G. 2001. *Phenology is a major determinant of tree species range*. Ecology Letters 4: 500–510.'
+- id: castanea
+  title: '4. Dufrêne, E. et al. 2005. *Modelling carbon and water cycles in a beech forest: Part I: Model description and uncertainty analysis on modelled NEE*. - Ecological Modelling 185: 407–436.'
+
+  
+  
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)  # Hide code by default. Can override chunk-by-chunk
+```
+
+
+# {.col-2 style="grid-row: span 3;"}
+<!-- Span the first column for four rows, that way we can capture the usage block, two rows of template examples, and refs/footer information -->
+
+
+
+## 1. Context and objective
+
+* Two types of species distribution models (SDMs): **correlative niche-based models** and **process-based models**[@dormann]
+![](img/dormann.png)
+* Process-based models: translate **physiological and ecological processes** into **mathematical equations**. Take more time to develop, **calibration** is **challenging** and **time-consuming** 
+<br> <br>
+<span style="color: #A13A34;">Our goal: exploration of the feasibility of **calibrating process-based models using species occurrence data** as correlative SDMs, i.e. **backward calibration**</span>
+
+
+## 3. Covariance matrix adaptation, evolution strategy {.color2}
+
+### CMA-ES in a nutshell
+* Robust optimization algorithm for **non-linear optimization problems** in continuous domain developped by **Nikolaus Hansen**[@cmaes]
+<br> <br>
+* Inspired by **evolutionary biology**: recombination, mutation and selection
+
+
+### In practice
+* **Parallel implementation** on two computing clusters (40 to 100 CPUs)
+<br> <br>
+* Calibration runtime for 2000 points and 30 years:
+    * PHENOFIT: ~ 24 hours
+    * CASTANEA: ~ 20 days
+
+## 5. Non-identifiability of parameters
+
+* Focus on the leaf unfolding submodel in PHENOFIT: **high variability in the parameter estimates** because of **structural correlations**
+![](img/leafunfolding_parameters_density.png){ width=100% }
+<figcaption class = "caption">
+<b>Fig. 2: Density of the main parameters of the leaf unfolding date submodel, after 100 calibrations for F. sylvatica</b>
+</figcaption>
+<br>
+* Parameter values **not necessarily ecologically relevant**
+
+## 7. Take-home message {.color2}
+
+<span style="color: #A13A34;">CMA-ES is a **powerful algorithm to calibrate complex ecological models**.</span>
+
+## References {.theme-minimalist}
+
+<div id="refs" class="references"></div>
+
+###  {.fullwidth}
+
+This poster was entirely created using `RMarkdown` and `drposter` R package.
+
+# {.col-2}
+
+## 2. Models and data {.color2}
+
+### Tree occurrence data
+
+* **EU-Forest** dataset
+* Completed with records from **GBIF**, filtered with **Atlas Flora Europeae** and **EuroVegMap** species ranges
+* For *Quercus ilex*, added records from **WOODIV** database
+
+### Climate and soil data
+
+* Climatic variables derived from **ERA5-Land** (1970-2000), 0.1° resolution
+* Soil variables extracted from **EU-SoilHydroGrids** and **SoilGrids250m**
+
+### {.fullwidth}
+
+
+![](img/species_distribution.png)
+<figcaption class = "caption">
+<b>Fig. 3: Species distribution</b>
+</figcaption>
+
+
+
+### Process-based models {.fullwidth}
+
+* **PHENOFIT**[@phenofit]: focuses on phenology and stress resistance, and simulates the fitness (survival and reproductive success) of an average individual (27 to 37 parameters)
+* **CASTANEA**[@castanea]: simulates carbon and water fluxes in forest, with several processes such as photosynthesis, stomatal conductance, or respiration (77 parameters)
+
+## 4. Improvement to model calibration
+
+### {.fullwidth}
+
+![](img/phenofitcastanea_3.png)
+<figcaption class = "caption">
+<b>Fig. 4: Species distribution maps obtained with PHENOFIT and CASTANEA forward calibration and backward calibration with CMA-ES. Optimal threshold to dichotomize model outputs is the Youden Index-based cut-off point. Forward calibration is based on expert knowledge, observations and measurements.</b>
+</figcaption>
+
+
+## 6. CMA-ES rocks! {.color2}
+
+### Calibration performance
+* **Great increase in AUC** compared to classical (forward) parametrization
+<br> <br>
+* **Easy to use**: does not require an extensive tuning
+<br> <br>
+* Efficient to deal with **ill-conditioned and non-separable problems**
+<br> <br>
+* Can be a **useful technique** to calibrate submodels whose parameter values can hardly be experimentally measured
+
+### Comparison with ABC
+CMA-ES slighty **outperforms** approximate bayesian computation (ABC)
+<figure>
+<img src="img/CMAESvsABC.png" alt=""  style="height:50%">
+<figcaption class = "caption">
+<b>Fig. 5: Comparison of CMA-ES (red) and ABC-rejection (orange)  performances for F. sylvatica</b>
+</figcaption>
+</figure>
+
+
+
+
