@@ -1,0 +1,10 @@
+# File for Phenofit4 CommandScript
+# Generated with Rstudio (time: 2023-02-02 10:25:08, user: vandermeersch)
+					
+speciesInputDir =
+climateInputDir =
+outputDir = D:/simulations/phenofit/paleo/test
+quietMode = true
+					
+# speciesFileName	climateFolderName	climateScenario	startingYear	endingYear
+C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Fagus_sylvatica_VVanderMeersch.species	D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg	HadCM3B	-1014	-985
