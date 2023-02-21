@@ -5,7 +5,7 @@
 #                                #
 ##################################
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/simulation"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation"
 
 source(file.path(wd, "functions/command_file_setup.R"))
 source(file.path(wd, "functions/read_mean_outputvalue.R"))

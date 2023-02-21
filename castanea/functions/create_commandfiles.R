@@ -13,7 +13,7 @@
 #                     scenario_file = "UniChillRenecofor_2021.fit2018"
 #                     )
 # 
-# output_dir <- "C:/Users/vandermeersch/Documents/CEFE/thesis/calibration/castanea/command_files"
+# output_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/calibration/castanea/command_files"
 # 
 # data <- list(lat = latitude, lon = longitude, alt = altitude,
 #              wfc = wfc, wilt = wilt,

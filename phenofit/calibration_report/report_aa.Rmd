@@ -29,7 +29,7 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_report"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/calibration_report"
 
 library(AUC)
 library(ggplot2)

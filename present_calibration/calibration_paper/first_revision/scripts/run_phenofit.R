@@ -1,7 +1,7 @@
 library(gtools)
 
 # Run Phenofit for every calibrated parameter sets
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
 source(file.path(wd, "functions", "command_file_setup.R"))
 
 cal_folder <- 'D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/ABC'

@@ -424,4 +424,4 @@ predictors_data$nd_neg5deg <- ndaysinf5_30y
 predictors_data$nd_neg0deg <- ndaysinf0_30y
 predictors_data$nd_neg2deg <- ndaysinf2_30y
 predictors_data$nd_summerfrost <- ndayssummerfrost_30y
-save(predictors_data, file = "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors/predictors_data.Rdata")
+save(predictors_data, file = "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors/predictors_data.Rdata")

@@ -7,7 +7,7 @@ library(ggfortify)
 library(ggcorrplot)
 library(ggthemes)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors"
 
 
 # Load predictors

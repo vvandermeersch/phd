@@ -1,5 +1,5 @@
 # Run file for Castanea
 # Generated on Rstudio by user vandermeersch, on the 2022-05-10
 
-cd C:/Program Files/Java/scripts && java8.cmd && cd/d D:/applications/capsis4 && setmem 2000 && capsis -p script castaneaonly.myscripts.Simulation_EU_Victor C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/sensitivity_analysis/test/ind1/commandfile_1.txt
-cd C:/Program Files/Java/scripts && java8.cmd && cd/d D:/applications/capsis4 && setmem 2000 && capsis -p script castaneaonly.myscripts.Simulation_EU_Victor C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/sensitivity_analysis/test/ind2/commandfile_1.txt
+cd C:/Program Files/Java/scripts && java8.cmd && cd/d D:/applications/capsis4 && setmem 2000 && capsis -p script castaneaonly.myscripts.Simulation_EU_Victor C:/Users/vandermeersch/Documents/CEFE/phd/castanea/sensitivity_analysis/test/ind1/commandfile_1.txt
+cd C:/Program Files/Java/scripts && java8.cmd && cd/d D:/applications/capsis4 && setmem 2000 && capsis -p script castaneaonly.myscripts.Simulation_EU_Victor C:/Users/vandermeersch/Documents/CEFE/phd/castanea/sensitivity_analysis/test/ind2/commandfile_1.txt

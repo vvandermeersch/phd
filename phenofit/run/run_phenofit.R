@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/run/"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/run/"
 source(paste0(wd, "/functions/command_file_setup.R"))
 
 

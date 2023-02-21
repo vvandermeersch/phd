@@ -3,7 +3,7 @@
 phenofit_ABC <- function(x) {
   
   # init
-  wd <<- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/ABC_calibration"
+  wd <<- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/ABC_calibration"
   source(paste0(wd, "/functions/create_init_species_file.R"))
   structure_file <- paste0(wd, "/input_files/Fagus_sylvatica_EvolLett2019.species")
   source(paste0(wd, "/functions/command_file_setup.R"))

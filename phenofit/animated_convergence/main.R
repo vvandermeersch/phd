@@ -1,5 +1,5 @@
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/animated_convergence"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/animated_convergence"
 
 source(paste0(wd, "/functions/read_species_file.R"))
 source(paste0(wd, "/functions/read_mean_outputvalue.R"))

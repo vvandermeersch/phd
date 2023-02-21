@@ -10,7 +10,7 @@ source(paste0(wd, 'functions/extract_climate.R'))
 source(paste0(wd, 'functions/save_climate.R'))
 
 # example : load("D:/species/processed/consensus_abialb_ERA5.Rdata")
-# wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/calibration/climate_data/extract/"
+# wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/calibration/climate_data/extract/"
 # out_folder <- paste0(pd_folder, "abies_alba_extraction/")
 
 phenofit_extract_climate <- function(years, species, species_data, pd_folder, out_folder, method_pet){

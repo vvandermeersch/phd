@@ -1,13 +1,13 @@
 
 # Setup
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps"
 source(file.path(wd, "sensitivity_analysis", "setup.R"))
 
 
 
 
 
-output_path <- "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps/sensitivity_analysis/fast99_model_simulations"
+output_path <- "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps/sensitivity_analysis/fast99_model_simulations"
 
 # commandfile_options$grid <- grid_points[100]
 # mat <- matrix(c(50, 30, 80, 100, 100, -40, -10, 20, 45, 0.2), nrow=1)

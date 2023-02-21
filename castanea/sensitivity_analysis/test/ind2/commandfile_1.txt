@@ -3,7 +3,7 @@
 
 # The filenames below are relative to the folder containing this command file
 castaneaFileName	=	ind_2.txt
-inventoryFileName	=	C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/calibration/process_files/inventory.txt
+inventoryFileName	=	C:/Users/vandermeersch/Documents/CEFE/phd/castanea/calibration/process_files/inventory.txt
 
 climateBaseName	=	D:/climate/ERA5-Land/castanea_format/
 climateExtension	=	.txt

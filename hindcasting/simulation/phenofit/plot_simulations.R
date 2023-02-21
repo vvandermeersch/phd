@@ -5,7 +5,7 @@
 #                                 #
 ###################################
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/simulation"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation"
 library(ggplot2)
 library(ggnewscale)
 library(terra)

@@ -3,7 +3,7 @@ library(dplyr)
 library(ggplot2)
 library(raster)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/contrast_paper/phenology"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/contrast_paper/phenology"
 
 
 # europe map # ----

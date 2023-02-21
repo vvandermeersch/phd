@@ -2,7 +2,7 @@
 
 ## Compute predictors
 compute <- FALSE # compute can be quite long
-wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors"
 if(compute){
   source(file.path(wd_pred, "compute_predictors.R"))
 }else{

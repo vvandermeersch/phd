@@ -3,7 +3,7 @@ library(terra)
 library(ggplot2)
 library(data.table)
 library(future.apply)
-source("C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate/functions/years_functions.R")
+source("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/functions/years_functions.R")
 
 data_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset"
 extent <- ext(c(-14,40,34,72))

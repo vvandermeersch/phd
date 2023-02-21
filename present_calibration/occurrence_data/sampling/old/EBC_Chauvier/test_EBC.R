@@ -1,4 +1,4 @@
-setwd("C:/Users/vandermeersch/Documents/CEFE/thesis/sampling/EBC_Chauvier")
+setwd("C:/Users/vandermeersch/Documents/CEFE/phd/sampling/EBC_Chauvier")
 
 require(ggplot2)
 require(raster)

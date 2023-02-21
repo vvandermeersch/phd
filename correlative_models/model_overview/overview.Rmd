@@ -19,7 +19,7 @@ library(gbm)
 library(disdat)
 library(biomod2)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 
 source(file.path(wd, "model_overview", "functions", "compute_predictions.R"))
 source(file.path(wd, "model_overview", "functions", "get_response_curve.R"))

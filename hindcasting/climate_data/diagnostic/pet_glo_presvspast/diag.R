@@ -38,7 +38,7 @@ ggplot(data = pres_data) +
   ylab("Daily maximum temperature")
 
 
-past_clim_dir <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate/outputs"
+past_clim_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/outputs"
 
 past_data <- fread(file.path(past_clim_dir, "20985_21015BP_glorad.csv"))
 past_data <- past_data[past_data$id == 61 & past_data$year == 20985,]

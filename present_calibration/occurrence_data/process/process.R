@@ -14,7 +14,7 @@ library(raster)
 library(data.table)
 library(stringr)
 
-wd_process <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/occurrence_data/process/"
+wd_process <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/occurrence_data/process/"
 
 source(paste0(wd_process,"functions/read_process_GBIF.R"))
 source(paste0(wd_process,"functions/transform_to_grid.R"))

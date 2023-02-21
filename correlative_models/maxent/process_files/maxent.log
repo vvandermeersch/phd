@@ -5,14 +5,14 @@ readGrid: max memory 2147483648, total allocated 1069547520, free 1046478848, us
 Reading samples from presence
 Read samples: max memory 2147483648, total allocated 1069547520, free 784477712, used 285069808, increment 262001136
 Adding samples to background in feature space
-Command line used:  autorun -e C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files/absence -o C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files -s C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files/presence -z nothreshold
-Command line to repeat: java density.MaxEnt nowarnings noprefixes outputdirectory=C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files samplesfile=C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files/presence environmentallayers=C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files/absence autorun novisible
+Command line used:  autorun -e C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files/absence -o C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files -s C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files/presence -z nothreshold
+Command line to repeat: java density.MaxEnt nowarnings noprefixes outputdirectory=C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files samplesfile=C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files/presence environmentallayers=C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files/absence autorun novisible
 Species: species
 Layers: WHC bio12 bio6 pH sum_apsep_GDD5 w_bal
 Layertypes: Continuous Continuous Continuous Continuous Continuous Continuous
-outputdirectory: C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files
-samplesfile: C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files/presence
-environmentallayers: C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/maxent/process_files/absence
+outputdirectory: C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files
+samplesfile: C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files/presence
+environmentallayers: C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/maxent/process_files/absence
 autorun: true
 visible: false
 

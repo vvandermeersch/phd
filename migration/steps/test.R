@@ -2,7 +2,7 @@ library(steps)
 library(raster)
 library(future.apply)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/migration/steps" # working dir
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/migration/steps" # working dir
 
 # ## Loading fitness (// suitability) values, resolution 0.1deg
 hab_suit <- readRDS("C:/Users/vandermeersch/Documents/fagus_fit.rds")

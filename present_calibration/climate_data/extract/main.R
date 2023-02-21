@@ -5,7 +5,7 @@
 # author : V. Van der Meersch
 # date : 16/02/2022
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/climate_data/extract/"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/extract/"
 
 
 ## Functions needed

@@ -1,5 +1,5 @@
 # Best threshold
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/run/"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/run/"
 
 load("D:/species/processed/fagus_sylvatica/2000pres_2000abs/occurrence_subset_1.Rdata")
 

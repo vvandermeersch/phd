@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_report"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/calibration_report"
 
 library(ggplot2)
 library(cowplot)

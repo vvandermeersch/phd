@@ -6,7 +6,7 @@ library(sp)
 library(raster)
 library(cowplot)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/climate_data/visualise/"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/visualise/"
 
 source(paste0(wd, 'functions/create_time_series.R'))
 source(paste0(wd, 'functions/create_climate_map.R'))

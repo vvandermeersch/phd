@@ -3,8 +3,8 @@
 					
 speciesInputDir =
 climateInputDir =
-outputDir = C:/Users/vandermeersch/Documents/CEFE/thesis/calibration/climate_data/visualise/output
+outputDir = C:/Users/vandermeersch/Documents/CEFE/phd/calibration/climate_data/visualise/output
 quietMode = true
 					
 # speciesFileName	climateFolderName	climateScenario	startingYear	endingYear
-C:/Users/vandermeersch/Documents/CEFE/thesis/calibration/phenofit/run/Fagus_sylvatica_backward.species	D:/climate/ERA5-Land/phenofit_format/transformed	ERA5LAND	1970	2000
+C:/Users/vandermeersch/Documents/CEFE/phd/calibration/phenofit/run/Fagus_sylvatica_backward.species	D:/climate/ERA5-Land/phenofit_format/transformed	ERA5LAND	1970	2000

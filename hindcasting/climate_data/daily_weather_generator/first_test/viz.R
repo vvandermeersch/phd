@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/daily_weather_generator/gwgen_f90-master"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/daily_weather_generator/gwgen_f90-master"
 
 library(lubridate)
 library(ggplot2)

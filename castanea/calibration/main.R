@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/castanea"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/castanea"
 
 source(file.path(wd, "functions", "cmaes_calibration.R"))
 source(file.path(wd, "functions", "load_parameter_values.R"))
@@ -43,7 +43,7 @@ inv_options <- list(inventory_file_suffix = "",
                                  age = 30, clumping = 0.61, LAI = 6, opt_vars = "-")
                     )
 
-species=list(name = "Abies alba", structure_file = "C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/species/CastaneaSpecies_08_2021.txt")
+species=list(name = "Abies alba", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
 
 
 #-------------------#

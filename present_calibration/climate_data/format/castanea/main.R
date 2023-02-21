@@ -8,7 +8,7 @@
 # in order to increase computing speed and avoid unnecessary calculations (hourly data -> daily data)
 # this script use pre-processed daily Phenofit4 climate files (see ~climate_data/format/phenofit)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/climate_data/format/castanea/"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/format/castanea/"
 
 
 ## Packages needed

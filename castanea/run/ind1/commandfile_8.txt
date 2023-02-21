@@ -3,7 +3,7 @@
 
 # The filenames below are relative to the folder containing this command file
 castaneaFileName	=	CastaneaSpecies_08_2021.txt
-inventoryFileName	=	C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/run/inventory.txt
+inventoryFileName	=	C:/Users/vandermeersch/Documents/CEFE/phd/castanea/run/inventory.txt
 
 climateBaseName	=	D:/climate/ERA5-Land/castanea_format/
 climateExtension	=	.txt

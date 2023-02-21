@@ -14,10 +14,10 @@ library(dplyr)
 library(data.table)
 library(Matrix)
 library(AUC)
-source("C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
+source("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
 
 # folders
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 sp_data_dir <- "D:/species/processed"
 clim_data_dir <- "D:/climate/ERA5-Land/bioclim_format"
 soil_data_dir <- "D:/soil/processed"

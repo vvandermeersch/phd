@@ -5,7 +5,7 @@
 library(RangeShiftR)
 
 # Working directory 
-dirpath = "C:/Users/vandermeersch/Documents/CEFE/thesis/migration/RangeShiftR/sessile_test"
+dirpath = "C:/Users/vandermeersch/Documents/CEFE/phd/migration/RangeShiftR/sessile_test"
 
 dir.create(file.path(dirpath,"Inputs"), showWarnings = TRUE)
 dir.create(file.path(dirpath,"Outputs"), showWarnings = TRUE)

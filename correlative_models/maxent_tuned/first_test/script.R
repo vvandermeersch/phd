@@ -2,7 +2,7 @@
 library(blockCV)
 library(ENMeval)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 
 # environmental data in raster format
 bc_covars <- c("bio6", "bio12")

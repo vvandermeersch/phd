@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps"
 
 source(file.path(wd, "functions", "cmaes_calibration.R"))
 source(file.path(wd, "functions", "load_parameter_values.R"))
@@ -33,7 +33,7 @@ sim_options <- list(siteFileName = "unused", speciesFileName = "unused", default
                     climaticFitness = "false", fitnessImpactsGrowth = "false", 
                     management = "false", managementFileName = "unused",
                     droughtStressOption = "FORCLIM_LIKE_DROUGHT_STRESS",
-                    setup_file = "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps/calibration/test.setup"
+                    setup_file = "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps/calibration/test.setup"
                     )
 
 species <- list(structure_file = file.path(wd, "first_tests", "forceps2.New_species"),

@@ -3,7 +3,7 @@
 ############################################
 
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 
 
 # species settings

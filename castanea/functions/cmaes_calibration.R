@@ -138,7 +138,7 @@ cmaes_vectorized <- function(nruns, obj_function, ...,
                           control=list(sigma=controls$sigma, mu=controls$mu, lambda=controls$lambda, 
                                        maxit=controls$maxit, vectorized=T),
                           is_feasible = is_feasible,
-                          log_file="C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/calibration/logs/CMAES_log.txt")
+                          log_file="C:/Users/vandermeersch/Documents/CEFE/phd/castanea/calibration/logs/CMAES_log.txt")
   
   end_time <- Sys.time()
   

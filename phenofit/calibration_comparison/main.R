@@ -1,5 +1,5 @@
 
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_comparison'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/calibration_comparison'
 source(file.path(wd, "functions", "read_species_file.R"))
 
 

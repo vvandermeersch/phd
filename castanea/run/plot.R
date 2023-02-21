@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/castanea"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/castanea"
 source(file.path(wd, "functions", "read_mean_outputvalue.R"))
 library(ggplot2)
 library(colorspace)

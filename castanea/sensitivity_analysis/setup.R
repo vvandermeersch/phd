@@ -2,7 +2,7 @@
 # Setup script #
 ################
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/castanea"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/castanea"
 
 source(file.path(wd, "functions", "run_model.R"))
 source(file.path(wd, "functions", "create_speciesfile.R"))
@@ -81,5 +81,5 @@ data <- list(grid = grid_points, lat = data_soil[grid_points, "lat"], lon = data
              wilt = round(data_soil[grid_points, "WP"],3), stone =  round(data_soil[grid_points, "crf_all"],3), 
              bulk = round(data_soil[grid_points, "bld"],3), soil_prop = soil_prop)
 
-species=list(name = "Fagus sylvatica", structure_file = "C:/Users/vandermeersch/Documents/CEFE/thesis/castanea/species/CastaneaSpecies_08_2021.txt")
+species=list(name = "Fagus sylvatica", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
 

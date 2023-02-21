@@ -2,7 +2,7 @@ library(RangeShiftR)
 library(raster)
 
 # Working directory 
-dirpath = "C:/Users/vandermeersch/Documents/CEFE/thesis/migration/RangeShiftR/first_test"
+dirpath = "C:/Users/vandermeersch/Documents/CEFE/phd/migration/RangeShiftR/first_test"
 
 dir.create(file.path(dirpath,"Inputs"), showWarnings = TRUE)
 dir.create(file.path(dirpath,"Outputs"), showWarnings = TRUE)

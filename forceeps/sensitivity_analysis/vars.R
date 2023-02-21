@@ -6,13 +6,13 @@
 
 
 # Setup
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps"
 source(file.path(wd, "sensitivity_analysis", "setup.R"))
 source(file.path(wd, "functions", "read_auc.R"))
 
 
 # Read parameter matrix
-VARS_dir <- "C:/Users/vandermeersch/Documents/CEFE/thesis/global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1/VARS"
+VARS_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1/VARS"
 parameter_matrix_file <- file.path(VARS_dir, "forceeps_out_3", "STAR_out.smp")
 parameter_matrix <- fread(parameter_matrix_file, header=F)
 

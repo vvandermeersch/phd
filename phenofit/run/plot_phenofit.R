@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/run/"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/run/"
 
 library(AUC)
 library(ggplot2)

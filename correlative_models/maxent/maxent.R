@@ -20,7 +20,7 @@ options(java.parameters = "-Xmx2g" )
 
 
 # folders
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 sp_data_dir <- "D:/species/processed"
 clim_data_dir <- "D:/climate/ERA5-Land/bioclim_format"
 soil_data_dir <- "D:/soil/processed"

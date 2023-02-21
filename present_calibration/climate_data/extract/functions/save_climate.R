@@ -1,4 +1,4 @@
-source("C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/climate_data/format/phenofit/functions/get_comments.R")
+source("C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/format/phenofit/functions/get_comments.R")
 
 save_climate <- function(climate_data, yr, output_folder, p_var, species, method=NULL){
   

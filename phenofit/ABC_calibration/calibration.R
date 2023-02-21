@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/ABC_calibration"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/ABC_calibration"
 
 source(paste0(wd, "/functions/phenofit_ABC.R"))
 source(paste0(wd, "/functions/create_init_species_file.R"))

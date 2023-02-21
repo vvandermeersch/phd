@@ -7,7 +7,7 @@ setwd("D:/climate/ERA5-Land/raw") # folder where files will be downloaded
 # Python config
 use_python("C:/Users/vandermeersch/AppData/Local/Programs/Python/Python310/python.exe", required=T)
 cdsapi <- import("cdsapi")
-source_python("C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/climate_data/download/ERA5_land_download.py") # custom script
+source_python("C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/download/ERA5_land_download.py") # custom script
 
 
 # select the variable; name must be a valid ERA5 CDS API name

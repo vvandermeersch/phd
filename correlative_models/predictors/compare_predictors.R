@@ -2,7 +2,7 @@
 # Comparing and selecting predictors for cSDM #
 ###############################################
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors"
 
 library(dplyr)
 library(corrplot)

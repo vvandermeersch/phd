@@ -5,7 +5,7 @@
 
 # author : V. Van der Meersch - 13/10/2022
 
-dir_wgen <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/daily_weather_generator"
+dir_wgen <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/daily_weather_generator"
 
 gwgen <- function(input_file, output_dir){
   

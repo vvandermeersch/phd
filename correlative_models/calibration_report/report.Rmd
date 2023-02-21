@@ -30,9 +30,9 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 
-source("C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
+source("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
 
 library(AUC)
 library(ggplot2)
@@ -92,7 +92,7 @@ load(file.path(sp_data_dir, "fagus_sylvatica", "fagus_sylvatica_presabs.Rdata"))
 
 
 # predictors
-wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors"
 load(file.path(wd_pred, "predictors_data.Rdata"))
 
 europe_data <- predictors_data %>% 

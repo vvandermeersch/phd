@@ -8,7 +8,7 @@
 
 # Author : V. Van der Meersch
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate"
 
 
 # Load libraries and functions
@@ -40,16 +40,16 @@ for(year in seq(21000, 3000, -2000)){
 for(year in seq(17000, 1000, -2000)){
   yrb <- year - 15
   yre <- year + 15
-  input_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate/inputs/",
+  input_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/inputs/",
                        yrb, "_", yre,
                        "BP_gwgen.csv")
-  gwgen_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate/outputs/",
+  gwgen_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/outputs/",
                        yrb, "_", yre,
                        "BP_gwgen_out.csv")
-  toa_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate/outputs/",
+  toa_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/outputs/",
                        yrb, "_", yre,
                        "BP_toarad.csv")
-  glo_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/climate_data/generate/outputs/",
+  glo_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/outputs/",
                      yrb, "_", yre,
                      "BP_glorad.csv")
   format_gwgen_to_phenofit_addvar(input_file, toa_file, addvar = "TOA", pd_folder = out_clim_dir, debug_first_row = FALSE)

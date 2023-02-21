@@ -7,7 +7,7 @@
 
 # Inspired by this page: https://github.com/NeotomaDB/RangeMapper/blob/master/workflows/walkthroughs/RangeMapper_walkthrough_pollen.Rmd
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/hindcasting/occurrence_data/neotoma"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/occurrence_data/neotoma"
 
 # Load packages and functions
 library(neotoma2)

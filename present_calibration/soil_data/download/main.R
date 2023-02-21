@@ -5,7 +5,7 @@
 # nitrogen, pH and carbon stocks
 # need local VRT to modify the source filename (relativeToVRT="0")
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/soil_data/download"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/soil_data/download"
 vrt_dir <- file.path(wd, "vrt_files")
 
 gdal_path <- "C:/Program Files/QGIS 3.16.16/bin"

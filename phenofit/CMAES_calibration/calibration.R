@@ -3,7 +3,7 @@
 # Working directory
 wd <- "/scratch/vvandermeersch/phenofit_calibration_3"
 
-#wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration'
+#wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/calibration'
 
 #library(progressr)
 

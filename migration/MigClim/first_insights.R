@@ -7,7 +7,7 @@ library(MigClim)
 library(ggplot2)
 library(terra)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/migration/MigClim"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/migration/MigClim"
 
 # little modification of MigClim R function
 source(file.path(wd, "functions", "migclim.migrate.custom.R"))

@@ -14,9 +14,9 @@ library(scales)
 library(AUC)
 
 # folders
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models"
 sp_data_dir <- "D:/species/processed"
-wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+wd_pred <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors"
 
 # model types
 model_types <- c("gam", "lasso_glm", "maxent", "random_forest", "brt")

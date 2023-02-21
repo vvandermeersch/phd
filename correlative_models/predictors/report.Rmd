@@ -23,7 +23,7 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_report"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/calibration_report"
 
 library(ggplot2)
 library(cowplot)
@@ -45,7 +45,7 @@ knitr::opts_chunk$set(cache=TRUE,
 
 ```{r data, include=FALSE}
 # Simulation (at European scale) folder
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/correlative_models/predictors"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors"
 
 # Load predictors
 load(file.path(wd, "predictors_data.Rdata"))

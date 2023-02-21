@@ -13,7 +13,7 @@ header-includes:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/contrast_paper/phenology"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/contrast_paper/phenology"
 source(file.path(wd, "pep725andtempo_exploration.R"))
 
 ```
@@ -47,7 +47,7 @@ raster_map
 ## Comparison of forward and first best calibration
 
 ```{r pheno_forward, include=FALSE}
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
 source(file.path(wd, "functions", "read_species_file.R"))
 source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
 
@@ -100,7 +100,7 @@ forward_comp_map <- ggplot() +
 ```
 
 ```{r pheno_backward, include=FALSE}
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
 source(file.path(wd, "functions", "read_species_file.R"))
 source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
 
@@ -207,7 +207,7 @@ backward_comp_map_true
 ## Comparison of forward and second best calibration
 
 ```{r pheno_backward2, include=FALSE}
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
 source(file.path(wd, "functions", "read_species_file.R"))
 source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
 
@@ -334,7 +334,7 @@ backward_comp_map_true2
 ## Comparison of forward and third best calibration
 
 ```{r pheno_backward3, include=FALSE}
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
 source(file.path(wd, "functions", "read_species_file.R"))
 source(file.path(wd, "functions", "read_mean_outputvalue_phenofit.R"))
 

@@ -6,7 +6,7 @@ library(data.table)
 rawdata_folder <- "D:/soil"
 out_folder <- "D:/soil/castanea_format"
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/present_calibration/soil_data/format"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/soil_data/format"
 source(file.path(wd, "functions", "phenofit_get_WHC.R"))
 source(file.path(wd, "functions", "get_comments.R"))
 

@@ -1,4 +1,4 @@
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps"
 
 library(dplyr)
 library(tibble)
@@ -70,7 +70,7 @@ sim_options <- list(siteFileName = "unused", speciesFileName = "unused", default
                     climaticFitness = "false", fitnessImpactsGrowth = "false", 
                     management = "false", managementFileName = "unused",
                     droughtStressOption = "FORCLIM_LIKE_DROUGHT_STRESS",
-                    setup_file = "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps/calibration/test.setup"
+                    setup_file = "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps/calibration/test.setup"
 )
 
 species <- list(structure_file = file.path(wd, "first_tests", "forceps2.New_species"),
@@ -80,7 +80,7 @@ species <- list(structure_file = file.path(wd, "first_tests", "forceps2.New_spec
 
 # create species_file
 grid_points <- alt_subset$cell
-commandfile_options <- list(setupFileName = "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps/calibration/test.setup",
+commandfile_options <- list(setupFileName = "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps/calibration/test.setup",
                             climateFolder = "D:/climate/ERA5-Land/forceeps_format",
                             numberOfYearsToBeJumped = 1,
                             exportTimeStep = 1,
@@ -124,7 +124,7 @@ with_progress(system.time(run_model(runlines, ncores = 20)))
 # 6490s for 1200 sim on 20 cores
 # 35394s for 12288 sim on 20 cores
 
-output_path <- "C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps/sensitivity_analysis/process_files3"
+output_path <- "C:/Users/vandermeersch/Documents/CEFE/phd/forceeps/sensitivity_analysis/process_files3"
 files <- list.files(path = output_path, pattern = "\\.siteproductivity.txt$", recursive = T)
 
 

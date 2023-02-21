@@ -1,7 +1,7 @@
 # Forceps script command file, format victor.SimulationCommandReaderVictor
 # Generated on Rstudio by user vandermeersch, on the 2022-08-06
 
-setupFileName = C:/Users/vandermeersch/Documents/CEFE/thesis/forceeps/calibration/calibration.setup
+setupFileName = C:/Users/vandermeersch/Documents/CEFE/phd/forceeps/calibration/calibration.setup
 climateFolder = D:/climate/ERA5-Land/forceeps_format
 numberOfYearsToBeJumped = 1
 exportTimeStep = 1
