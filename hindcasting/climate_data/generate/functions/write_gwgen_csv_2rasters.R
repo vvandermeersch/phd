@@ -10,6 +10,13 @@
 
 write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debug_wet = F, debug_wndcld = F, debug_years = F){
   
+  outname <-   ifelse(!is.na(years [2]) ,paste0(years[1], "_",years[2],"BP"), paste0(years[1], "_BP"))
+  
+  # write header as require by gwgen
+  header <- c("station id", "lon", "lat", "year", "month", "min.temperature", "max.temperature",
+              "cloud fraction", "wind speed", "precipitation", "wet")
+  write.table(t(header), file = file.path(output_dir, paste0(outname, "_gwgen.csv")), col.names = FALSE, row.names = FALSE, sep=",")
+  
   # first raster
   # get file spec
   file_spec <- years_to_file(years[1])
@@ -68,15 +75,15 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
                             paste0("v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
                   subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max)
   
-  # merge
+  # merge (time goes forward)
   cat("Merging raster files \n")
-  r_tmin <- merge(r_tmin1, r_tmin2)
-  r_tmax <- merge(r_tmax1, r_tmax2)
-  r_pre <- merge(r_pre1, r_pre2)
-  r_wet <- merge(r_wet1, r_wet2)
-  r_cloud <- merge(r_cloud1, r_cloud2)
-  r_uwind <- merge(r_uwind1, r_uwind2)
-  r_vwind <- merge(r_vwind1, r_vwind2)
+  r_tmin <- c(r_tmin2, r_tmin1)
+  r_tmax <- c(r_tmax2, r_tmax1)
+  r_pre <- c(r_pre2, r_pre1)
+  r_wet <- c(r_wet2, r_wet1)
+  r_cloud <- c(r_cloud2, r_cloud1)
+  r_uwind <- c(r_uwind2, r_uwind1)
+  r_vwind <- c(r_vwind2, r_vwind1)
   
   
   # crop
@@ -103,11 +110,12 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   vwind <- as.vector(r_vwind)
   wind <- sqrt(uwind^2 + vwind^2)
   
-  id <- rep(1:ncell(r_tmin), length(rmonths$min:rmonths$max))
-  lon <- rep(unlist(lapply(1:ncell(r_tmin), function(i)xFromCell(r_tmin, i))), length(rmonths$min:rmonths$max))
-  lat <- rep(unlist(lapply(1:ncell(r_tmin), function(i)yFromCell(r_tmin, i))), length(rmonths$min:rmonths$max))
+  id <- rep(1:ncell(r_tmin), length(years[1]:years[2])*12)
+  lon <- rep(unlist(lapply(1:ncell(r_tmin), function(i)xFromCell(r_tmin, i))), length(years[1]:years[2])*12)
+  lat <- rep(unlist(lapply(1:ncell(r_tmin), function(i)yFromCell(r_tmin, i))), length(years[1]:years[2])*12)
   month <- rep(unlist(lapply(1:12, function(i)rep(i,ncell(r_tmin)))), length(years[1]:years[2]))
-  yr <- unlist(lapply(years[1]:years[2], function(i)rep(i,ncell(r_tmin)*12)))
+  yr <- unlist(lapply(years[2]:years[1], function(i)rep(i,ncell(r_tmin)*12))) # time goes forward
+  
   if(debug_years){
     yr <- unlist(lapply(1900:1930, function(i)rep(i,ncell(r_tmin)*12)))
   }

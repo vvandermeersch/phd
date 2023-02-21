@@ -76,7 +76,7 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, debug_wet = F
   lon <- rep(unlist(lapply(1:ncell(r_tmin), function(i)xFromCell(r_tmin, i))), length(rmonths$min:rmonths$max))
   lat <- rep(unlist(lapply(1:ncell(r_tmin), function(i)yFromCell(r_tmin, i))), length(rmonths$min:rmonths$max))
   month <- rep(unlist(lapply(1:12, function(i)rep(i,ncell(r_tmin)))), length(years[1]:years[2]))
-  yr <- unlist(lapply(years[1]:years[2], function(i)rep(i,ncell(r_tmin)*12)))
+  yr <- unlist(lapply(years[2]:years[1], function(i)rep(i,ncell(r_tmin)*12))) # time goes forward
   if(debug_years){
     yr <- unlist(lapply(1900:1930, function(i)rep(i,ncell(r_tmin)*12)))
   }
