@@ -40,3 +40,4 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/correlative_models/biomod/fit
 **/correlative_models/brt/fit
 **/correlative_models/random_forest/fit
+**/correlative_models/gam/fit
