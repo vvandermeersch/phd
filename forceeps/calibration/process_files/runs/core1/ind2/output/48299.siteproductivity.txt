@@ -1,0 +1,14 @@
+# Forceps productivity export at Mon May 09 12:45:49 CEST 2022
+
+# Genotypes included in the simulation
+# genoptypeName	id name sname type s hmax amax g ddmin witn witx drtol ntol brow ly la lq immt ageMaturityForReproduction
+# 17-Genotype-1	17 Fagus sylvatica FSyl D2 76.9983678656077 48.26248965636 1477.55819293415 33.3764991583333 640.966386444998 2.10362098678517 6.09016216004337 0.413941804342939 3 3 0.0891340381032469 6.48549685911632 2 -12000.0 1.0
+
+#Trees
+#date	patchId	speciesId	speciesShortName	adultProdBasalArea	adultProdBiomass	adultTreeBasalArea	adultTreeBiomass	deadBasalArea	deadBiomass	saplingBasalArea	saplingBiomass	adultTreeNumber	deadNumber	saplingNumber	droughtIndexAnnual	droughtIndexSeasonal
+
+1971	1	17	FSyl	0.00016	0.8112	0.03354	144.16852	0	0	0	0	3	0	0	0.3302314858591481	0.4093472592545582
+1972	1	17	FSyl	0	0	0.03354	144.16852	0	0	0	0	3	0	0	0.4775047571258154	0.664600507052845
+1973	1	17	FSyl	0	0	0.03354	144.16852	0	0	0	0	3	0	0	0.5423605345038165	0.7422612841821642
+1974	1	17	FSyl	0	0	0.03354	144.16852	0	0	0	0	3	0	0	0.46144994446240384	0.573178543123008
+1975	1	17	FSyl	0	0	0.03354	144.16852	0	0	0	0	3	0	0	0.5458453555263221	0.7797790793233172

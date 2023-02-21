@@ -1,0 +1,38 @@
+# Inventory file for Castanea
+# Generated on Rstudio by user vandermeersch, on the 2022-12-19
+
+# General
+fmCellWidth	=	20
+year	=	1970
+latitude	=	44
+longitude	=	5
+
+# CASTANEA parameters
+CO2mode	=	CO2_PAST_EVOLUTION
+elevationEffect	=	ELEVATION_EFFECT_FIXED
+predawnModel	=	PREDAWN_CAMP
+LAImode	=	LAI_STAND
+mortalityModel	=	MORTALITY_RDI
+typeOfVegetation	=	TYPE_VEG_STAND
+phenoMode	=	PHENO_CASTANEA
+fit2018FileName	=	fit2018/UniChillRenecofor_2021.fit2018
+droughtOnRespiration	=	FALSE
+soilInit	=	SOIL_INIT_EQ
+temperatureEffectOnPhotosynthesis	=	TEMPERATURE_EFFECT_BERNACCHI
+allocRemain	=	ALLOC_REMAIN_RESERVES
+ETRMode	=	ETR_FAO
+aeroMode	=	AERO_FAO
+iFROST	=	3
+simulationReproduction	=	FALSE
+allocRepro	=	REPRO_OLD
+allocSchema	=	ALLOC_SCHEMA_DAVI2009
+parametPotFromSoil	=	true
+initWoodByVolume	=	true
+stomataStress	=	STOMATA_STRESS_GRANIER
+
+output	=	1
+
+optionalVariables	=	-
+
+# Type	Id	Species	xc	yc	zc	soilHeight	stone	wfc	wilt	propMacro	bulk	SOLCLAYtop	SOLCLAYsol	SOLFINtop	SOLFINsol	SOLSANDtop	SOLSANDsol	prac	pracDeep	deepSoilDep	stoneDeep	MacroDeep	dbh	Nha	Vha	age	clumping	LAI	optional variable
+cell	1	12	200	200	0	0	0	0	0	0	0	0	0	0	0	0	0	0.5	0	0	0	0	15	1200	126	42	0.7	6	-

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Quercus ilex</Name>
+    <Leaf Model="2">
+      <t0>-76.4210325159544</t0>
+      <a>3.04246707681406</a>
+      <b>49.020941931966</b>
+      <c>13.1543332094656</c>
+      <d>-1.01108807604264</d>
+      <e>10.8973631948177</e>
+      <Ccrit>22.1780035762659</Ccrit>
+      <Fcrit>16.778338497561</Fcrit>
+    </Leaf>
+    <Flower Model="2">
+      <t0>-76.4210325159544</t0>
+      <a>3.04246707681406</a>
+      <b>49.020941931966</b>
+      <c>13.1543332094656</c>
+      <d>-1.01108807604264</d>
+      <e>10.8973631948177</e>
+      <Ccrit>22.1780035762659</Ccrit>
+      <Fcrit>23.5205740587995</Fcrit>
+    </Flower>
+    <FruitMaturation Model="2">
+      <Tb>15.4706594198479</Tb>
+      <Fcrit>3.70693660522856</Fcrit>
+      <sigma>239.523175858923</sigma>
+      <pfe50>0.520820754622541</pfe50>
+    </FruitMaturation>
+    <Senescence Model="1">
+      <!-- Trick to have no senescence (initially Model="4", modified by V. V.) -->
+      <Fcrit>300</Fcrit>
+      <Tb>20</Tb>
+      <sigmaSen>0</sigmaSen>
+    </Senescence>
+    <CompoundBud>2</CompoundBud>
+    <LeafHabit>2</LeafHabit>
+    <Tdeath>-35</Tdeath>
+    <Frost>
+      <FHfrmax1>-12.1243012615918</FHfrmax1>
+      <FHfrmax2>-25.8579729582004</FHfrmax2>
+      <FHminfe>-7.60320884729755</FHminfe>
+      <FHminfl>-3.41306902221155</FHminfl>
+      <Te1>6.03393582435748</Te1>
+      <Te2>-5.25442473526873</Te2>
+      <FHtfemax>-6.43257898928013</FHtfemax>
+      <FHtflmax>-8.07116464807973</FHtflmax>
+      <FHpfemax>-9.77907167532393</FHpfemax>
+      <FHpflmax>-12.5668939015072</FHpflmax>
+      <NL1>13.2606410775335</NL1>
+      <NL2>7.1351454475889</NL2>
+    </Frost>
+    <Drought Model="1">
+      <pp1>278.064190790161</pp1>
+      <pp2>2530.23985096438</pp2>
+    </Drought>
+  </Provenance>
+</Species>

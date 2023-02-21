@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Fagus_sylvatica</Name>
+    <Leaf Model="9">
+      <t0>-59.6030919400616</t0>
+      <Vb>7.15241286984063</Vb>
+      <d>-1.10176876671101</d>
+      <e>5.53385531585902</e>
+      <Ccrit>116.966506228762</Ccrit>
+      <Fcrit>1</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <t0>-59.6030919400616</t0>
+      <Vb>7.15241286984063</Vb>
+      <d>-1.10176876671101</d>
+      <e>5.53385531585902</e>
+      <Ccrit>116.966506228762</Ccrit>
+      <Fcrit>33.0392872026583</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <aa>-1.60217211730981</aa>
+      <bb>9.23459707076617</bb>
+      <Fcrit>9.34412583678067</Fcrit>
+      <Top>16.5695953395927</Top>
+      <matmoy>14.0457159454787</matmoy>
+      <sigma>6.33303146140798</sigma>
+      <pfe50>0.536538874053308</pfe50>
+      <photosType>2</photosType>
+    </FruitMaturation>
+    <Senescence Model="6">
+      <Pb>8.74527777505777</Pb>
+      <Tb>14.9353209552871</Tb>
+      <alpha>1.46285816123718</alpha>
+      <beta>0.789173348525765</beta>
+      <Scrit>33.8893793344688</Scrit>
+      <sigmaSen>5.22869448908518</sigmaSen>
+    </Senescence>
+    <CompoundBud>2</CompoundBud>
+    <LeafHabit>1</LeafHabit>
+    <Tdeath>-30</Tdeath>
+    <Frost>
+      <FHfrmax1>-14.7866563919143</FHfrmax1>
+      <FHfrmax2>-21.3458184926995</FHfrmax2>
+      <FHminfe>-9.00342536077421</FHminfe>
+      <FHminfl>-0.846104586605099</FHminfl>
+      <Te1>2.28454420481255</Te1>
+      <Te2>-17.4866423475068</Te2>
+      <FHtfemax>-9.25241430310562</FHtfemax>
+      <FHtflmax>-15</FHtflmax>
+      <FHpfemax>-18.8753043844053</FHpfemax>
+      <FHpflmax>-20</FHpflmax>
+      <NL1>17.9074642761342</NL1>
+      <NL2>15.8918836318114</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>623.226795613246</ppextremelow>
+      <pplow>563.334307448181</pplow>
+      <pphigh>2039.0805993837</pphigh>
+      <ppextremehigh>2933.43093261364</ppextremehigh>
+    </Drought>
+  </Provenance>
+</Species>

@@ -1,0 +1,42 @@
+# Species file for Castanea, generated on Rstudio with CMA-ES algorithm, on the 2022-05-10
+MRN	=	0.0011
+QDIX	=	2.1
+tc	=	0.5
+Tbase	=	15
+Oi0	=	205
+Ko0	=	248
+Kc0	=	404
+cVc	=	26.35
+cVo	=	22.98
+cKc	=	404.9
+cKo	=	278.4
+cgama	=	42.75
+EaKc	=	79430
+EaKo	=	36380
+EaVc	=	65330
+EaVo	=	60110
+Eagama	=	37830
+rdtq	=	0.24
+coefbeta	=	2.2
+KAR	=	0.4
+Cd	=	0.2
+Zosol	=	0.001
+K1	=	3.9
+K2	=	4.9
+K3	=	7.3
+K4	=	6
+K5	=	14.8
+K6	=	18.5
+K7	=	0.2
+K8	=	0.0045
+Cph	=	1.01
+R	=	8.3144621
+IO	=	1370
+gsolmax	=	0.003
+gsolmin	=	7.75e-05
+emsg	=	0.96
+Alit	=	0.28
+Asoil	=	0.39
+
+# speciesCode	speciesName	CRF	CRRG	CRRF	CRBV	Crrepro	tronviv	branviv	rgviv	Lignroots	LIGNrl	LIGNll	LIGNfb	LIGNcb	LIGNcr	TGSS	Nitrogen	NRG	NRF	NBR	NTV	NSS	Nrepro	potToWood	GBVmin	TMRF	ratioBR	RS	coefrac	ratioG	TMBV	SF	LMA0	KLMA	alphal	alphab	CrownArea1	CrownArea2	CoefLAI1	CoefLAI2	CoefLAI3	aDBH	bDBH	aGF	bGF	Phi	ros	logaRDI	bRDI	clumping	RauwPIR	RauwPAR	RaufPIR	TaufPIR	RaufPAR	TaufPAR	emsf	Tleaf	Tbark	CIA	CIB	propec	g0	g1	RSoilleaf	CapSoilleaf	P50	P50Roots	pleafMin	Kplantini	EaVJ	ETT	JMT	NC	teta	TBASEA	TBASEB	TBASEC	NSTART	NSTART3	TSUMBB	HSUMFL	HSUMLMA	TSUMLFAL	SmatchDelay	SShape	Rec0	frec0	T1rec	T2rec	T3rec	T6rec	fa0	fd0	ffrost	woodStop	FHminfe	FHmax	decidue	cohorLeaves	reservesToReproduce	reservesToMortality	reserveToLeafFall	BSSminCrit	rateOfSeed	rateOfSeedJourne	seedMass_mg	seedMass_mu	auxiliaryReproStructure	seedMortality	seedsperFruit
+3	Fagus sylvatica	1.5	1.5	1.5	1.5	1.5	0.15	0.25	0.15	25	0.38	0.38	0.35	0.35	0.38	0.25	5	1	5	5	1	0.04	5	-1.5	0.5	1	0.5	0.5	0.5	0.22	0.005	2750	225	0.25	45.5	45.5	0.25	0	1.5	1.5	0.3	-2.5	2.5	2.5	0.5	0.5	550	10	-2.5	0.5	0.314	0.135	0.356	0.377	0.0877	0.055	0.97	1	2.5	2.5	5	1	0.1	10	52500	0.04	-5	-5	-5	0.5	37000	710	220000	25.5	0.7	2.5	6.5	20	52.5	213	550	1050	1100	200	1000	2	150	0.5	0	-5	-5	-5	0.25	0.25	0.25	425	-10	-52.5	1	1	175	100	25	-80	0.2	0.003	167.7	2.8	0.5	0.45	150.5

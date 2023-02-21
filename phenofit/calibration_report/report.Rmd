@@ -1,0 +1,240 @@
+---
+output: 
+  stevetemplates::article:
+    fig_caption: true
+#bibliography: master.bib
+biblio-style: apsr
+title: "Phenofit calibration report"
+# thanks: "Replication files are available on the author's Github account (http://github.com/svmiller). **Current version**: `r format(Sys.time(), '%B %d, %Y')`; **Corresponding author**: svmille@clemson.edu."
+author:
+- name: Victor Van der Meersch
+  affiliation: CEFE, CNRS
+abstract: "This document provides detailed information about a specific calibration run, including ABC algorithm performance and model outputs. "
+# keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+#geometry: margin=1cm
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+header-includes:
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.6\textwidth, textfont=it, font=small]{caption}
+  - \usepackage{nopageno}
+  - \setlength{\voffset}{-0.4in}
+  - \geometry{top=1in, bottom=-1in, left=1.25in, right=1.25in}
+
+---
+
+```{r setup, include=FALSE}
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_report"
+
+library(AUC)
+library(ggplot2)
+library(colorspace)
+library(dplyr)
+library(sf)
+library(raster)
+library(rnaturalearth)
+library(ecospat)
+
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      cache.path = '_cache/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+source(file.path(wd, "functions", "read_mean_outputvalue.R"))
+
+# Way to get lat/lon
+climate_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed"
+alt_file <- paste0(climate_folder, "/ERA5LAND_", "Altitude.fit")
+alt <- fread(alt_file, showProgress=F)
+colnames(alt) <- c("lat", "lon", "alt")
+alt$lat <- round(alt$lat, 1)
+alt$lon <- round(alt$lon, 1)
+
+```
+
+```{r data, include=FALSE}
+# settings
+species <- "fagus_sylvatica"
+calibration_run <- "11-06"
+subset <- "1"
+
+ABC <- TRUE
+
+# Calibration and simulation (at European scale) folders
+cal_dir <- paste0("D:/calibrations/phenofit/", species, "/1000pres_1000abs/", calibration_run)
+sim_dir <- paste0("D:/simulations/phenofit/backward/", species, "/", calibration_run)
+
+if(ABC){
+  cal_dir <- paste0("D:/calibrations/phenofit/", species, "/ABC/", calibration_run)
+  sim_dir <- paste0("D:/simulations/phenofit/backward/", species, "/ABC/", calibration_run)
+}
+
+# Calibration points
+cal_points <- paste0("D:/species/processed/", species, "/1000pres_1000abs/occurrence_subset_", subset ,".Rdata")
+load(cal_points)
+
+# Species pres/abs points
+points_presabs <- readRDS(paste0("D:/species/processed/", species, "/", species, "_presabs.rds"))
+
+if(!ABC){
+  cmaes_fit <- list.files(path = cal_dir, pattern = "\\.Rdata$", full.names = T)
+  load(cmaes_fit)
+}
+if(ABC){
+  ABC_fit <- list.files(path = cal_dir, pattern = "\\.Rdata$", full.names = T)
+  load(ABC_fit)
+  cmaes_fit <- list(list())
+  cmaes_fit[[1]]
+  cmaes_fit[[1]][["runtime"]] <- ABC_rej[["computime"]]
+  cmaes_fit[[1]][["value"]] <- min(ABC_rej[["stats"]])
+}
+
+
+# Load fitness
+fitness <- read_mean_outputvalue(sim_dir, "Fitness") # all Europe
+fitness_presabs <- read_mean_outputvalue(sim_dir, "Fitness", points = points_presabs) # only on pres/abs points
+
+# AUC on pres/abs points 
+auc_presabs <- auc(roc(fitness_presabs, as.factor(points_presabs$pres)))
+
+# Boyce index on pres points (Hirzel et al. 2006)
+# the Boyce index is probably the most appropriate reliability metric for presence‐only data (Leroy et al. 2018)
+presence_records <- left_join(alt, points_presabs, by = c('lat', 'lon')) %>% dplyr::select(-c('alt'))
+fitness_obs <- fitness[which(presence_records$pres == 1)]
+
+boyce_index <- c(0,0,0)
+names(boyce_index) <- c("spearman", "pearson", "kendall")
+boyce_list <- ecospat.boyce(fit = fitness, obs = fitness_obs, nclass=0, window.w="default", res=100, PEplot = F, rm.duplicate = F,  method = 'spearman' )
+boyce_index["spearman"] <- boyce_list$cor
+boyce_list <- ecospat.boyce(fit = fitness, obs = fitness_obs, nclass=0, window.w="default", res=100, PEplot = F, rm.duplicate = F,  method = 'pearson' )
+boyce_index["pearson"] <- boyce_list$cor
+boyce_list <- ecospat.boyce(fit = fitness, obs = fitness_obs, nclass=0, window.w="default", res=100, PEplot = F, rm.duplicate = F,  method = 'kendall' )
+boyce_index["kendall"] <- boyce_list$cor
+
+
+```
+
+```{r calibration_points, include=FALSE}
+# Only on calibration points : below...
+# # Simulation only on calibration points
+# calsim_dir <- file.path(sim_dir, "calibration_points")
+# fitness_cal <- read_mean_outputvalue(calsim_dir, "Fitness")
+# 
+# # Best threshold maximizing Youden index
+# youden_index <- sensitivity(fitness_cal, factor(species_occurrence$pres))$measure +
+#   specificity(fitness_cal, factor(species_occurrence$pres))$measure -1
+# thresholds <- roc(fitness_cal, factor(species_occurrence$pres))$cutoffs
+# best_threshold <- thresholds[which(youden_index == max(youden_index))]
+
+# On every points
+youden_index <- sensitivity(fitness_presabs, as.factor(points_presabs$pres))$measure +
+  specificity(fitness_presabs, as.factor(points_presabs$pres))$measure -1
+thresholds <- roc(fitness_presabs, as.factor(points_presabs$pres))$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+
+
+
+
+
+
+```
+
+## 1. Insights on the calibration process
+
+Input data:  
+- Species : *F. sylvatica*   
+- `r nrow(species_occurrence)` calibration points (50/50 presence/absence)  
+\
+Parameter tuning and calibration performance:  
+- $\lambda = 20$, $\mu = 10$, $\sigma = 2$   
+- $20$ parallel objective function evaluations  
+- $60$ CPUs, $80 Go$ of memory  
+- Runtime = `r round(cmaes_fit[[1]][["runtime"]]/3600, 2)` hours  
+- AUC on calibration points = `r 1-round(cmaes_fit[[1]][["value"]], 3)`  
+- Discrimination metric: AUC on all presence/absence points = `r round(auc_presabs, 3)`  
+- Reliability metric: Boyce index on all presence points = `r round(boyce_index, 3)` (*Spearman, Pearson, Kendall*)
+
+```{r calpoints_map, echo=FALSE, fig.height = 4.5, fig.width = 6, fig.align = "center", fig.cap = "Calibration points: presence in red and absence in orange. Light green is species distribution area.", fig.pos="H"}
+
+# Europe map
+countries_EUForest <- c("Austria", "Belarus", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Rep.", "Denmark", "Estonia", "Finland", "France", "Germany",
+                        "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Moldova", "Netherlands", "Norway", "Poland", "Portugal", "Romania",
+                        "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "United Kingdom")
+other_countries <- c("Ukraine", "Bosnia and Herzegovina", "Republic of Serbia", "Macedonia", "Greece",
+                     "Kosovo", "Albania", "Montenegro")
+countries <- c(countries_EUForest, other_countries)
+world_map <- ne_countries(scale="medium",returnclass = 'sf')
+eu_map <- world_map %>% filter(sovereignt %in% countries)
+eu_map_cropped <- eu_map %>% 
+  st_crop(st_bbox(c(xmin = -12, xmax = 40, ymax = 71, ymin = 34), crs = st_crs(4326)))
+
+
+
+ggplot() + 
+  geom_sf(data = eu_map_cropped, fill = 'grey', alpha=0.1, color='grey', size = 0.1) +
+  geom_tile(data=points_presabs[points_presabs$pres == 1,], aes(x = lon, y = lat), fill = "#8FD5A6", alpha=0.3) +
+  geom_tile(data = species_occurrence[species_occurrence$pres==1,], aes(x = lon, y = lat), fill = "#0C8346", alpha=1) +
+  geom_tile(data = species_occurrence[species_occurrence$pres==0,], aes(x = lon, y = lat), fill = "#D57A66", alpha=0.7) +
+  theme_void() +
+  theme(legend.position="none") +
+  theme(plot.title = element_text(size=12))
+
+
+
+```
+
+
+## 2. Simulation at European scale
+
+
+```{r fitness_map, echo=FALSE, fig.height = 4.3, fig.width = 4.3, fig.align = "center", fig.cap = "Fitness map with calibrated parameter set", fig.pos="H"}
+data_fitness <- as.data.frame(cbind(alt$lat, alt$lon,t(fitness)))
+colnames(data_fitness) <- c("lat", "lon", "fitness")
+
+ggplot(data=data_fitness, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = fitness), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+```
+
+
+
+```{r presence_map, echo=FALSE, fig.height = 4.3, fig.width = 4.3, fig.align = "center", fig.cap = paste0("Species presence map with calibrated parameter set. AUC threshold maximizing Youden index = ", round(best_threshold,3), "."), fig.pos="H"}
+data_presence <- data_fitness
+data_presence[data_presence$fitness < best_threshold, 'presence'] <- 0
+data_presence[data_presence$fitness >= best_threshold, 'presence'] <- 1
+
+ggplot(data=data_presence, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = presence), color = NA) +
+  theme_void() +
+  theme(legend.position="none") +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#488B49")
+
+```
+
+<!--
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+-->

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Fagus_sylvatica</Name>
+    <Leaf Model="9">
+      <t0>-61.8010964420208</t0>
+      <Vb>6.65568428192156</Vb>
+      <d>-1.17122978981872</d>
+      <e>5</e>
+      <Ccrit>111.07974861503</Ccrit>
+      <Fcrit>1</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <t0>-61.8010964420208</t0>
+      <Vb>6.65568428192156</Vb>
+      <d>-1.17122978981872</d>
+      <e>5</e>
+      <Ccrit>111.07974861503</Ccrit>
+      <Fcrit>35.3154129659128</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <aa>-1.72256783011863</aa>
+      <bb>8.94806911515351</bb>
+      <Fcrit>8.37356056181504</Fcrit>
+      <Top>16.2777350547373</Top>
+      <matmoy>3.41418231085625</matmoy>
+      <sigma>5.68191555210067</sigma>
+      <pfe50>0.549985905861276</pfe50>
+      <photosType>2</photosType>
+    </FruitMaturation>
+    <Senescence Model="6">
+      <Pb>7.9977230467515</Pb>
+      <Tb>15.5237072256884</Tb>
+      <alpha>1.55368833085089</alpha>
+      <beta>0.776963668059005</beta>
+      <Scrit>26.1843260327736</Scrit>
+      <sigmaSen>5.28705590419691</sigmaSen>
+    </Senescence>
+    <CompoundBud>2</CompoundBud>
+    <LeafHabit>1</LeafHabit>
+    <Tdeath>-30</Tdeath>
+    <Frost>
+      <FHfrmax1>-15</FHfrmax1>
+      <FHfrmax2>-21.8249323729203</FHfrmax2>
+      <FHminfe>-9.17114633491888</FHminfe>
+      <FHminfl>-0.604581718667021</FHminfl>
+      <Te1>2.27374931128572</Te1>
+      <Te2>-16.6080294394406</Te2>
+      <FHtfemax>-8.05016553233496</FHtfemax>
+      <FHtflmax>-15</FHtflmax>
+      <FHpfemax>-19.0598347909942</FHpfemax>
+      <FHpflmax>-19.7547326741671</FHpflmax>
+      <NL1>18.4916769817692</NL1>
+      <NL2>16.4029116410975</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>592.961300732326</ppextremelow>
+      <pplow>558.420658385184</pplow>
+      <pphigh>1963.46582381863</pphigh>
+      <ppextremehigh>2863.29235229896</ppextremehigh>
+    </Drought>
+  </Provenance>
+</Species>

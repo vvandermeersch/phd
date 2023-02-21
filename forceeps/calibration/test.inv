@@ -1,0 +1,14 @@
+# Forceps inventory
+
+inventoryPatchN = 1
+inventoryPatchArea = 800
+
+#patchId	treeId	speciesId age(years)	dbh(cm)	crownA1[0,1]	dbhIncrement(cm)	slowGrowthIndex(0,1)
+1	1	17	20	15	0.1	0.05	0
+1	2	17	10	10	0.1	0.1	0
+1	3	17	10	10	0.1	0.1	0
+
+
+
+
+

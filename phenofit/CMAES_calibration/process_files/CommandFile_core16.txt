@@ -1,0 +1,11 @@
+# File for Phenofit4 CommandScript
+# Generated with Rstudio (time: 2022-04-01 14:12:44, user: vvandermeersch)
+					
+speciesInputDir =
+climateInputDir =
+outputDir = /scratch/vvandermeersch/phenofit_calibration_3/process_files/output/core16/run
+quietMode = true
+					
+# speciesFileName	climateFolderName	climateScenario	startingYear	endingYear
+/scratch/vvandermeersch/phenofit_calibration_3/process_files/params/fagus_sylvatica_31.species	/scratch/vvandermeersch/data/climate/ERA5Land_fagsyl/2000pres_2000abs	ERA5LAND	1970	2000
+/scratch/vvandermeersch/phenofit_calibration_3/process_files/params/fagus_sylvatica_32.species	/scratch/vvandermeersch/data/climate/ERA5Land_fagsyl/2000pres_2000abs	ERA5LAND	1970	2000

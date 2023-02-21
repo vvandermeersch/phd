@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Fagus_sylvatica</Name>
+    <Leaf Model="9">
+      <t0>-53.2650539547004</t0>
+      <Vb>6.46730297038295</Vb>
+      <d>-0.972728214260111</d>
+      <e>6.221941084082</e>
+      <Ccrit>109.821881059856</Ccrit>
+      <Fcrit>1</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <t0>-53.2650539547004</t0>
+      <Vb>6.46730297038295</Vb>
+      <d>-0.972728214260111</d>
+      <e>6.221941084082</e>
+      <Ccrit>109.821881059856</Ccrit>
+      <Fcrit>31.3128297927621</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <aa>-1.57308105276977</aa>
+      <bb>9.31100945488998</bb>
+      <Fcrit>6.47607286617789</Fcrit>
+      <Top>15.3603798623495</Top>
+      <matmoy>7.02523148172858</matmoy>
+      <sigma>5.97264571843444</sigma>
+      <pfe50>0.585662294170764</pfe50>
+      <photosType>2</photosType>
+    </FruitMaturation>
+    <Senescence Model="6">
+      <Pb>7.25500780139212</Pb>
+      <Tb>14.7587334567858</Tb>
+      <alpha>1.4954665566836</alpha>
+      <beta>0.810559357814264</beta>
+      <Scrit>29.9924636122413</Scrit>
+      <sigmaSen>4.68426657956296</sigmaSen>
+    </Senescence>
+    <CompoundBud>2</CompoundBud>
+    <LeafHabit>1</LeafHabit>
+    <Tdeath>-30</Tdeath>
+    <Frost>
+      <FHfrmax1>-15</FHfrmax1>
+      <FHfrmax2>-20.7409481341688</FHfrmax2>
+      <FHminfe>-9.15734991307335</FHminfe>
+      <FHminfl>-0.666804072586933</FHminfl>
+      <Te1>3.28910891145993</Te1>
+      <Te2>-16.8059797695639</Te2>
+      <FHtfemax>-7.78256658744846</FHtfemax>
+      <FHtflmax>-15</FHtflmax>
+      <FHpfemax>-17.407472694448</FHpfemax>
+      <FHpflmax>-20</FHpflmax>
+      <NL1>16.6095682028454</NL1>
+      <NL2>16.1735552792548</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>615.155702826617</ppextremelow>
+      <pplow>458.988732545222</pplow>
+      <pphigh>2011.05367622566</pphigh>
+      <ppextremehigh>2888.83703479439</ppextremehigh>
+    </Drought>
+  </Provenance>
+</Species>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Fagus_sylvatica</Name>
+    <Leaf Model="9">
+      <t0>-60.2146705359062</t0>
+      <Vb>6.60017540536358</Vb>
+      <d>-1.16923868961632</d>
+      <e>5.82670216063879</e>
+      <Ccrit>113.034205650288</Ccrit>
+      <Fcrit>13.5552036583809</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <t0>-60.2146705359062</t0>
+      <Vb>6.60017540536358</Vb>
+      <d>-1.16923868961632</d>
+      <e>5.82670216063879</e>
+      <Ccrit>113.034205650288</Ccrit>
+      <Fcrit>34.3669539042485</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <aa>-1.67410052788933</aa>
+      <bb>8.06298893905888</bb>
+      <Fcrit>7.72933551480147</Fcrit>
+      <Top>15.1771841255034</Top>
+      <matmoy>10.9556523561766</matmoy>
+      <sigma>5.74125100990717</sigma>
+      <pfe50>0.535297944923793</pfe50>
+      <photosType>2</photosType>
+    </FruitMaturation>
+    <Senescence Model="6">
+      <Pb>8.43213328702696</Pb>
+      <Tb>14.3866264350329</Tb>
+      <alpha>1.4292992897045</alpha>
+      <beta>0.885802506461893</beta>
+      <Scrit>30.0151158806555</Scrit>
+      <sigmaSen>4.47937286565219</sigmaSen>
+    </Senescence>
+    <CompoundBud>2</CompoundBud>
+    <LeafHabit>1</LeafHabit>
+    <Tdeath>-30</Tdeath>
+    <Frost>
+      <FHfrmax1>-15</FHfrmax1>
+      <FHfrmax2>-21.6174435760111</FHfrmax2>
+      <FHminfe>-8.95889131523993</FHminfe>
+      <FHminfl>-0.425337156937539</FHminfl>
+      <Te1>2.34033197397245</Te1>
+      <Te2>-17.1565686533309</Te2>
+      <FHtfemax>-8.30000858712831</FHtfemax>
+      <FHtflmax>-15</FHtflmax>
+      <FHpfemax>-18.2982178792538</FHpfemax>
+      <FHpflmax>-20</FHpflmax>
+      <NL1>16.2063083215658</NL1>
+      <NL2>16.3835520692502</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>634.713821478858</ppextremelow>
+      <pplow>506.780701904402</pplow>
+      <pphigh>1937.50523283352</pphigh>
+      <ppextremehigh>2878.88726182322</ppextremehigh>
+    </Drought>
+  </Provenance>
+</Species>

@@ -1,0 +1,178 @@
+---
+output: 
+  stevetemplates::article:
+    fig_caption: true
+#bibliography: master.bib
+biblio-style: apsr
+#title: "Phenofit outputs"
+# thanks: "Replication files are available on the author's Github account (http://github.com/svmiller). **Current version**: `r format(Sys.time(), '%B %d, %Y')`; **Corresponding author**: svmille@clemson.edu."
+#author:
+#- name: Victor Van der Meersch
+#  affiliation: CEFE, CNRS
+#abstract: "This document provides detailed information about a specific calibration run, including CMA-ES algorithm performance and model outputs. "
+# keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+#geometry: margin=1cm
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+endnote: no
+header-includes:
+  - \usepackage{graphicx}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.6\textwidth, textfont=it, font=small]{caption}
+  - \usepackage{nopageno}
+  - \setlength{\voffset}{-0.4in}
+  - \geometry{top=1in, bottom=-1in, left=1.25in, right=1.25in}
+
+---
+
+```{r setup, include=FALSE}
+wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/phenofit/calibration_report"
+
+library(ggplot2)
+library(cowplot)
+
+knitr::opts_chunk$set(cache=TRUE,
+                      message=FALSE, warning=FALSE,
+                      fig.path='figs/',
+                      cache.path = '_cache/',
+                      fig.process = function(x) {
+                      x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+                      if (file.rename(x, x2)) x2 else x
+                      })
+
+source(file.path(wd, "functions", "read_mean_outputvalue.R"))
+
+# Way to get lat/lon
+climate_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed"
+alt_file <- paste0(climate_folder, "/ERA5LAND_", "Altitude.fit")
+alt <- fread(alt_file, showProgress=F)
+colnames(alt) <- c("lat", "lon", "alt")
+alt$lat <- round(alt$lat, 1)
+alt$lon <- round(alt$lon, 1)
+
+```
+
+```{r data, include=FALSE}
+# Simulation (at European scale) folder
+sim_dir <- "D:/simulations/phenofit/forward/quercus_ilex/Puechabon"
+
+# Load variables
+fruit_index <- read_mean_outputvalue(sim_dir, "FruitIndex")
+maturation_index <- read_mean_outputvalue(sim_dir, "MaturationIndex")
+leaf_index <- read_mean_outputvalue(sim_dir, "LeafIndex")
+carbon_survival <- read_mean_outputvalue(sim_dir, "CarbonSurvival")
+drought_survival <- read_mean_outputvalue(sim_dir, "DroughtSurvival")
+temperature_survival <- read_mean_outputvalue(sim_dir, "TempSurvival")
+
+
+
+```
+
+
+```{r index_maps, echo=FALSE, fig.align = "center", fig.cap = "Leaf (A), fruit (B) and maturation (C) indices and carbon (D), drought (E) and (F) temperature survival indices.", fig.pos="H", fig.height = 9}
+index_data <- as.data.frame(cbind(alt$lat, alt$lon,t(leaf_index), t(fruit_index), t(maturation_index)))
+colnames(index_data) <- c("lat", "lon", "leaf", "fruit", "maturation")
+
+leaf <- ggplot(data=index_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = leaf), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#F7A072", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+fruit <- ggplot(data=index_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = fruit), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#F7A072", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+maturation <- ggplot(data=index_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = maturation), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#F7A072", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+survival_data <- as.data.frame(cbind(alt$lat, alt$lon,t(carbon_survival), t(drought_survival), t(temperature_survival)))
+colnames(survival_data) <- c("lat", "lon", "carbon", "drought", "temperature")
+
+carbon <- ggplot(data=survival_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = carbon), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#AF90A9", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+drought <- ggplot(data=survival_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = drought), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#AF90A9", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+temperature <- ggplot(data=survival_data, aes(x = lon, y = lat)) + 
+  geom_tile(aes(fill = temperature), color = NA) +
+  theme_void() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank()) +
+  ylab("") +
+  xlab("") +
+  scale_fill_gradient(low = "#EBEBD3", high = "#AF90A9", limits=c(0,1)) +
+  theme(legend.key.height= unit(0.2, 'cm'),
+        legend.key.width= unit(1, 'cm'))
+
+
+plot_grid(
+  plot_grid(leaf + theme(legend.position = "none"),
+            carbon + theme(legend.position = "none"),
+            fruit + theme(legend.position = "none"),
+            drought + theme(legend.position = "none"), 
+            maturation + theme(legend.position = "none"),
+            temperature + theme(legend.position = "none"),
+            ncol=2,
+            labels = c("(A)", "(D)", "(B)", "(E)", "(C)", "(F)"),
+            label_size = 10),
+  plot_grid(get_legend(leaf), get_legend(carbon), ncol = 2),
+  ncol = 1,
+  rel_heights = c(20,1)
+
+)
+
+```
+
+
+
+
+
+<!--
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+-->

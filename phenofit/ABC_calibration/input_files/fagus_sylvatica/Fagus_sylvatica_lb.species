@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Fagus_sylvatica</Name>
+	<!-- LOWER BOUNDS, NARROW RANGE -->
+    <Leaf Model="9">
+      <t0>-122</t0>
+      <Vb>-5</Vb>
+      <d>-2</d> <!-- attention signe ! -->
+      <e>5</e>
+      <Ccrit>1</Ccrit>
+      <Fcrit>1</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <t0>-122</t0>
+      <Vb>-5</Vb>
+      <d>-2</d> <!-- attention signe ! -->
+      <e>5</e>
+      <Ccrit>1</Ccrit>
+      <Fcrit>1</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <aa>-2</aa>
+      <bb>5</bb>
+      <Fcrit>1</Fcrit>
+      <Top>5</Top>
+      <matmoy>1</matmoy>
+      <sigma>0.01</sigma>
+      <pfe50>0.2</pfe50>
+      <photosType>FIXED</photosType>
+    </FruitMaturation>
+    <Senescence Model="6">
+      <Pb>1</Pb>
+      <Tb>0</Tb>
+      <alpha>0</alpha> <!-- Discrete value... -->
+      <beta>0</beta> <!-- Discrete value... -->
+      <Scrit>1</Scrit>
+      <sigmaSen>0.01</sigmaSen>
+    </Senescence>
+    <CompoundBud>FIXED</CompoundBud>
+    <LeafHabit>FIXED</LeafHabit>
+    <Tdeath>FIXED</Tdeath>
+    <Frost>
+      <FHfrmax1>-15</FHfrmax1>
+      <FHfrmax2>-30</FHfrmax2>
+      <FHminfe>-10</FHminfe>
+      <FHminfl>-10</FHminfl>
+      <Te1>0</Te1>
+      <Te2>-25</Te2>
+      <FHtfemax>-15</FHtfemax>
+      <FHtflmax>-15</FHtflmax>
+      <FHpfemax>-20</FHpfemax>
+      <FHpflmax>-20</FHpflmax>
+      <NL1>1</NL1>
+      <NL2>1</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>50</ppextremelow>
+      <pplow>200</pplow>
+      <pphigh>1000</pphigh>
+      <ppextremehigh>2000</ppextremehigh>
+    </Drought>
+  </Provenance>
+</Species>

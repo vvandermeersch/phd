@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Fagus_sylvatica</Name>
+    <Leaf Model="9">
+      <t0>-60.3745746774077</t0>
+      <Vb>6.24622209294821</Vb>
+      <d>-1.00544277403425</d>
+      <e>6.20289539952132</e>
+      <Ccrit>109.015703909186</Ccrit>
+      <Fcrit>1</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <t0>-60.3745746774077</t0>
+      <Vb>6.24622209294821</Vb>
+      <d>-1.00544277403425</d>
+      <e>6.20289539952132</e>
+      <Ccrit>109.015703909186</Ccrit>
+      <Fcrit>38.0382919269893</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <aa>-1.64068173981895</aa>
+      <bb>8.06347299072184</bb>
+      <Fcrit>6.59110103451668</Fcrit>
+      <Top>15.6955770679528</Top>
+      <matmoy>11.689362069041</matmoy>
+      <sigma>5.6999410290738</sigma>
+      <pfe50>0.542846414754167</pfe50>
+      <photosType>2</photosType>
+    </FruitMaturation>
+    <Senescence Model="6">
+      <Pb>7.07102136965556</Pb>
+      <Tb>14.4084452820224</Tb>
+      <alpha>1.32865015631749</alpha>
+      <beta>0.897896591211857</beta>
+      <Scrit>28.1256633937273</Scrit>
+      <sigmaSen>5.21707725613613</sigmaSen>
+    </Senescence>
+    <CompoundBud>2</CompoundBud>
+    <LeafHabit>1</LeafHabit>
+    <Tdeath>-30</Tdeath>
+    <Frost>
+      <FHfrmax1>-14.5450679015304</FHfrmax1>
+      <FHfrmax2>-21.3631047712468</FHfrmax2>
+      <FHminfe>-8.43796497445288</FHminfe>
+      <FHminfl>-0.737570048492417</FHminfl>
+      <Te1>2.94434298106259</Te1>
+      <Te2>-16.9339561293883</Te2>
+      <FHtfemax>-8.18609244896277</FHtfemax>
+      <FHtflmax>-15</FHtflmax>
+      <FHpfemax>-18.8651941513515</FHpfemax>
+      <FHpflmax>-19.5218354570963</FHpflmax>
+      <NL1>17.1940981623112</NL1>
+      <NL2>16.0593792313905</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>678.444573169181</ppextremelow>
+      <pplow>540.006173598598</pplow>
+      <pphigh>2027.42857120577</pphigh>
+      <ppextremehigh>2949.19751062589</ppextremehigh>
+    </Drought>
+  </Provenance>
+</Species>

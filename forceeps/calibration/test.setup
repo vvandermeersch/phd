@@ -1,0 +1,76 @@
+# Forceps setup file
+# Generated on Rstudio by user vandermeersch, on the 2022-05-09
+
+siteFileName = unused
+
+speciesFileName = unused
+defaultClimateFileName = unused
+
+bareGround = false
+bareGroundPatchN = 0
+bareGroundPatchArea = 0
+
+inventory = true
+inventoryFileName = test.inv
+
+adaptiveMode = false
+adaptiveInputCompleteExport = unused
+adaptiveVarianceLevel = ADAPTIVE_VARIANCE_LEVEL_LOW
+adaptiveTradeOffOption = ADAPTIVE_TRADEOFF_G_OPTION
+adaptiveInventoryPatchN = 0
+adaptiveInventoryPatchArea = 800
+adaptiveInitial_laSd = 0
+adaptiveInitial_drtolSd = 0
+adaptiveInitial_gSd = 0
+adaptiveExtraVariance_drtol = 0
+adaptiveExtraVariance_g = 0
+adaptiveTreeReproductionWeight = true
+
+initDate = 1970
+randomSeed = 98
+
+distProba = 0
+
+deathProbaCoef = 4.605
+
+slowGrowthProba = 0.368
+
+slowGrowthTime = 2
+
+potentialSpeciesList = 17
+
+# If true, trees get a real crown length
+crownLengthOption = true
+crownLengthImpactOnGrowth = true
+
+# Regeneration: one option out of these 3 must be selected
+regenerationMaxTreesPerPatchOption = false
+regenerationMaxTreesPerPatchNumber = 0
+regenerationMaxTreesPerPatchWithNTries = false
+regenerationMaxTreesPerPatchNTries = 0
+regenerationSeedlingsPerPatchOption = false
+regenerationSeedlingsPerPatchNumber = 0
+regenerationForclimLike = true
+
+# Regeneration: additional options
+regenerationActualSpeciesOnly = true
+regenerationActualSpeciesOnlyAtPatchLevel = false
+regenerationConstraint = true
+regenerationActualSpeciesOnlyAbundance = false
+
+establishmentProbabilityCoef = 0.1
+
+ppMothActivated = false
+ppMothRegionalPercentageOfInfestedTreesOption = false
+ppMothRegionalPercentageOfInfestedTrees = 0.12
+
+variability = false
+variabilityFileName = unused
+
+climaticFitness = false
+fitnessImpactsGrowth = false
+
+management = false
+managementFileName = unused
+
+droughtStressOption = FORCLIM_LIKE_DROUGHT_STRESS
