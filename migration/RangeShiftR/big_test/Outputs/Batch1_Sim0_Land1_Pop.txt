@@ -1,0 +1,1 @@
+Rep	Year	RepSeason	x	y	Species	NInd	NInd_stage1	NInd_stage2	NInd_stage3	NInd_stage4	NJuvs

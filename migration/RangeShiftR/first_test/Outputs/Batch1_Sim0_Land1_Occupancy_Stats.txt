@@ -1,0 +1,1 @@
+Year	Mean_OccupSuit	Std_error

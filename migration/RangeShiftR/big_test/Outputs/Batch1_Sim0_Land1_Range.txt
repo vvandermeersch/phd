@@ -1,0 +1,1 @@
+Rep	Year	RepSeason	NInds	NInd_stage1	NInd_stage2	NInd_stage3	NInd_stage4	NJuvs	NOccupCells	Occup/Suit	min_X	max_X	min_Y	max_Y

@@ -1,0 +1,2 @@
+Rep	Year	RepSeason	NInds	NInd_stage1	NInd_stage2	NInd_stage3	NInd_stage4	NJuvs	NOccupCells	Occup/Suit	min_X	max_X	min_Y	max_Y
+0	0	0	9775420	0	0	9775420	0	47249577	995	0.0254586	3.92881e+06	4.19481e+06	2.30072e+06	2.45572e+06
