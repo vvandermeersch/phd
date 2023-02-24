@@ -30,7 +30,7 @@ run <- paste(capsis_settings$cd_java8, capsis_settings$java8, capsis_settings$cd
 
 # simulation loop
 
-for(year in seq(9000, 1000, -2000)){
+for(year in seq(11000, 10000, -200)){
   yr_b <- as.character(- year - 14)
   yr_e <- as.character(- year + 15)
   command_file_setup(command_file, species_file, output_folder, climate_folder,
