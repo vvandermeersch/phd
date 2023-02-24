@@ -5,7 +5,7 @@
 #
 # MigClim.plot: displays ascii files produced by the MigClim.migrate() function.
 #
-MigClim.plot <- function(asciiFile, outDir="", fileFormat="jpeg", fullOutput=FALSE){
+MigClimCustom.plot <- function(asciiFile, outDir="", fileFormat="jpeg", fullOutput=FALSE){
 	
 	### Verify user input
 	if(substr(asciiFile, nchar(asciiFile)-3, nchar(asciiFile))!=".asc") asciiFile <- paste(asciiFile, ".asc", sep="")

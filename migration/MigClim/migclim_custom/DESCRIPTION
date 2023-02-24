@@ -1,13 +1,14 @@
-Package:     MigClimVV
-Version:     1.6
-Date:        2013-12-11
-Title:       Implementing dispersal into species distribution models, modified by VV
+Package:     MigClimCustom
+Version:     1.0
+Date:        2023-02-23
+Title:       Implementing dispersal into species distribution models - version modified by V. Van der Meersch
 Author:      Robin Engler <robin.engler@gmail.com> and
              Wim Hordijk <wim@WorldWideWanderings.net> and
              Loic Pellissier <loic.pellissier@unil.ch>
-			 VV <victor.vandermeersch@cefe.cnrs.fr>
+			 Victor Van der Meersch <victor.vandermeersch@cefe.cnrs.fr>
 Maintainer:  Robin Engler <robin.engler@gmail.com>
 Depends:     SDMTools, raster
 Description: Functions for implementing species dispersal into projections
-             of species distribution models (e.g. under climate change scenarios).
+             of species distribution models. This package was originally developped by R. Engler et al. (2012). 
+			 It was then modified by V. Van der Meersch to implement a second kernel for long-distance dispersal events.
 License:     GPL

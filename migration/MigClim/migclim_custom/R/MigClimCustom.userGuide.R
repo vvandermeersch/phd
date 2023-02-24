@@ -1,7 +1,7 @@
 #
 # Displays the PDF user guide to the MigClim R package.
 #
-MigClim.userGuide <- function()
+MigClimCustom.userGuide <- function()
 {
     UGpath <- find.package("MigClim")
     if(.Platform$OS.type=="windows") eval(parse(text=paste("system('open \"", UGpath, "/doc/MigClim_userGuide.pdf\"')", sep="")))

@@ -1,16 +1,18 @@
 #
 # The R functions for the MigClim package.
 # Robin Engler & Wim Hordijk
-# MigClim.migrate: Last modified: 11 May 2012
+# Original MigClim.migrate: last modified: 11 May 2012
 #
-# MigClim.migrate: Initialize the MigClim method by writing the parameter
+# MigClimCustom.migrate: last modified: 23 February 2023
+#
+# MigClimCustom.migrate: Initialize the MigClim method by writing the parameter
 #                  values to file, and then run it.
 #
-MigClim.migrate <- function (iniDist="InitialDist", hsMap="HSmap", rcThreshold=0, 
+MigClimCustom.migrate <- function (iniDist="InitialDist", hsMap="HSmap", rcThreshold=0, 
                              envChgSteps=1, dispSteps=1, dispKernel=c(1.0,1.0), 
                              barrier="", barrierType="strong", 
                              iniMatAge=1, propaguleProd=c(1.0), 
-                             lddFreq=0.0, lddMinDist=NULL, lddMaxDist=NULL, dispKernel_LDD=c(1.0,1.0),
+                             lddFreq=0.0, dispKernel_LDD=c(1.0,1.0),
                              simulName="MigClimTest", replicateNb=1, overWrite=FALSE,
                              testMode=FALSE, fullOutput=FALSE, keepTempFiles=FALSE)
 {
@@ -19,7 +21,7 @@ MigClim.migrate <- function (iniDist="InitialDist", hsMap="HSmap", rcThreshold=0
   #if(require(raster, quietly=T)==F) stop("This function requires the 'raster' package. Please install 'raster' on your computer and try again.")
   #if(require(SDMTools, quietly=T)==F) stop("This function requires the 'SDMTools' package. Please install 'SDMTools' on your computer and try again.")
   
-  cat("Starting MigClim, version modified by VV. \n")
+  cat("Starting MigClim, version modified by V. Van der Meersch (2023). \n")
   
 
   # Verify that parameters have meaningful values.
@@ -30,7 +32,7 @@ MigClim.migrate <- function (iniDist="InitialDist", hsMap="HSmap", rcThreshold=0
   if(envChgSteps<1 | envChgSteps > 295) stop("'envChgSteps' must be an integer number in the range [1:295]. \n")
   if(envChgSteps%%1!=0) stop("'envChgSteps' must be a number an integer number. \n")
   if(!is.numeric(dispSteps)) stop("'dispSteps' must be a number in the range [1:99]. \n")
-  if(dispSteps<1 | dispSteps > 99) stop("'dispSteps' must be a number in the range [1:99]. \n")
+  if(dispSteps<1 | dispSteps > 200) stop("'dispSteps' must be a number in the range [1:200]. \n")
   if(dispSteps%%1!=0) stop("'dispSteps' must be a number an integer number. \n")
   
   if(!is.numeric(dispKernel)) stop("Values of 'dispKernel' must be numbers > 0 and <= 1. \n")
@@ -46,15 +48,10 @@ MigClim.migrate <- function (iniDist="InitialDist", hsMap="HSmap", rcThreshold=0
   if(!is.numeric(lddFreq)) stop("Data input error: 'lddFreq' must be a numeric value. \n")
   if(lddFreq<0 | lddFreq>1) stop("'lddFreq' must be a number >= 0 and <= 1. \n")
   if(lddFreq>0){
-    # if(!is.numeric(lddMinDist)) stop("Data input error: 'lddMinDist' must be a numeric value. \n")
-    # if(!is.numeric(lddMaxDist)) stop("Data input error: 'lddMaxDist' must be a numeric value. \n")
-    # if(lddMinDist%%1!=0 | lddMaxDist%%1!=0) stop("'lddMinDist' and 'lddMaxDist' must be integer numbers. \n")
-    # if(lddMinDist <= length(dispKernel)) stop("Data input error: 'lddMinDist' must be larger than the length of the 'dispKernel'. \n")
-    # if(lddMaxDist < lddMinDist) stop("Data input error: 'lddMaxDist' must be >= 'lddMinDist'. \n")
 	if(!is.numeric(dispKernel_LDD)) stop("Values of 'dispKernel_LDD' must be numbers > 0 and <= 1. \n")
 	if(any(dispKernel_LDD>1) | any(dispKernel_LDD<=0)) stop("Values of 'dispKernel_LDD' must be numbers > 0 and <= 1")
 	
-  } else lddMinDist <- lddMaxDist <- 0
+  }
   
   if(!is.numeric(replicateNb)) stop("Data input error: 'replicateNb' must be a numeric, integer, value. \n")
   if(replicateNb<1 | replicateNb%%1!=0) stop("Data input error: 'replicateNb' must be an integer value >= 1. \n")
@@ -295,30 +292,30 @@ MigClim.migrate <- function (iniDist="InitialDist", hsMap="HSmap", rcThreshold=0
   }
   rm(noDataVal)
   
-  
+  # commented by V.V.
   # Verify that all raster have exactly the same dimensions and that they contain apropriate values. 
   # "iniDist" and "barrier" should contain only values of 0 or 1. "hsMap" should contain only values in the range [0:1000].
   #
   Rst <- raster(paste(iniDist,".asc",sep=""))
   nrRows <- nrow(Rst)
   nrCols <- ncol(Rst)
-  if(any(is.na(match(raster::unique(Rst), c(0,1))))) stop("Data input error: the 'iniDist' raster should contain only values of 0 or 1. \n")
-  #if(dataType(Rst)!="INT2U" & dataType(Rst)!="INT1U") stop("Data input error: the 'iniDist' layer must contain integer values (8 or 16-bit unsigned integers). The R 'dataType' code for 8-bit and 16-bit unsigned integers is 'INT1U' and 'INT2U'.")
-  for(J in 1:envChgSteps){
-    Rst <- raster(paste(hsMap,J,".asc",sep=""))
-    #if(dataType(Rst)!="INT2U") stop("Data input error: all habitat suitability rasters must contain integer values (16-bit unsigned integers) in the range 0 to 1000. The R 'dataType' code for 16-bit unsigned integers is 'INT2U'.")
-    if(nrow(Rst)!=nrRows | ncol(Rst)!=nrCols) stop("Data input error: not all your rasters input data have the same dimensions. \n")
-    if(cellStats(Rst,"min")<0 | cellStats(Rst,"max")>1000) stop("Data input error: all habitat suitability rasters must have values in the range [0:1000]. \n")
-    rm(Rst)
-  }
-  if(!identical(barrier, "")){
-    Rst <- raster(paste(barrier,".asc",sep=""))
-    #if(dataType(Rst)!="INT2U" & dataType(Rst)!="INT1U") stop("Data input error: the 'barrier' layer must contain integer values (8 or 16-bit unsigned integers). The R 'dataType' code for 8-bit and 16-bit unsigned integers is 'INT1U' and 'INT2U'.")
-    if(nrow(Rst)!=nrRows | ncol(Rst)!=nrCols) stop("Data input error: not all your rasters input data have the same dimensions.\n")
-    if(any(is.na(match(raster::unique(Rst), c(0,1))))) stop("Data input error: the 'barrier' raster should contain only values of 0 or 1.\n")
-    rm(Rst)
-  }
-
+  # if(any(is.na(match(raster::unique(Rst), c(0,1))))) stop("Data input error: the 'iniDist' raster should contain only values of 0 or 1. \n")
+  # if(dataType(Rst)!="INT2U" & dataType(Rst)!="INT1U") stop("Data input error: the 'iniDist' layer must contain integer values (8 or 16-bit unsigned integers). The R 'dataType' code for 8-bit and 16-bit unsigned integers is 'INT1U' and 'INT2U'.")
+  # for(J in 1:envChgSteps){
+    # Rst <- raster(paste(hsMap,J,".asc",sep=""))
+    # if(dataType(Rst)!="INT2U") stop("Data input error: all habitat suitability rasters must contain integer values (16-bit unsigned integers) in the range 0 to 1000. The R 'dataType' code for 16-bit unsigned integers is 'INT2U'.")
+    # if(nrow(Rst)!=nrRows | ncol(Rst)!=nrCols) stop("Data input error: not all your rasters input data have the same dimensions. \n")
+    # if(cellStats(Rst,"min")<0 | cellStats(Rst,"max")>1000) stop("Data input error: all habitat suitability rasters must have values in the range [0:1000]. \n")
+    # rm(Rst)
+  # }
+  # if(!identical(barrier, "")){
+    # Rst <- raster(paste(barrier,".asc",sep=""))
+    # if(dataType(Rst)!="INT2U" & dataType(Rst)!="INT1U") stop("Data input error: the 'barrier' layer must contain integer values (8 or 16-bit unsigned integers). The R 'dataType' code for 8-bit and 16-bit unsigned integers is 'INT1U' and 'INT2U'.")
+    # if(nrow(Rst)!=nrRows | ncol(Rst)!=nrCols) stop("Data input error: not all your rasters input data have the same dimensions.\n")
+    # if(any(is.na(match(raster::unique(Rst), c(0,1))))) stop("Data input error: the 'barrier' raster should contain only values of 0 or 1.\n")
+    # rm(Rst)
+  # }
+  rm(Rst) # added by V.V.
     
 	  
   # Create output directory.

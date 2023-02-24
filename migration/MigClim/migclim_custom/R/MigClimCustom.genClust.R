@@ -1,7 +1,7 @@
 #
 # MigClim.genClust: Run the genetic clusters migration simulation.
 #
-MigClim.genClust <- function (hsMap="hsMap", barrier="barrier",
+MigClimCustom.genClust <- function (hsMap="hsMap", barrier="barrier",
                               nrClusters=4, nrIterations=1, threshold=445,
                               outFile="out", initFile="")
 {
