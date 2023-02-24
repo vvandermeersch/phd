@@ -1,18 +1,24 @@
 
 #-----------------------#
 # First test of MigClim #
-#-----------------------#                         
+#-----------------------#     
 
-library(MigClim)
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/migration/MigClim"
+
+install.packages(file.path(wd, "migclim_custom"), 
+                 repos = NULL, 
+                 type = "source")
+
+library(MigClimCustom)
 library(ggplot2)
 library(terra)
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/thesis/migration/MigClim"
+
 
 # little modification of MigClim R function
-source(file.path(wd, "functions", "migclim.migrate.custom.R"))
-environment(MigClim.migrate.custom) <- asNamespace('MigClim')
-assignInNamespace("MigClim.migrate", MigClim.migrate.custom, ns = "MigClim")
+# source(file.path(wd, "functions", "migclim.migrate.custom.R"))
+# environment(MigClim.migrate.custom) <- asNamespace('MigClim')
+# assignInNamespace("MigClim.migrate", MigClim.migrate.custom, ns = "MigClim")
 
 
 
@@ -63,7 +69,7 @@ pdf_2dt = function(SDD, b = 0){
 }
 
 int_2dt = function (SDD, b = 0, d) {
-  integrate(pdf_2dt(SDD, b),  lower = d, upper = Inf)$value
+  integrate(pdf_2dt(SDD, b),  lower = d, upper = Inf, rel.tol = .Machine$double.eps^0.5)$value
 }
 
 ##   integrate to unity
@@ -71,11 +77,60 @@ int_2dt(SDD = 25, b = 2, d = 0)
 
 ## e.g. for 4 cells
 res = 25 # resolution of the grid, in meters - is it enough // SDD ~ 25 ?
-ncells <- 4 # max: 100m
-sapply(1:ncells, function(i) int_2dt(SDD = 25, b = 2, d = (i-1)*res))
-
-
+ncells <- 40 # max: 200m
+sapply(1:ncells, function(i) int_2dt(SDD = 25, b = 2, d = (i-1)*res+12.5))
 disp_kernel <- sapply(1:ncells, function(i) int_2dt(SDD = 25, b = 2, d = (i-1)*res))
+
+
+
+
+## linear combination of SSD and LDDD kernels
+ncells <- which(sapply(1:42, function(i) int_2dt(SDD = 200, b = 2, d = (i-1)*res))<0.005)-1 
+sapply(1:ncells, function(i) 0.99*int_2dt(SDD = 25, b = 2, d = (i-1)*res+12.5)+0.01*int_2dt(SDD = 200, b = 2, d = (i-1)*res+12.5))
+disp_kernel_cb <- sapply(1:ncells, function(i) 0.99*int_2dt(SDD = 25, b = 2, d = (i-1)*res+res/2)+0.01*int_2dt(SDD = 200, b = 2, d = (i-1)*res+res/2))
+
+ncells <- 8 # max 200m
+disp_kernel_SD <- sapply(1:ncells, function(i) int_2dt(SDD = 25, b = 2, d = (i-1)*res))
+
+ncells <- 80 # max: 200*10 = 2000m ?
+disp_kernel_LD <- sapply(1:ncells, function(i) int_2dt(SDD = 200, b = 2, d = (i-1)*res))
+
+
+kernels <-data.frame(d = 1:40, disp_kernel, disp_kernel_LD)
+ggplot(data = kernels) +
+  geom_line(aes(x =d*25, y = disp_kernel, color = "SD kernel"), size = 1) +
+  geom_line(aes(x =d*25, y = disp_kernel_LD, color = "LD kernel"), size = 1) +
+  theme_minimal() +
+  labs(x = "Distance (m)", y = "Prob. of dispersion") +
+  scale_color_manual(values = c("LD kernel" = "#e76f51", "SD kernel" = "#e9c46a"))
+
+
+#
+#
+#
+
+# adapted from Boisvert-Marsh et al. (2022)
+
+iniMatAge <- 10
+fullMatAge <- 50
+
+x<-seq(0,fullMatAge-iniMatAge, 1)
+
+sigmoid = function(params, x) {
+  params[1] / (1 + exp(-params[2] * (x - params[3])))
+}
+
+shape<- 0.5
+relInflecAge <- 15
+
+params <-c(1, shape, relInflecAge) 
+
+propaguleProd <- sigmoid(params,x)
+
+plot(x, sigmoid(params,x), col='blue')
+
+
+
 
 
 
@@ -88,9 +143,10 @@ fitness_map <- readRDS(file.path(sim_dir, "fitness.rds"))
 
 terraOptions(memfrac = 0.9)
 
-## change resolution
+# load data
 rtemp <- rast(fitness_map[, c("lon", "lat", "value")], crs = "EPSG:4326")
-extent <- extent(c(-10,10,40,50))
+#extent <- extent(c(-10,10,40,50))
+extent <- extent(c(5,10,45,50))
 rtemp <- crop(rtemp, extent)
 rtemp <- project(rtemp, "EPSG:3035") # in meters
 
@@ -98,18 +154,33 @@ rtemp <- project(rtemp, "EPSG:3035") # in meters
 rcopy <- rtemp
 res(rcopy) <- c(res, res)
 rtemp <- terra::resample(rtemp, rcopy, method="bilinear") 
+rm(rcopy)
 
-init_dist <- rtemp
+# small dataset for test
+sm_ext <- extent(c(4120000,4180000,2745000,2746000))
+rtemp2 <- crop(rtemp, sm_ext)
+
+# initial distribution
+init_dist <- rtemp2
 init_dist[init_dist >= 0.8] <- 1
 init_dist[init_dist < 0.8] <- 0
-terra::writeRaster(init_dist , file.path(wd, "simulation_test/init_dist.asc"), 
+terra::writeRaster(init_dist , file.path(wd, "small_test/init_dist.asc"), 
                    overwrite = T, NAflag = -9999, datatype="INT2S")
 
-
-hs_map1 <- rtemp*1000
+# three similar habitat suitability layers
+hs_map1 <- rtemp2*1000
 hs_map1[hs_map1 < 600] <- 0
-terra::writeRaster(hs_map1 , file.path(wd, "simulation_test/hs_map1.asc"), 
+terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map1.asc"), 
                    overwrite = T, NAflag = -9999, datatype="INT2S")
+terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map2.asc"), 
+                   overwrite = T, NAflag = -9999, datatype="INT2S")
+terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map3.asc"), 
+                   overwrite = T, NAflag = -9999, datatype="INT2S")
+terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map4.asc"), 
+                   overwrite = T, NAflag = -9999, datatype="INT2S")
+terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map5.asc"), 
+                   overwrite = T, NAflag = -9999, datatype="INT2S")
+
 
 
 
@@ -117,33 +188,34 @@ terra::writeRaster(hs_map1 , file.path(wd, "simulation_test/hs_map1.asc"),
 # 2. Migrate ! #
 #--------------#  
 
-setwd(file.path(wd, "simulation_test"))
+setwd(file.path(wd, "small_test"))
 
-MigClim.migrate.custom(iniDist= "init_dist", # initial distribution
-
-                hsMap= "hs_map", # habitat suitability, between 0 and 1000
-                rcThreshold=0, # continuous mode
-
-                envChgSteps=1, # number of times the hsMap should be updated (max 295)
-                dispSteps=200,  # number of dispersal steps per hsMap (max 99)
-                              # if the interval between hsMap is 5 years, and the species disperse once a year
-                              # disSteps must be set to 5
-
-                dispKernel= disp_kernel,
-
-                barrier="", barrierType="strong", # cells across which dispersal cannot occur, only affect SD events
-
-                iniMatAge= 40, # just for example
-                propaguleProd=c(1.0), # propagule production probability as a function of time
-                                      # since the cell became colonized
-                # note that cell age is measured in dispersal steps
-
-                lddFreq=0.0, lddMinDist=NULL, lddMaxDist=NULL, # long distance dispersal events
-
-                simulName="MigClimTest", replicateNb=10,
-                overWrite=TRUE,
-
-                testMode=FALSE, fullOutput=FALSE, keepTempFiles=FALSE)
+MigClimCustom.migrate(iniDist= "init_dist", # initial distribution
+                      
+                      hsMap= "hs_map", # habitat suitability, between 0 and 1000
+                      rcThreshold=0, # continuous mode
+                      
+                      envChgSteps=5, # number of times the hsMap should be updated (max 295)
+                      dispSteps=200,  # number of dispersal steps per hsMap (max 200)
+                      # if the interval between hsMap is 5 years, and the species disperse once a year
+                      # disSteps must be set to 5
+                      
+                      dispKernel= disp_kernel_SD,
+                      
+                      barrier="", barrierType="strong", # cells across which dispersal cannot occur, only affect SD events
+                      
+                      iniMatAge = iniMatAge, # just for example
+                      propaguleProd = propaguleProd, # propagule production probability as a function of time
+                      # since the cell became colonized
+                      # note that cell age is measured in dispersal steps
+                      
+                      lddFreq=0.01, # long distance dispersal events
+                      dispKernel_LDD = disp_kernel_LD,
+                      
+                      simulName="MigClimTest", replicateNb=1,
+                      overWrite=TRUE,
+                      
+                      testMode=FALSE, fullOutput=FALSE, keepTempFiles=FALSE)
 
 
 
@@ -151,14 +223,28 @@ MigClim.migrate.custom(iniDist= "init_dist", # initial distribution
 # 3. Plot #
 #---------#  
 
-rst <- terra::rast("MigClimTest/MigClimTest1_raster.asc")
+rst <- terra::rast("MigClimTest/MigClimTest_raster.asc")
+crs(rst) <- "EPSG:3035"
 
-# change to 1km resolution // plotting resolution
-rst <- terra::aggregate(rst, fact = 1000/res, fun="mean", cores = 10)
+rstcopy <- rst
+m <- c(-30000, 0, 0,
+       1, 1, 1,
+       2, 29999, 2,
+       30000, 30001, 0)
+rclmat <- matrix(m, ncol=3, byrow=TRUE)
+rstcopy <- classify(rstcopy, rclmat, right=NA)
+plot(rstcopy)
 
 
 
-Df <- as.data.frame(Rst, xy= TRUE)
+# rstcopy  <- subst(rst, c(0,30000), c(0,0))
+# rstcopy[rstcopy == 30000 | rstcopy < 0] <- 0 # remove {suitable but not colonized} and {decolonized}
+# change to 10km resolution // plotting resolution
+rstcopy2 <- terra::aggregate(rstcopy, fact = 10000/res, fun="mean")
+
+
+
+Df <- as.data.frame(rst, xy= TRUE)
 ggplot() +
   geom_raster(data = Df[Df$MigClimTest1_raster == 0,], 
               aes(x = x, y = y), fill = "#edede1") + #unsuitable
@@ -167,12 +253,41 @@ ggplot() +
   geom_raster(data = Df[Df$MigClimTest1_raster > 1 & Df$MigClimTest1_raster < 30000,], 
               aes(x = x, y = y), fill = "#B4E0AA") + # colonized
   geom_raster(data = Df[Df$MigClimTest1_raster == 30000,], 
-              aes(x = x, y = y), fill = "#FFCD6A") + # suitable but not colonized
-  geom_raster(data = Df[Df$MigClimTest1_raster < 0,], 
-              aes(x = x, y = y), fill = "#C75C5A") + # decolonized
+              aes(x = x, y = y), fill = "#FFCD6A")  # suitable but not colonized
+geom_raster(data = Df[Df$MigClimTest1_raster < 0,], 
+            aes(x = x, y = y), fill = "#C75C5A") + # decolonized
   theme_void() +
   ylab("") +
   xlab("")
-  
 
+
+
+
+# 
+# ggplot() +
+#   geom_spatraster(data = rst) +
+#   binned_scale(aesthetics = "fill",
+#                scale_name = "stepsn", 
+#                palette = function(x) c("#edede1", "#488B49", "#B4E0AA", "#FFCD6A"),
+#                breaks = c(0, 1, 29999, 30000),
+#                limits = c(0, 30000),
+#                show.limits = TRUE, 
+#                guide = "colorsteps"
+#   )
+
+data <- as.data.frame(rstcopy, xy= TRUE)
+names(data) <- c("x", "y", "val")
+ggplot() +
+  geom_raster(data = data, 
+              aes(x = x-4120000, y = y, fill = as.factor(val))) + 
+  theme_minimal() +
+  scale_fill_manual(
+    labels = c("Uncolonized", "Initial distribution", "Colonized"),
+    values = c("0" = "#f6f4d2",  "1" = "#1a7431", "2" = "#25a244")) + 
+  labs( y ="", x = "", fill = "") +
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        legend.position = "none") 
 
