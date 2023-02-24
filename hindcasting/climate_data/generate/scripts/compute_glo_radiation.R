@@ -14,21 +14,18 @@ gwgen_data <- fread(gwgen_file) # generated daily values
 
 # load altitude data (yearly data)
 alt <- lapply(years[1]:years[2], function(yr){
-  # alt_yr <- load_altitude(yr, raw_clim_dir, extent(c(-14,40,34,72)))
-  alt_yr <- load_altitude(yr, raw_clim_dir, extent(c(-14,40,34,72))) #debug
+  alt_yr <- load_altitude(yr, raw_clim_dir, extent(c(-14,40,34,72)))
   print(nrow(alt_yr))
   alt_yr$year <- yr
   return(alt_yr)
 })
-# debug: some rare points are missing in the altitude netcdf file (to modify later)
-ind_yr_debug <- which(sapply(alt, nrow) == max(sapply(alt, nrow)))
-# alt <- do.call(rbind, alt)
-alt <- data.frame(alt[ind_yr_debug])
+alt <- do.call(rbind, alt)
+alt <- data.frame(alt)
 
 # compute the relative atmospheric pressure
 z0 <- 1/8000
 alt$ratm <- exp(-alt$alt * z0)
-toa_data <- left_join(toa_data, alt[,c("id", "alt", "ratm")], by = c("id"))
+toa_data <- left_join(toa_data, alt[,c("id", "year", "alt", "ratm")], by = c("id", "year"))
 # test if debug was ok
 if(length(which(is.na(toa_data))) != 0){
   stop("problem with altitude data !")
@@ -39,6 +36,7 @@ if(length(which(is.na(toa_data))) != 0){
 # load albedo (monthly data)
 alb <- lapply(years[1]:years[2], function(yr){
   alb_yr <- load_albedo(yr, raw_clim_dir, extent(c(-14,40,34,72)))
+  print(nrow(alb_yr))
   alb_yr$year <- yr
   return(alb_yr)
 })
@@ -270,7 +268,7 @@ for(yr in unique(toa_data$year)){
       
       
     }
-    else if(pet_method == "faoPM"){
+    else if(pet_method == "faoPM"){ 
       
       k <- 1
       # albedo <- albedoPM <- 0.23 # hypothetical reference crop with an albedo of 0.23

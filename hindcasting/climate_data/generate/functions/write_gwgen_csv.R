@@ -59,7 +59,6 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, debug_wet = F
   r_vwind <- crop(r_uwind, extent)
   
   
-  ncells_with_data <- freq(r_tmin, value=NA)$count[1]
   cat(paste0("Number of cells: ", ncell(r_tmin), "\n"))
   cat(paste0("Number of NA cells: ", freq(r_tmin, value=NA)$count[1], "\n"))
   
