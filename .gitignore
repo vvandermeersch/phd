@@ -37,6 +37,7 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/hindcasting/climate_data/generate/outputs
 **/hindcasting/climate_data/generate/inputs
 **/hindcasting/climate_data/diagnostic/gwgen_jed
+**/hindcasting/simulation/phenofit/output
 
 **/correlative_models/biomod/fit
 **/correlative_models/brt/fit
