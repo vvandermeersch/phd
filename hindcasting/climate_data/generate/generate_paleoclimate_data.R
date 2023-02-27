@@ -28,7 +28,7 @@ ds_out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/phenofit_format/downscaled_
 # Choose extent
 extent <- extent(c(-14,40,34,72))
 
-for(year in seq(10200, 11000, 200)){
+for(year in seq(2000, 16000, 2000)){
   years <- c(year -15, year + 15)
   try(source(file.path(wd, "scripts", "paleoclimate_main.R")))
   gc()

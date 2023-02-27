@@ -71,7 +71,7 @@ phenofit_yr <- format_gwgen_to_phenofit(input_file, glo_file, pd_folder = out_cl
 
 
 
-g##################
+##################
 # 4. Downscaling #
 ##################
 
