@@ -17,7 +17,7 @@ species_file <- "C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/f
 # species_file <- "D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/CMAES/subset_4/cmaes_fit_subset4_rep1.species"
 # species_file <- "C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Abies_alba_VVanderMeersch2.species"
 output_folder <- "D:/simulations/phenofit/paleo/test"
-climate_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg"
+climate_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg_cor"
 command_file <- file.path(wd, "phenofit","command_file.txt")
 
 

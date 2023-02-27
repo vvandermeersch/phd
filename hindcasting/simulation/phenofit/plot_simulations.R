@@ -18,16 +18,17 @@ ext <- extent(c(-14,40,34,72))
 
 # loop on years
 
-for(year in seq(21000, 1000, -2000)){
+for(year in seq(11000, 10000, -200)){
   
   fitness <- readRDS(file.path(output_folder, paste0(year, "BP"), "fitness.rds"))
   
   ice_sheet <- load_icesheet(year, folder = hadcm3b_folder, sea_ice = F, extent = ext)
+  ice_sheet[ice_sheet$ice > 1, "ice"] <- 1
   ice_sheet[ice_sheet$ice < 0.05, ] <- NA
   
   # altitude <- load_altitude(year, folder = hadcm3b_folder, extent = ext, dscale = T)
   
-  ggplot() +
+  plot <- ggplot() +
     geom_raster(data = fitness, aes(fill = value, x = lon, y = lat)) +
     theme_void() +
     ylab("") +
