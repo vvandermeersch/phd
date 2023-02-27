@@ -2,7 +2,6 @@
 # load ice sheet for a specific year
 
 load_icesheet <- function(year, folder, sea_ice = FALSE, extent){
-  extent <- extent(c(-14,40,34,72))
   file <- years_to_file(year)
   ice_file <- file.path(folder, "field1391_old_sims_1yrAvg_ann_0.5degRes_noBias_Europe_24000_0kyr",
                         paste0("field1391_old_sims_1yrAvg_ann_0.5degRes_noBias_Europe_", file$name, ".nc"))
