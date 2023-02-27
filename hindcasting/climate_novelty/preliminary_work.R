@@ -17,7 +17,6 @@ present_temp <- rasterFromXYZ(present_temp)
 present_pre <- fread(file.path(present_climate_dir, "ERA5LAND_pre_1970_dly.fit"))
 present_pre <- data.frame(lon = present_pre[,2], lat = present_pre[,1], pre = rowSums(present_pre[,-c(1,2)]))
 present_pre <- rasterFromXYZ(present_pre)
-
 for(i in 1971:2000){
   
   print(i)
