@@ -448,7 +448,6 @@ void mcMigrate (char **paramFile, int *nrFiles)
 				
 				if(UNIF01 <= lddSeedProb || lddSeedProb == 1.0){ // LDD event
 					if (mcSrcCell_LDD (i, j, currentState, pixelAge, loopID, habSuitability[i][j], barriers)){
-						Rprintf ("LD source found !\n");
 						cellInDispDist = true; 
 					}
 				}

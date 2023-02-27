@@ -227,12 +227,7 @@ bool mcSrcCell_LDD (int i, int j, int **curState, int **pxlAge, int loopID,
     }
   }
  End_of_Routine:
- if(sourceFound){
-	 Rprintf("rnd = %f\n", rnd);  
-	 Rprintf("probKernel = %f\n", dispKernel_LDD[realDist-1]);
-	 Rprintf("probCol = %f\n", probCol);  
-	 Rprintf("LD: %d\n", sourceFound);  
- }
+
   /*
   ** Return the result.
   */

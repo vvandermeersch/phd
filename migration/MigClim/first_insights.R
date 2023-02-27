@@ -138,15 +138,15 @@ plot(x, sigmoid(params,x), col='blue')
 # 2. Input data #
 #---------------#  
 
-sim_dir <- "D:/simulations/phenofit/paleo/test/1000BP"
-fitness_map <- readRDS(file.path(sim_dir, "fitness.rds"))
+sim_dir <- "D:/simulations/phenofit/paleo/test"
+fitness_map <- readRDS(file.path(sim_dir, "11000BP", "fitness.rds"))
 
 terraOptions(memfrac = 0.9)
 
 # load data
 rtemp <- rast(fitness_map[, c("lon", "lat", "value")], crs = "EPSG:4326")
 #extent <- extent(c(-10,10,40,50))
-extent <- extent(c(5,10,45,50))
+extent <- extent(c(-5,0,47,50)) # Bretagne!
 rtemp <- crop(rtemp, extent)
 rtemp <- project(rtemp, "EPSG:3035") # in meters
 
@@ -156,22 +156,43 @@ res(rcopy) <- c(res, res)
 rtemp <- terra::resample(rtemp, rcopy, method="bilinear") 
 rm(rcopy)
 
-# small dataset for test
-sm_ext <- extent(c(4120000,4180000,2745000,2746000))
-rtemp2 <- crop(rtemp, sm_ext)
-
 # initial distribution
-init_dist <- rtemp2
-init_dist[init_dist >= 0.8] <- 1
-init_dist[init_dist < 0.8] <- 0
-terra::writeRaster(init_dist , file.path(wd, "small_test/init_dist.asc"), 
+init_dist <- rtemp
+init_dist[init_dist >= 0.75] <- 1
+init_dist[init_dist < 0.75] <- 0
+terra::writeRaster(init_dist , file.path(wd, "bretagne11kBP/init_dist.asc"), 
                    overwrite = T, NAflag = -9999, datatype="INT2S")
 
 # three similar habitat suitability layers
-hs_map1 <- rtemp2*1000
+hs_map1 <- rtemp*1000
 hs_map1[hs_map1 < 600] <- 0
-terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map1.asc"), 
+terra::writeRaster(hs_map1 , file.path(wd, "bretagne11kBP/hs_map1.asc"), 
                    overwrite = T, NAflag = -9999, datatype="INT2S")
+i <- 2
+for(yr in seq(10800, 10000, -200)){
+  fitness_map <- readRDS(file.path(sim_dir, paste0(yr, "BP"), "fitness.rds"))
+  
+  # load data
+  rtemp <- rast(fitness_map[, c("lon", "lat", "value")], crs = "EPSG:4326")
+  extent <- extent(c(-5,0,47,50)) # Bretagne!
+  rtemp <- crop(rtemp, extent)
+  rtemp <- project(rtemp, "EPSG:3035") # in meters
+  
+  # change to 25m resolution // dispersal
+  rcopy <- rtemp
+  res(rcopy) <- c(res, res)
+  rtemp <- terra::resample(rtemp, rcopy, method="bilinear") 
+  rm(rcopy)
+  
+  hs_map <- rtemp*1000
+  hs_map[hs_map < 600] <- 0
+  terra::writeRaster(hs_map , file.path(wd, "bretagne11kBP", paste0("hs_map",i,".asc")), 
+                     overwrite = T, NAflag = -9999, datatype="INT2S")
+  
+  i <- i + 1
+  
+}
+
 terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map2.asc"), 
                    overwrite = T, NAflag = -9999, datatype="INT2S")
 terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map3.asc"), 
@@ -188,7 +209,7 @@ terra::writeRaster(hs_map1 , file.path(wd, "small_test/hs_map5.asc"),
 # 2. Migrate ! #
 #--------------#  
 
-setwd(file.path(wd, "small_test"))
+setwd(file.path(wd, "bretagne11kBP"))
 
 MigClimCustom.migrate(iniDist= "init_dist", # initial distribution
                       
@@ -275,7 +296,7 @@ geom_raster(data = Df[Df$MigClimTest1_raster < 0,],
 #                guide = "colorsteps"
 #   )
 
-data <- as.data.frame(rstcopy, xy= TRUE)
+data <- as.data.frame(rstcopy, xy= TRUE, na.rm = TRUE)
 names(data) <- c("x", "y", "val")
 ggplot() +
   geom_raster(data = data, 
