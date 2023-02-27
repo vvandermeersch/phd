@@ -187,7 +187,7 @@ ggplot(data = glo_df) +
 
 
 # load generated daily values
-gen_glo <- sapply(c(seq(21000,3000,-2000), seq(10800,10000,-200)), function(yr){
+gen_glo <- sapply(c(seq(21000,1000,-2000), seq(10800,10000,-200), seq(2000, 16000, 2000)), function(yr){
   print(yr)
   d <- fread(file.path(data_dir, "phenofit_format", "05deg_cor", paste0(yr, "BP"),
                        paste0("HadCM3B_glo_-", yr,"_dly.fit")))
@@ -195,7 +195,7 @@ gen_glo <- sapply(c(seq(21000,3000,-2000), seq(10800,10000,-200)), function(yr){
   return(sum(as.matrix(d))/nrow(d))
 })
 
-gglo_df <- data.frame(year = c(seq(21000,3000,-2000), seq(10800,10000,-200)), gen = gen_glo)
+gglo_df <- data.frame(year = c(seq(21000,1000,-2000), seq(10800,10000,-200), seq(2000, 16000, 2000)), gen = gen_glo)
 
 ggplot() +
   geom_line(data = glo_df[glo_df$year >= 1000,], aes(x = year, y = raw), col = "#a8e6cf", size = 1, alpha = 0.6) +
