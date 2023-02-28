@@ -45,36 +45,42 @@ present_sd <- c(r_temp_sd, r_pre_sd)
 present_climate_dir <- "D:/climate/ERA5-Land/phenofit_format/transformed"
 present_temp <- fread(file.path(present_climate_dir, "ERA5LAND_tmp_1970_dly.fit"))
 present_temp <- data.frame(lon = present_temp[,2], lat = present_temp[,1], tas = rowMeans(present_temp[,-c(1,2)]))
-present_temp <- rasterFromXYZ(present_temp)
+present_temp <- rast(present_temp)
 present_pre <- fread(file.path(present_climate_dir, "ERA5LAND_pre_1970_dly.fit"))
 present_pre <- data.frame(lon = present_pre[,2], lat = present_pre[,1], pre = rowSums(present_pre[,-c(1,2)]))
-present_pre <- rasterFromXYZ(present_pre)
+present_pre <- rast(present_pre)
 for(i in 1971:2000){
   
   print(i)
   present_temp_i <- fread(file.path(present_climate_dir, paste0("ERA5LAND_tmp_",i,"_dly.fit")))
   present_temp_i <- data.frame(lon = present_temp_i[,2], lat = present_temp_i[,1], tas = rowMeans(present_temp_i[,-c(1,2)]))
-  present_temp_i <- rasterFromXYZ(present_temp_i)
+  present_temp_i <- rast(present_temp_i)
   present_pre_i <- fread(file.path(present_climate_dir, paste0("ERA5LAND_pre_",i,"_dly.fit")))
   present_pre_i <- data.frame(lon = present_pre_i[,2], lat = present_pre_i[,1], pre = rowSums(present_pre_i[,-c(1,2)]))
-  present_pre_i <- rasterFromXYZ(present_pre_i)
+  present_pre_i <- rast(present_pre_i)
   
-  present_temp <- stack(present_temp, present_temp_i)
-  present_pre <- stack(present_pre, present_pre_i)
+  present_temp <- c(present_temp, present_temp_i)
+  present_pre <- c(present_pre, present_pre_i)
   
 }
-present_temp_mean <- mean(present_temp)
-present_pre_mean <- mean(present_pre)
-
+extent <- ext(c(-14,30,34,71))
+r_temp_sd <- crop(app(present_temp, "sd"), extent)
+r_pre_sd <- crop(app(present_pre, "sd"), extent) 
+r_temp_mn <- crop(mean(present_temp), extent)
+r_pre_mn <- crop(mean(present_pre), extent)
+present_ERA5Land_data <- c(r_temp_mn, r_pre_mn )
+present_ERA5Land_sd <- c(r_temp_sd, r_pre_sd)
+.present_ERA5Land_data <- wrap(present_ERA5Land_data)
+.present_ERA5Land_sd <- wrap(present_ERA5Land_sd)
 
 
 ### Past data and minimum euclidean distance
 past_sed <- list()
 years <- seq(21000,200,-200)
-plan(multisession, workers = 20)
+plan(multisession, workers = 5)
 past_sed <- future_lapply(1:length(years), function(i){
-  present_data <- rast(.present_data)
-  present_sd <- rast(.present_sd)
+  present_ERA5Land_data <- rast(.present_ERA5Land_data)
+  present_ERA5Land_sd <- rast(.present_ERA5Land_sd)
   
   extent <- ext(c(-14,30,34,71))
   yr <- years[i]
@@ -92,19 +98,19 @@ past_sed <- future_lapply(1:length(years), function(i){
   
   # mask with ice sheet
   ice_sht <- rast(load_icesheet(yr, folder = data_dir, extent = extent))
-  ice_sht[ice_sht > 0.1] <- NA
+  ice_sht[ice_sht > 0] <- NA
   crs(ice_sht) <- crs(past_data)
   
   past_data <- mask(past_data, ice_sht)
   
-  r_sed <- climatic_dissimilarity(focal = past_data, baseline = present_data, 
+  r_sed <- climatic_dissimilarity(focal = past_data, baseline = present_ERA5Land_data, 
                                   method = "std_euclidean",
-                                  interannual_sd = present_sd)
+                                  interannual_sd = present_ERA5Land_sd)
   return(as.data.frame(r_sed, xy = T)) # return a dataframe to avoid problem of external pointer
 })
 
 past_sed <- lapply(past_sed, rast)
-names(past_sed) <- as.character(seq(21000,1000,-200))
+names(past_sed) <- as.character(seq(21000,200,-200))
 mean_sed <- sapply(past_sed, function(i) global(i, mean, na.rm = T)$mean)
 median_sed <- sapply(past_sed, function(i) global(i, median, na.rm = T)$global)
 q25_sed <- sapply(past_sed, function(i) global(i, quantile, na.rm = T)$X25.)
@@ -113,10 +119,10 @@ sed_df <- data.frame(year = as.numeric(names(mean_sed)), mean = mean_sed,
                      median = median_sed, q25 = q25_sed, q75 = q75_sed)
 ggplot(data = sed_df, aes(x = year, y = median)) +
   geom_ribbon(aes(ymin = q25, ymax = q75), fill = "#94d2bd", alpha = 0.5) +
-  geom_line(aes(y = q75), color = "#0a9396", size = 0.3, alpha = 0.6) +
-  geom_line(aes(y = q25), color = "#0a9396", size = 0.3, alpha = 0.6) +
-  geom_line(col = "#0a9396", size = 1) +
-  scale_y_continuous(limits = c(0,1.5), expand = c(0, 0)) +
+  geom_line(aes(y = q75), color = "#0a9396", linewidth = 0.3, alpha = 0.6) +
+  geom_line(aes(y = q25), color = "#0a9396", linewidth = 0.3, alpha = 0.6) +
+  geom_line(col = "#0a9396", linewidth = 1) +
+  scale_y_continuous(limits = c(0,1.8), expand = c(0, 0)) +
   scale_x_reverse(expand = c(0.01, 0)) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
@@ -125,4 +131,16 @@ ggplot(data = sed_df, aes(x = year, y = median)) +
         axis.ticks.length=unit(.2, "cm")) +
   xlab("Years BP") +
   ylab("Climatic distance")
-  
+
+
+ggplot(data = sed_df, aes(x = year, y = mean)) +
+  geom_line(col = "#0a9396", linewidth = 1) +
+  scale_y_continuous(limits = c(0,1.8), expand = c(0, 0)) +
+  scale_x_reverse(expand = c(0.01, 0)) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
+        axis.ticks.x = element_line(colour = "grey90", size = 0.7, linetype = "solid"),
+        axis.line.x = element_line(colour = "grey90", size = 0.7, linetype = "solid"),
+        axis.ticks.length=unit(.2, "cm")) +
+  xlab("Years BP") +
+  ylab("Climatic distance") 
