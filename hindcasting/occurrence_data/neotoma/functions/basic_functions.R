@@ -2,10 +2,10 @@
 # Function to return a vector of TRUE/FALSE to filter taxa
 detect_taxa <- function(samples, taxa){
   
-  detected_taxa <- stringr::str_detect(samples$variablename, paste0(taxa[1], "*"))
+  detected_taxa <- stringr::str_detect(samples$MHVar.2, paste0(taxa[1], "*"))
   if(length(taxa) == 1){return(detected_taxa)}
   for(i in 2:length(taxa)){
-    detected_taxa <- detected_taxa + stringr::str_detect(samples$variablename, paste0(taxa[i], "*"))
+    detected_taxa <- detected_taxa + stringr::str_detect(samples$MHVar.2, paste0(taxa[i], "*"))
   }
   return(detected_taxa>0)
   

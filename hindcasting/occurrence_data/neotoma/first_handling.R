@@ -7,7 +7,8 @@
 
 # Inspired by this page: https://github.com/NeotomaDB/RangeMapper/blob/master/workflows/walkthroughs/RangeMapper_walkthrough_pollen.Rmd
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/occurrence_data/neotoma"
+# wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/occurrence_data/neotoma"
+wd <- "C:/Users/33651/Desktop/neotoma"
 
 # Load packages and functions
 library(neotoma2)
@@ -34,7 +35,7 @@ macrofossil_samples_fltd <- macrofossil_samples %>%
 
 
 # Select pollen counts only ("NISP") for pollen, and age interval (+/- 250 for linear interpolation, see below)
-age_young <- 9000
+age_young <- 0
 age_old <- 21000
 
 other_samples_fltd <- pollen_samples_fltd %>%       # keep on hand other sample types (e.g. wood, stomata), exclude spores
