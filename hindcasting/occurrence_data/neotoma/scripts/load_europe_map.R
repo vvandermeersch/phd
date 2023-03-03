@@ -6,7 +6,8 @@ countries_EUForest <- c("Austria", "Belarus", "Belgium", "Bulgaria", "Croatia", 
                         "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Moldova", "Netherlands", "Norway", "Poland", "Portugal",
                         "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "United Kingdom")
 other_countries <- c("Bosnia and Herzegovina", "Republic of Serbia", "Macedonia", "Greece",
-                     "Kosovo", "Albania", "Montenegro", "Malta", "Liechtenstein", "Luxembourg", "Ukraine", "Turkey")
+                     "Kosovo", "Albania", "Montenegro", "Malta", "Liechtenstein", 
+                     "Luxembourg", "Ukraine", "Turkey", "Georgia")
 countries <- c(countries_EUForest, other_countries)
 world_map <- ne_countries(scale="medium",returnclass = 'sf')
 eu_map <- world_map %>% filter(sovereignt %in% countries)
