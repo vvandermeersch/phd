@@ -29,7 +29,7 @@ r_pre <- rast(file.path(data_dir, pre_fd,
 indices<-rep(0:30,each=12)
 r_temp_yrmn <- tapp(r_temp, indices, fun = mean, na.rm=FALSE) # yearly mean temperature
 r_pre_sm <- tapp(r_pre*30, indices, fun = sum, na.rm=FALSE) # yearly sum of precipitation
-extent <- ext(c(-14,40,34,72))
+extent <- ext(c(-14,30,34,71))
 r_temp_sd <- crop(app(r_temp_yrmn, "sd"), extent)
 r_pre_sd <- crop(app(r_pre_sm, "sd"), extent) 
 r_temp_mn <- crop(mean(r_temp_yrmn), extent)
@@ -98,7 +98,7 @@ past_sed <- future_lapply(1:length(years), function(i){
   
   # mask with ice sheet
   ice_sht <- rast(load_icesheet(yr, folder = data_dir, extent = extent))
-  ice_sht[ice_sht > 0] <- NA
+  ice_sht[ice_sht > 0] <- NA # restrict analyses to grid locations with less than 50% ice cover (Burke et al. 2019)
   crs(ice_sht) <- crs(past_data)
   
   past_data <- mask(past_data, ice_sht)
@@ -122,7 +122,7 @@ ggplot(data = sed_df, aes(x = year, y = median)) +
   geom_line(aes(y = q75), color = "#0a9396", linewidth = 0.3, alpha = 0.6) +
   geom_line(aes(y = q25), color = "#0a9396", linewidth = 0.3, alpha = 0.6) +
   geom_line(col = "#0a9396", linewidth = 1) +
-  scale_y_continuous(limits = c(0,1.8), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0,2.2), expand = c(0, 0)) +
   scale_x_reverse(expand = c(0.01, 0)) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
