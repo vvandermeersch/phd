@@ -58,10 +58,7 @@ source(file.path(wd, "gam", "gam_presenceabsence.R"))
 gam_pa_litpred <- readRDS(paste0(wd, "/gam/fit/", sp_name, "/gam_pa_", cov_type,"_", Sys.Date(), ".rds"))
 
 # GAM with literature predictors and presence-only data
-cov_type <- "litpred"
-bc_covars <- c("bio6", "bio12")
-soil_covars <- c("WHC", "pH")
-cc_covars <- c("sum_apsep_GDD5", "w_bal")
+
 source(file.path(wd, "gam", "gam_presenceonly.R"))
 gam_litpred <- readRDS(paste0(wd, "/gam/fit/", sp_name, "/gam_", cov_type,"_", Sys.Date(), ".rds"))
 
