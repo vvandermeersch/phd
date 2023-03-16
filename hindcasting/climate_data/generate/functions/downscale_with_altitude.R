@@ -9,22 +9,25 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   
   plan(multisession, workers = ncores)
   
-  # Load data
-  alt <- fread(file.path(in_folder, "HadCM3B_Altitude.fit"))
-  alt <- rasterFromXYZ(alt[, c(2,1,3)])
   tmax <- data.frame(fread(file.path(in_folder, paste0("HadCM3B_tmx_", yr, "_dly.fit"))))
   tmin <- data.frame(fread(file.path(in_folder, paste0("HadCM3B_tmn_", yr, "_dly.fit"))))
   tmean <- data.frame(fread(file.path(in_folder, paste0("HadCM3B_tmp_", yr, "_dly.fit"))))
   glo <- data.frame(fread(file.path(in_folder, paste0("HadCM3B_glo_", yr, "_dly.fit"))))
   
-  # High res altitude to raster format
-  hr_alt <- rasterFromXYZ(hr_alt[, c(2,1,3)])
+  # Load data
+  # alt <- fread(file.path(in_folder, "HadCM3B_Altitude.fit"))
+  # alt <- rast(alt[, c(2,1,3)])
+  alt <- resample(hr_alt, rast(tmax[, c(2,1)]))
+  .alt <- wrap(alt)
   
-  # Create raster stacks
-  tmax_reg <- stack()
-  tmin_reg <- stack()
-  tmean_reg <- stack()
-  glo_reg <- stack()
+  # High res altitude to raster format
+  # hr_alt <- rasterFromXYZ(hr_alt[, c(2,1,3)])
+  
+  # Create rasters
+  tmax_reg <- rast()
+  tmin_reg <- rast()
+  tmean_reg <- rast()
+  glo_reg <- rast()
   
   # Create rasters for the loop
   tmax_regd <- alt
@@ -36,10 +39,10 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   # 1. quantify the change with height at the native coarse resolution
   for(day in 3:ncol(tmax)){ # sequential loop on days
     
-    tmax_d <- rasterFromXYZ(tmax[, c(2,1,day)])
-    tmin_d <- rasterFromXYZ(tmin[, c(2,1,day)])
-    tmean_d <- rasterFromXYZ(tmean[, c(2,1,day)])
-    glo_d <- rasterFromXYZ(glo[, c(2,1,day)])
+    tmax_d <- rast(tmax[, c(2,1,day)])
+    tmin_d <- rast(tmin[, c(2,1,day)])
+    tmean_d <- rast(tmean[, c(2,1,day)])
+    glo_d <- rast(glo[, c(2,1,day)])
     
     ##### JUST TEMPORARY ######
     tmax_d <- mask(tmax_d, alt)
@@ -48,13 +51,26 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
     glo_d <- mask(glo_d, alt)
     ##########################
     
+    # create objects that can be passed over a serialized connection
+    .tmax_d <- wrap(tmax_d)
+    .tmin_d <- wrap(tmin_d)
+    .tmean_d <- wrap(tmean_d)
+    .glo_d <- wrap(glo_d)
+    
+    
+    
     coef_linreg <- foreach(fcell = 1:ncell(tmax_d)) %dopar% { # parallel loop on raster cells
+      tmax_d <- rast(.tmax_d)
+      tmin_d <- rast(.tmin_d)
+      tmean_d <- rast(.tmean_d)
+      glo_d <- rast(.glo_d)
+      alt <- rast(.alt)
       if(!is.na(tmax_d[fcell])){
-        ind_ncells <- adjacent(tmax_d, fcell, 8, include = T)[,2]
-        tmax_linreg <- lm(tmax_d[ind_ncells] ~ alt[ind_ncells]) # linear regression for maximum temperature
-        tmin_linreg <- lm(tmin_d[ind_ncells] ~ alt[ind_ncells]) # minimum temperature
-        tmean_linreg <- lm(tmean_d[ind_ncells] ~ alt[ind_ncells]) # mean temperature
-        glo_linreg <- lm(glo_d[ind_ncells] ~ alt[ind_ncells]) # radiation
+        ind_ncells <- as.numeric(terra::adjacent(tmax_d, fcell, 8, include = T))
+        tmax_linreg <- lm(unlist(tmax_d[ind_ncells]) ~ unlist(alt[ind_ncells])) # linear regression for maximum temperature
+        tmin_linreg <- lm(unlist(tmin_d[ind_ncells]) ~ unlist(alt[ind_ncells])) # minimum temperature
+        tmean_linreg <- lm(unlist(tmean_d[ind_ncells]) ~ unlist(alt[ind_ncells])) # mean temperature
+        glo_linreg <- lm(unlist(glo_d[ind_ncells]) ~ unlist(alt[ind_ncells])) # radiation
         c(as.numeric(tmax_linreg$coefficients[2]), as.numeric(tmin_linreg$coefficients[2]),
           as.numeric(tmean_linreg$coefficients[2]), as.numeric(glo_linreg$coefficients[2]))
       }else{
@@ -66,10 +82,10 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
     tmin_regd[] <- coef_linreg[,2]
     tmean_regd[] <- coef_linreg[,3]
     glo_regd[] <- coef_linreg[,4]
-    tmax_reg <- stack(tmax_reg, tmax_regd)
-    tmin_reg <- stack(tmin_reg, tmin_regd)
-    tmean_reg <- stack(tmean_reg, tmean_regd)
-    glo_reg <- stack(glo_reg, glo_regd)
+    tmax_reg <- c(tmax_reg, tmax_regd)
+    tmin_reg <- c(tmin_reg, tmin_regd)
+    tmean_reg <- c(tmean_reg, tmean_regd)
+    glo_reg <- c(glo_reg, glo_regd)
     
   }
   
@@ -80,17 +96,17 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   hr_glo_reg <- resample(glo_reg, hr_alt)
   
   # 3. interpolate the coarse variable to the high-resolution
-  tmax_rast <- stack(lapply(3:ncol(tmax), function(day) rasterFromXYZ(tmax[, c(2,1,day)])))
-  tmin_rast <- stack(lapply(3:ncol(tmin), function(day) rasterFromXYZ(tmin[, c(2,1,day)])))
-  tmean_rast <- stack(lapply(3:ncol(tmax), function(day) rasterFromXYZ(tmean[, c(2,1,day)])))
-  glo_rast <- stack(lapply(3:ncol(glo), function(day) rasterFromXYZ(glo[, c(2,1,day)])))
+  tmax_rast <- rast(lapply(3:ncol(tmax), function(day) rast(tmax[, c(2,1,day)])))
+  tmin_rast <- rast(lapply(3:ncol(tmin), function(day) rast(tmin[, c(2,1,day)])))
+  tmean_rast <- rast(lapply(3:ncol(tmax), function(day) rast(tmean[, c(2,1,day)])))
+  glo_rast <- rast(lapply(3:ncol(glo), function(day) rast(glo[, c(2,1,day)])))
   hr_tmax <- resample(tmax_rast, hr_alt)
   hr_tmin <- resample(tmin_rast, hr_alt)
   hr_tmean <- resample(tmean_rast, hr_alt)
   hr_glo <- resample(glo_rast, hr_alt)
   
   # 4. create coarse elevation field at high resolution
-  coarse_alt_hr <- resample(alt, hr_alt, method = "ngb")
+  coarse_alt_hr <- resample(alt, hr_alt)
   
   # 5. apply height correction 
   hr_tmax_cor <- hr_tmax + hr_tmax_reg * (hr_alt - coarse_alt_hr)
