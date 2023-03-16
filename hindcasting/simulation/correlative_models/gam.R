@@ -1,13 +1,11 @@
 
-#----------------------------#
-# Lasso GLM paleosimulations #
-#----------------------------#
+#----------------------#
+# GAM paleosimulations #
+#----------------------#
 
-model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit"
-sim_dir <- "D:/simulations/csdm/lasso_glm/paleo"
+model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit"
+sim_dir <- "D:/simulations/csdm/gam/paleo"
 clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
-
-library(Matrix)
 
 # Setup
 species <- "fagus_sylvatica"
@@ -15,14 +13,15 @@ bc_covars <- c("bio6", "bio12") # bioclim predictors
 soil_covars <- c("WHC", "pH") # soil predictors
 cc_covars <- c("sum_apsep_GDD5", "w_bal") # custom climatic predictors
 covars <- c(bc_covars, soil_covars, cc_covars)
-source("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
 dir.create(file.path(sim_dir, species), showWarnings = F)
 
 # Load model
-glmmod <- readRDS(file.path(model_dir, species, "lasso_glm_finalcov_fullmodel.rds"))
+gammod <- readRDS(file.path(model_dir, species, "gam_finalcov_fullmodel.rds"))
 
 # Load soil predictors (present data used throughout past simulations)
 soil_predictors <- readRDS(file.path(clim_dir, "soil_predictors.rds"))
+
+
 
 # Simulation loop
 for(year in c(seq(21000,1000, -2000), 15)){
@@ -35,16 +34,15 @@ for(year in c(seq(21000,1000, -2000), 15)){
   predictors <- predictors %>% 
     dplyr::select(all_of(covars))
   
-  # create quadratic terms and sparse matrix (full data)
-  quad_obj <- make_quadratic(predictors, cols = covars)
-  quad <- predict.make_quadratic(quad_obj, newdata = predictors)
-  new_vars <- names(quad)[names(quad) != "pres"]
-  sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+  # normalize predictors
+  i <- 1
+  for(v in covars){
+    predictors[, v] <- (predictors[, v] - gammod$meanv_l[i]) / gammod$sdv_l[i]
+    i <- i+1
+  }
   
   # make and save predictions
-  sim$pred <- as.numeric(predict(glmmod$model, sparse, type = "response", s = "lambda.min"))
+  sim$pred <-  as.numeric(predict(gammod$model, predictors, type = "response"))
   saveRDS(sim, file.path(sim_dir, species, paste0(year, "BP.rds")))
   
-  
 }
-
