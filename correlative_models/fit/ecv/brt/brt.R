@@ -117,13 +117,10 @@ cat("\n   Full model\n")
 cat(paste0("      AUC on  combined set of test predictions = ", round(auc_accumulate$aucs[1],2),"\n"))
 cat(paste0("      Boyce index on combined set of test predictions = ", round(boyce_accumulate$cor,2),"\n"))
 
-# convert the response to factor for RF model to return probabilities
-full_data$pres <- as.factor(full_data$pres)
-
 # calculating the case weights (down-weighted)
-prNum <- as.numeric(table(train_data$pres)["1"]) # number of presences
-bgNum <- as.numeric(table(train_data$pres)["0"]) # number of backgrounds
-wt <- ifelse(train_data$pres == 1, 1, prNum / bgNum)
+prNum <- as.numeric(table(full_data$pres)["1"]) # number of presences
+bgNum <- as.numeric(table(full_data$pres)["0"]) # number of backgrounds
+wt <- ifelse(full_data$pres == 1, 1, prNum / bgNum)
 
 # run model
 t0 <- proc.time()
@@ -172,6 +169,6 @@ outfile$cov_norm <- TRUE # are covariates normalized before calibration ?
 outfile$meanv_l <- meanv_l # mean parameter list for normalization
 outfile$sdv_l <- sdv_l # standard deviation parameter list for normalization
 
-saveRDS(outfile, file = paste0(wd, "brt/fit/", sp_name, "/brt_", cov_type, "_fullmodel.rds"))
+saveRDS(outfile, file = paste0(wd, "/brt/fit/", sp_name, "/brt_", cov_type, "_fullmodel.rds"))
 
 gc()
