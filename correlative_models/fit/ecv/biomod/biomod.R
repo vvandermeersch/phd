@@ -89,7 +89,7 @@ myBiomodOption <- BIOMOD_ModelingOptions(
 t0 <- proc.time()
 # model fitting c('GLM','GBM','GAM','CTA','ANN','FDA','MARS','RF','MAXENT')
 myBiomodModelOut <- BIOMOD_Modeling(bm.format = myBiomodData,
-                                    models = c('GLM','GBM','GAM','CTA','ANN','FDA','MARS','RF','MAXENT'),
+                                    models = c('GLM','GBM','GAM','CTA','ANN','FDA',  'RF','MAXENT', 'MARS'),
                                     bm.options = myBiomodOption,
                                     data.split.table = e_clust$biomod_table,
                                     metric.eval = c("ROC"), 
@@ -124,6 +124,30 @@ boyce_accumulate <- ecospat.boyce(fit = accumulate_data$pred, obs = accumulate_d
                                   nclass=0, window.w="default", res=100, 
                                   PEplot = F, rm.duplicate = F,  method = 'pearson' )
 
+# save file
+outfile <- list()
+outfile$species <- sp_name # species name
+outfile$name <- "Biomod" # model name
+outfile$modality <- paste0("ecv - folds") # modelling modality 
+outfile$fit_date <- Sys.Date() # date
+outfile$model_parts <- myBiomodModelOut 
+outfile$model <- myBiomodEM # model object (ensemble)
+outfile$runtime <- runtime[3] # runtime
+outfile$auc_test <- auc_accumulate # auc on testing set
+outfile$auc_all <- NULL # auc on every species points
+outfile$best_threshold <- NULL # best threshold to discriminate probabilites
+outfile$europe_pred <- NULL # prediction on every Europe cells
+outfile$cov_norm <- TRUE # are covariates normalized before calibration ?
+outfile$meanv_l <- meanv_l  # mean parameter list for normalization
+outfile$sdv_l <- sdv_l # standard deviation parameter list for normalization
+
+# save file
+dir.create(paste0(wd, "/biomod/fit/", sp_name), showWarnings = FALSE)
+saveRDS(outfile, file = paste0(wd, "/biomod/fit/", sp_name, "/biomod_", cov_type, "_folds.rds"))
+
+gc()
+
+
 
 # 3. Full model (all the available training data is used)
 # "this approach favours final prediction quality over perfect accuracy of error estimates", see Roberts et al. (2017)
@@ -135,22 +159,25 @@ cat(paste0("      Boyce index on combined set of test predictions = ", round(boy
 # run model
 t0 <- proc.time()
 myBiomodModelOut <- BIOMOD_Modeling(bm.format = myBiomodData,
-                                    models = c('GLM','GBM','GAM','CTA','ANN','FDA','MARS','RF','MAXENT'),
+                                    models = c('GLM','GAM', 'CTA','GBM', 'ANN','FDA',  'RF','MAXENT', 'MARS'), 
                                     bm.options = myBiomodOption,
-                                    nb.rep = 0, 
+                                    nb.rep = 1, 
                                     data.split.perc = 100,
                                     metric.eval = c("ROC"), 
                                     save.output = TRUE,
                                     scale.models = FALSE,
+                                    do.full.models = TRUE,
                                     modeling.id = paste0(cov_type,"_", Sys.Date()),
                                     nb.cpu = 1)
 myBiomodEval <- get_evaluations(myBiomodModelOut)
 myBiomodEM <- BIOMOD_EnsembleModeling(bm.mod = myBiomodModelOut,
                                       models.chosen = 'all',
                                       em.by = "all",
-                                      metric.eval = c("ROC"),
+                                      metric.eval = 'ROC',
                                       metric.select.thresh = NULL, 
                                       em.algo = c('EMmean'))
+
+
 runtime <- proc.time() - t0
 
 # predict on all species points
@@ -165,8 +192,51 @@ myBiomodEnProj <- BIOMOD_EnsembleForecasting(bm.proj = myBiomodProj,
                                              bm.em = myBiomodEM,
                                              selected.models = "all")
 myEnProjDF <- as.data.frame(get_predictions(myBiomodEnProj))
-sp_data$pred <- myEnProjDF[,1]
+sp_data$pred <- myEnProjDF$pred
 eval_obj <- evalmod(scores = sp_data$pred, labels = sp_data$pres)
 auc_all <- precrec::auc(eval_obj)
 cat(paste0("      Total AUC = ", round(auc_all$aucs[1],2), "\n\n"))
+
+# best threshold
+youden_index <- sensitivity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F)$measure +
+  specificity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+
+# predict on all Europe
+myBiomodProj <- BIOMOD_Projection(bm.mod = myBiomodModelOut,
+                                  new.env = as.data.frame(all_data[, covars]),
+                                  proj.name = "valavietal",
+                                  selected.models = "all",
+                                  binary.meth = "ROC",
+                                  compress = TRUE,
+                                  clamping.mask = TRUE)
+myBiomodEnProj <- BIOMOD_EnsembleForecasting(bm.proj = myBiomodProj,
+                                             bm.em = myBiomodEM,
+                                             selected.models = "all")
+myEnProjDF <- as.data.frame(get_predictions(myBiomodEnProj))
+all_data$pred <- myEnProjDF$pred
+
+# save file
+outfile <- list()
+outfile$species <- sp_name # species name
+outfile$name <- "Biomod" # model name
+outfile$modality <- "ecv - full model" # modelling modality 
+outfile$fit_date <- Sys.Date() # date
+outfile$model_parts <- myBiomodModelOut 
+outfile$model <- myBiomodEM # model object (ensemble)
+outfile$runtime <- runtime[3] # runtime
+outfile$auc_test <- auc_accumulate # auc on  combined set of test predictions
+outfile$boyceindex_test <- boyce_accumulate # Boyce Index on  combined set of test predictions
+outfile$auc_all <- auc_all # auc on every species points
+outfile$best_threshold <- best_threshold # best threshold to discriminate probabilites
+outfile$europe_pred <- data.frame(lat = alt$lat, lon = alt$lon, pred = all_data$pred) # prediction on every Europe cells
+outfile$cov_norm <- TRUE # are covariates normalized before calibration ?
+outfile$meanv_l <- meanv_l  # mean parameter list for normalization
+outfile$sdv_l <- sdv_l # standard deviation parameter list for normalization
+
+saveRDS(outfile, file = paste0(wd, "/biomod/fit/", sp_name, "/biomod_", cov_type, "_fullmodel.rds"))
+
+gc()
+
 
