@@ -249,7 +249,8 @@ calculate_glo_from_toa <- function(toa_data, gwgen_data, pet, alb = 0.23){
   Ratm <- toa_data$ratm
   
   # clear-sky factor
-  sunf <- 1-0.29*(cldf + (cldf)^2) # Antoine et al. 1996
+  # sunf <- 1-0.29*(cldf + (cldf)^2) # Antoine et al. 1996
+  sunf <- 1 - cldf
   
   # tropics indicator (tropical = 1, else 0)
   if (tcm < 10){
@@ -270,7 +271,7 @@ calculate_glo_from_toa <- function(toa_data, gwgen_data, pet, alb = 0.23){
   direct <- sunf * tau**kp * toa * tau**fm
   
   # diffuse insolation atmospheric turbidity factor
-  zeta0 <- 0.403 * exp(-1.20 * Ratm * exp(-0.633 / (prec + 1.) - 0.226 * pet))
+  zeta0 <- 0.503 * exp(-1.20 * Ratm * exp(-0.633 / (prec + 1.) - 0.226 * pet))
   
   # diffuse downwelling shortwave radiation
   diffuse <- zeta0 * kag**albedo * kan**(1 - sunf) * (1 - kn * (1 - sunf)) * (tau**kp * toa - direct)

@@ -24,27 +24,27 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   rmonths <- year_to_months(years[1], file_spec$max, file_spec$max)
   # load raster files
   cat("Loading first raster files \n")
-  r_tmin1 <- rast(file.path(source_dir, "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                           paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                 subds = "tempmin_av", lyrs = rmonths$min:rmonths$max)
-  r_tmax1 <- rast(file.path(source_dir, "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                           paste0("tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                 subds = "tempmax_av", lyrs = rmonths$min:rmonths$max)
+  r_tmin1 <- rast(file.path(source_dir, "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
+                           paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
+                 subds = "tempmin_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
+  r_tmax1 <- rast(file.path(source_dir, "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
+                           paste0("tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
+                 subds = "tempmax_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_pre1 <- rast(file.path(source_dir, "precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                           paste0("precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                subds = "precip_mm_srf", lyrs = rmonths$min:rmonths$max)
+                subds = "precip_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_wet1 <- rast(file.path(source_dir, "rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                           paste0("rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                subds = "rd3_mm_srf", lyrs = rmonths$min:rmonths$max)
+                subds = "rd3_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_cloud1 <- rast(file.path(source_dir, "totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                             paste0("totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                  subds = "totCloud_mm_ua", lyrs = rmonths$min:rmonths$max)
+                  subds = "totCloud_mm_ua", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_uwind1 <- rast(file.path(source_dir, "u_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                             paste0("u_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                  subds = "u_mm_10m", lyrs = rmonths$min:rmonths$max)
+                  subds = "u_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_vwind1 <- rast(file.path(source_dir, "v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                             paste0("v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                  subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max)
+                  subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   
   # second raster
   # get file spec
@@ -53,27 +53,27 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   rmonths <- year_to_months(file_spec$min, years[2], file_spec$max)
   # load raster files
   cat("Loading second raster files \n")
-  r_tmin2 <- rast(file.path(source_dir, "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                           paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                 subds = "tempmin_av", lyrs = rmonths$min:rmonths$max)
-  r_tmax2 <- rast(file.path(source_dir, "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                           paste0("tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                 subds = "tempmax_av", lyrs = rmonths$min:rmonths$max)
+  r_tmin2 <- rast(file.path(source_dir, "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
+                           paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
+                 subds = "tempmin_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
+  r_tmax2 <- rast(file.path(source_dir, "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
+                           paste0("tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
+                 subds = "tempmax_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_pre2 <- rast(file.path(source_dir, "precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                           paste0("precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                subds = "precip_mm_srf", lyrs = rmonths$min:rmonths$max)
+                subds = "precip_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_wet2 <- rast(file.path(source_dir, "rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                           paste0("rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                subds = "rd3_mm_srf", lyrs = rmonths$min:rmonths$max)
+                subds = "rd3_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_cloud2 <- rast(file.path(source_dir, "totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                             paste0("totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                  subds = "totCloud_mm_ua", lyrs = rmonths$min:rmonths$max)
+                  subds = "totCloud_mm_ua", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_uwind2 <- rast(file.path(source_dir, "u_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                             paste0("u_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                  subds = "u_mm_10m", lyrs = rmonths$min:rmonths$max)
+                  subds = "u_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   r_vwind2 <- rast(file.path(source_dir, "v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                             paste0("v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                  subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max)
+                  subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
   
   # merge (time goes forward)
   cat("Merging raster files \n")
@@ -95,6 +95,19 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   r_cloud <- crop(r_cloud, extent)
   r_uwind <- crop(r_uwind, extent)
   r_vwind <- crop(r_uwind, extent)
+  
+  # mask with altitude data from ICE6GC
+  cat("Masking raster files \n")
+  mid_year <- (years[1]+years[2])/2
+  alt <- load_altitude_ICE6GC(year = mid_year, folder = "D:/climate/ICE-6G-C", folder_hadcm3b = "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw", extent)
+  alt_r <- rast(alt[,c("lon", "lat", "alt")])
+  r_tmin <- mask(r_tmin, alt_r)
+  r_tmax <- mask(r_tmax, alt_r)
+  r_pre <- mask(r_pre, alt_r)
+  r_wet <- mask(r_wet, alt_r)
+  r_cloud <- mask(r_cloud, alt_r)
+  r_uwind <- mask(r_uwind, alt_r)
+  r_vwind <- mask(r_uwind, alt_r)
   
   
   ncells_with_data <- freq(r_tmin, value=NA)$count[1]

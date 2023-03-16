@@ -3,7 +3,10 @@
 
 # return yr (according to Phenofit base-year)
 
-format_gwgen_to_phenofit <- function(gwgen_in_file, climate_file, pd_folder, yrbase = 22000, debug_first_row = T){
+format_gwgen_to_phenofit <- function(gwgen_in_file, climate_file, 
+                                     pd_folder,
+                                     debug_first_row = T, 
+                                     alt, WHC_present){
   
   # Load files
   id_loc <- unique(fread(gwgen_in_file, select = c("station id", "lon", "lat")))
@@ -28,7 +31,7 @@ format_gwgen_to_phenofit <- function(gwgen_in_file, climate_file, pd_folder, yrb
   dir.create(pd_folder_yr, showWarnings = FALSE)
   
   for(yr in years){
-    cat("Doing year", yr, "\n")
+    # cat("Doing year", yr, "\n")
     climate <- climate_data[climate_data$year == yr,]
     
     # debug GWGEN first row, replace 1st January with data of 2nd January (temporary)
@@ -43,13 +46,36 @@ format_gwgen_to_phenofit <- function(gwgen_in_file, climate_file, pd_folder, yrb
     
     
     # Process data     
-    tmin <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$tmin, climate$id))))
-    tmax <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$tmax, climate$id))))
-    wind <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$wind, climate$id)))) 
-    pre <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$prcp, climate$id))))
-    glo <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$glo, climate$id))))
-    pet <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$pet, climate$id))))
-    tmean <- cbind(id_loc$lat, id_loc$lon, (tmin[, -c(1,2)] + tmax[, -c(1,2)])/2) # approximation of Tmean 
+    tmin <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$tmin, climate$id))))
+    
+    # WHC data
+    WHC_present_r <- rast(WHC_present[,c("lon", "lat", "whc")])
+    res_r <- rast(tmin[,c(2,1,3)])
+    # resample WHC
+    WHC_present_r <- aggregate(WHC_present_r, 5, na.rm = T)
+    WHC_present_r <- terra::resample(WHC_present_r, res_r, method = "average")
+    WHC_present_r <- mask(WHC_present_r, res_r)
+    whc <- as.data.frame(WHC_present_r, xy = T)
+    names(whc)[1:2] <- c("lon", "lat")
+    
+    tmax <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$tmax, climate$id))))
+    wind <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$wind, climate$id)))) 
+    pre <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$prcp, climate$id))))
+    glo <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$glo, climate$id))))
+    pet <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$petPM, climate$id))))
+    tmean <- cbind(lat = id_loc$lat, lon = id_loc$lon, (tmin[, -c(1,2)] + tmax[, -c(1,2)])/2) # approximation of Tmean 
+    
+    
+    # match with WHC data (available only in Europe)
+    tmin <- inner_join(tmin, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    tmax <- inner_join(tmax, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    wind <- inner_join(wind, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    pre <- inner_join(pre, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    glo <- inner_join(glo, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    pet <- inner_join(pet, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    tmean <- inner_join(tmean, whc[,c("lon", "lat")], by = join_by(lat, lon))
+    
+    
     
     # Create files
     #yrb <- 1950 - yr # if we want true date
@@ -76,13 +102,17 @@ format_gwgen_to_phenofit <- function(gwgen_in_file, climate_file, pd_folder, yrb
     
   }
   
-  # false data
-  alt <- tmin[,1:2]
-  alt$alt <- 200
+  # Altitude data
+  alt <- alt[, c("lat", "lon", "alt")]
+  alt$alt <- round(alt$alt, 1)
+  alt <- inner_join(alt, whc[,c("lon", "lat")]) # match with WHC data
   alt_file <- create_phenofit_file(yrb, var = "Altitude", pd_folder_yr)
-  whc_file <- create_phenofit_file(yrb, var = "WHC", pd_folder_yr)
   fwrite(alt, file = alt_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
-  fwrite(alt, file = whc_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
+  
+  # WHC data
+  whc_file <- create_phenofit_file(yrb, var = "WHC", pd_folder_yr)
+  whc$whc <- round(whc$whc, 0)
+  fwrite(whc[,c("lat", "lon", "whc")], file = whc_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
 
   message("Conversion to PHENOFIT format done !")
   
