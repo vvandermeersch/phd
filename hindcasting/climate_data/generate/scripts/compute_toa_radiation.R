@@ -10,15 +10,20 @@ gwgen_data <- fread(gwgen_file)
 input_data <- fread(input_file)
 
 # get latitude of station
-lat_data <- unique(input_data[,c("station id", "lat")])
-names(lat_data) <- c("id", "lat")
+latlon_data <- unique(input_data[,c("station id", "lat", "lon")])
+names(latlon_data) <- c("id", "lat", "lon")
 
 # prepare output
-out_data <- left_join(data.frame(id = gwgen_data[, id]), lat_data)
+out_data <- left_join(data.frame(id = gwgen_data[, id]), latlon_data)
 out_data <- cbind(out_data, gwgen_data[, c("year", "month", "day")])
+
+
+
+
 # Calcultate DOY
 # out_data$doy <- yday(as.Date(paste(1950-out_data$year, out_data$month, out_data$day, sep ="-"), format = "%y-%m-%d")) # does not work BCE
-temp <- out_data[out_data$id == 2333,]
+list_ids <- unique(out_data$id)
+temp <- out_data[out_data$id == list_ids[1],]
 doy_temp <- sapply(1:nrow(temp), function(i){
   if(temp[i, "month"] == 1){
     return(temp[i, "day"])
@@ -31,8 +36,10 @@ rm(temp, doy_temp)
 gc()
 
 # compute
+message("Computing TOA radiation...")
+start_time <- Sys.time()
 for(yr in unique(out_data$year)){
-  cat(paste0("Year ", yr, "\n"))
+  # cat(paste0("Year ", yr, "\n"))
   
   orbit <- load_orbit_parameters(yr, orbit_data)
   
@@ -40,13 +47,11 @@ for(yr in unique(out_data$year)){
   
   plan(multisession, workers = ncores)
   
-  runt <- system.time(toa <- future_lapply(1:nrow(out_data_temp), function(i){
+  toa <- future_lapply(1:nrow(out_data_temp), function(i){
     calculate_toa(orbit, out_data_temp[i, "doy"], out_data_temp[i, "lat"])
-  }))
+  })
   
   plan(sequential)
-  
-  cat(paste0("Runtime: ", runt[3], "s \n"))
   
   toa <- do.call(rbind, toa)
   
@@ -57,10 +62,12 @@ for(yr in unique(out_data$year)){
   gc()
   
 }
+end_time <- Sys.time()
+cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
 
 fwrite(out_data, file = output_file, col.names = T, row.names = FALSE, sep=",")
 
-message("Daily TOA radiation computed !")
+# message("Daily TOA radiation computed !")
 
 rm(gwgen_data, out_data, input_data, out_data_temp)
 

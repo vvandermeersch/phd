@@ -35,7 +35,7 @@ load_altitude_ICE6GC <- function(year, folder = "D:/climate/ICE-6G-C", folder_ha
   ldmsk_10min <- rotate(rast(alt_file, subds = "sftlf"))
   ldmsk_10min[ldmsk_10min == 0] <- NA
   alt_10min <- mask(alt_10min, ldmsk_10min)
-  alt_20min <- aggregate(alt_10min, 2, na.rm = T)
+  alt_30min <- aggregate(alt_10min, 3, na.rm = T)
   # upscale and mask with HadCM3B file
   file <- years_to_file(year)
   years <- file$max:file$min # time goes forward
@@ -43,7 +43,7 @@ load_altitude_ICE6GC <- function(year, folder = "D:/climate/ICE-6G-C", folder_ha
                           paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file$name, ".nc"))
   cover <- rast(cover_file, subds = "tempmin_av", lyrs = which(years == year)*12-6)
   cover <- crop(cover, extent)
-  alt_05deg <- resample(alt_20min, cover)
+  alt_05deg <- resample(alt_30min, cover)
   alt_05deg <- mask(alt_05deg, cover)
   alt_05deg <- crop(alt_05deg, extent)
   

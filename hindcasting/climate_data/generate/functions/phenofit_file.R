@@ -76,7 +76,9 @@ get_comments <- function(var){
   else if(var=="mbar"){
     return("Daytime mean optical air mass")
   }
-  
+  else if(var=="wind"){
+    return("Wind speed")
+  }
   
   
   

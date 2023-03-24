@@ -124,7 +124,10 @@ format_gwgen_to_phenofit <- function(gwgen_in_file, climate_file,
 
 
 
-format_gwgen_to_phenofit_addvar <- function(gwgen_in_file, climate_file, addvar, pd_folder, yrbase = 22000, debug_first_row = T){
+format_gwgen_to_phenofit_addvar <- function(gwgen_in_file, climate_file, 
+                                            addvar, pd_folder,
+                                            debug_first_row = T, 
+                                            WHC_present){
   
   # Load files
   id_loc <- unique(fread(gwgen_in_file, select = c("station id", "lon", "lat")))
@@ -165,13 +168,27 @@ format_gwgen_to_phenofit_addvar <- function(gwgen_in_file, climate_file, addvar,
     
     # Process data 
     if(addvar == "TOA"){
-      data <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$toa, climate$id))))
+      data <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$toa, climate$id))))
     }else if(addvar == "cld"){
-      data <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$mean_cloud, climate$id))))
+      data <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$mean_cloud, climate$id))))
     }else if(addvar == "mbar"){
-      data <- cbind(id_loc$lat, id_loc$lon, as.data.frame(do.call(rbind, split(climate$mbar, climate$id))))
+      data <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$mbar, climate$id))))
+    }else if(addvar == "wind"){
+      data <- cbind(lat = id_loc$lat, lon = id_loc$lon, as.data.frame(do.call(rbind, split(climate$wind, climate$id))))
     }
     
+    # WHC data
+    WHC_present_r <- rast(WHC_present[,c("lon", "lat", "whc")])
+    res_r <- rast(data[,c(2,1,3)])
+    # resample WHC
+    WHC_present_r <- aggregate(WHC_present_r, 5, na.rm = T)
+    WHC_present_r <- terra::resample(WHC_present_r, res_r, method = "average")
+    WHC_present_r <- mask(WHC_present_r, res_r)
+    whc <- as.data.frame(WHC_present_r, xy = T)
+    names(whc)[1:2] <- c("lon", "lat")
+    
+    # match with WHC data (available only in Europe)
+    data <- inner_join(data, whc[,c("lon", "lat")], by = join_by(lat, lon))
     
     
     # Create files

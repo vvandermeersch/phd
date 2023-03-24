@@ -26,3 +26,6 @@ source(file.path(wd, "functions", "calculate_perh.R"))
 source(file.path(wd, "functions", "compute_toa_radiation.R"))
 source(file.path(wd, "functions", "compute_glo_radiation_from_toa.R"))
 source(file.path(wd, "functions", "load_altitude.R"))
+
+WHC_present <- fread("D:/climate/ERA5-Land/phenofit_format/transformed/ERA5LAND_WHC.fit")
+names(WHC_present) <- c("lat", "lon", "whc")

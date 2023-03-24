@@ -1,50 +1,49 @@
-# Script to compute TOA radiation
+# Script to compute global radiation
 # Much more faster to use a script rather than to use a function... Don't know why !
-
+message("Starting the script to compute global radiation...")
 # name of output file
 output_file <- file.path(output_dir,
                          paste0(strsplit(basename(toa_file), "_")[[1]][1], 
                                 "_", strsplit(basename(toa_file), "_")[[1]][2], "_glorad.csv"))
 
 # read data
-cat("Reading data...\n")
+cat("Preparing data...\n")
 toa_data <- fread(toa_file) # TOA radiation computed before
 input_data <- fread(input_file) # raw monthly data of GCM simulations
 gwgen_data <- fread(gwgen_file) # generated daily values
 
 # load altitude data (yearly data)
-alt <- lapply(years[1]:years[2], function(yr){
-  alt_yr <- load_altitude(yr, raw_clim_dir, extent(c(-14,40,34,72)))
-  print(nrow(alt_yr))
-  alt_yr$year <- yr
-  return(alt_yr)
-})
-alt <- do.call(rbind, alt)
-alt <- data.frame(alt)
+mid_year <- (years[1]+years[2])/2
+alt <- load_altitude_ICE6GC(year = mid_year, folder = "D:/climate/ICE-6G-C", folder_hadcm3b = "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw", extent)
 
 # compute the relative atmospheric pressure
 z0 <- 1/8000
 alt$ratm <- exp(-alt$alt * z0)
-toa_data <- left_join(toa_data, alt[,c("id", "year", "alt", "ratm")], by = c("id", "year"))
-# test if debug was ok
+toa_data <- left_join(toa_data, alt[,c("lat", "lon", "alt", "ratm")], by = c("lat", "lon"))
+# test
 if(length(which(is.na(toa_data))) != 0){
   stop("problem with altitude data !")
 }
 
-
-
 # load albedo (monthly data)
 alb <- lapply(years[1]:years[2], function(yr){
-  alb_yr <- load_albedo(yr, raw_clim_dir, extent(c(-14,40,34,72)))
-  print(nrow(alb_yr))
+  alb_yr <- load_albedo(yr, raw_clim_dir, ext(c(-14,40,34,72)))
+  # print(nrow(alb_yr))
   alb_yr$year <- yr
   return(alb_yr)
 })
 alb <- do.call(rbind, alb)
 alb <- data.frame(alb)
+# mean over 30 years (no significant changes)
+alb <- alb %>% 
+  group_by(id, lon, lat, month) %>%
+  summarise(alb = mean(alb))
 alb$month <- as.integer(alb$month)
-toa_data <- left_join(toa_data, alb[,c("id", "year", "month", "alb")], by = c("id", "year", "month"))
-
+toa_data <- left_join(toa_data, alb[,c("lat", "lon", "month", "alb")], by = c("lat", "lon", "month"))
+# test
+if(length(which(is.na(toa_data))) != 0){
+  stop("problem with albedo data !")
+}
 
 
 # in case of parallel computing
@@ -52,7 +51,8 @@ ncores <- 10
 plan(multisession, workers = ncores)
 
 # compute the "precipitation equitability index" (approx tmean = tmin + tmax /2), used thereafter to compute global radiation
-cat("Compute the precipitation equitability index...\n")
+cat("Computing precipitation equitability index...\n")
+start_time <- Sys.time()
 input_data$temp <- (input_data$min.temperature + input_data$max.temperature)/2
 coldest_month <- input_data %>%
   group_by(`station id`, year) %>%
@@ -67,10 +67,11 @@ warmest_month <- input_data %>%
   dplyr::select(`station id`, year, temp, precipitation)
 names(warmest_month) <- c("id", "year", "t_wm", "p_wm")
 peqin_data <- left_join(coldest_month, warmest_month, by = c("id", "year"))
-cat("Test...\n")
 peqin <- future_lapply(1:nrow(peqin_data), function(i){calculate_prec_eq_index(peqin_data[i,])})
 peqin_data$peqin <- unlist(peqin) 
 toa_data <- left_join(toa_data, peqin_data, by = c("id", "year"))
+end_time <- Sys.time()
+# cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
 
 # daily mean temperature, approximation
 gwgen_data$temp <- (gwgen_data$tmin + gwgen_data$tmax)/2
@@ -82,9 +83,10 @@ gc()
 
 
 # compute daily airmass, used thereafter to compute global radiation
-cat("Compute daily airmass...\n")
+cat("Computing daily airmass...\n")
+start_time <- Sys.time()
 for(yr in unique(toa_data$year)){
-  cat(paste0("Year ", yr, "\n"))
+  # cat(paste0("Year ", yr, "\n"))
   
   toa_data_temp <- toa_data[toa_data$year == yr,]
   
@@ -96,7 +98,7 @@ for(yr in unique(toa_data$year)){
   
   plan(sequential)
   
-  cat(paste0("Runtime: ", round(runt[3]), "s \n"))
+  # cat(paste0("Runtime: ", round(runt[3]), "s \n"))
   
   airmass <- do.call(rbind, airmass)
   
@@ -108,16 +110,19 @@ for(yr in unique(toa_data$year)){
   gc()
   
 }
-
+end_time <- Sys.time()
+cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
 
 
 # compute long-wave radiation (needed to compute PET in Kaplan method),
 # saturation vapour pressure, slope of vapour pressure curve, latent heat and psychrometric constant
-cat("Compute long-wave radiation...\n")
+cat("Computing long-wave radiation...\n")
 ncores <- 20
-
-system.time(for(yr in unique(toa_data$year)){
-  cat(paste0("Year ", yr, "\n"))
+start_time <- Sys.time()
+with_progress({
+  p <- progressor(along = unique(toa_data$year))
+  for(yr in unique(toa_data$year)){
+  # cat(paste0("Year ", yr, "\n"))
   
   b <- Sys.time()
   
@@ -146,11 +151,12 @@ system.time(for(yr in unique(toa_data$year)){
   gc()
   
   e <- Sys.time()
+  p()
+  # cat(paste0("Runtime: ", round(as.numeric(e-b)), "m \n"))
   
-  cat(paste0("Runtime: ", round(as.numeric(e-b)), "m \n"))
-  
-})
-
+}})
+end_time <- Sys.time()
+cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
 
 
 # lw <- future_lapply(1:nrow(toa_data), function(i){
@@ -165,8 +171,11 @@ toa_data <- data.frame(toa_data)
 
 # compute global radiation
 cat("Compute global radiation...\n")
-for(yr in unique(toa_data$year)){
-  cat(paste0("Year ", yr, "\n"))
+start_time <- Sys.time()
+with_progress({
+  p <- progressor(along = unique(toa_data$year))
+  for(yr in unique(toa_data$year)){
+  #cat(paste0("Year ", yr, "\n"))
   
   b <- Sys.time()
   
@@ -174,11 +183,11 @@ for(yr in unique(toa_data$year)){
   gwgen_data_temp <- gwgen_data[gwgen_data$year == yr,]
   
   # arbitrary correction term for cloudiness because of overestimated generated values by GWGEN
-  # not necessarily the best way to do it... 
+  # not necessarily the best way to do it...
   if(year >= 12000){
     gwgen_data_temp$mean_cloud <- 0.95*gwgen_data_temp$mean_cloud
   }else if(year < 12000){
-    gwgen_data_temp$mean_cloud <- 0.92*gwgen_data_temp$mean_cloud 
+    gwgen_data_temp$mean_cloud <- 0.92*gwgen_data_temp$mean_cloud
   }
   
   
@@ -271,8 +280,8 @@ for(yr in unique(toa_data$year)){
     else if(pet_method == "faoPM"){ 
       
       k <- 1
-      # albedo <- albedoPM <- 0.23 # hypothetical reference crop with an albedo of 0.23
-      albedoPM <- albedo <- toa_data_temp[i, "alb"]
+      albedoPM <- 0.23 # hypothetical reference crop with an albedo of 0.23
+      albedo <- toa_data_temp[i, "alb"]
       pet <- pet0 <- 0
       
       # wind speed
@@ -303,7 +312,7 @@ for(yr in unique(toa_data$year)){
       gamma <- toa_data_temp[i,"gamma"]/1000 #convert to kPa/C
       
       # effect of cloudiness (relative shortwave radiation)
-      # rs_rs0 <- (0.75 + (2 * 10^-5) * elev) * toa_data_temp[i,"toa"]/1000 # as in FAO
+      # rs0 <- (0.75 + (2 * 10^-5) * elev) * toa_data_temp[i,"toa"]/1000 # as in FAO
       rs_rs0 <- 1-0.29*(gwgen_data_temp[i,"mean_cloud"] + (gwgen_data_temp[i,"mean_cloud"])^2) # Antoine et al, 1996
       # rs_rs0 <- 1 - gwgen_data_temp[i,"mean_cloud"]
       
@@ -317,7 +326,7 @@ for(yr in unique(toa_data$year)){
         (1.35 * rs_rs0 - 0.35) 
       
       # net radiation
-      r_ng <- (1 - albedoPM) * r_s  - r_nl
+      r_ng <- (1 - albedo) * r_s  - r_nl
       
       # compute PET (Penman-Monteith equation) 
       pet <- max((0.408 * ss * r_ng + gamma * 900 * u2 * (es - ea) / (gwgen_data_temp[i,"temp"] + 273.15))/
@@ -332,7 +341,7 @@ for(yr in unique(toa_data$year)){
         r_nl <- 4.903e-09 * (0.34 - 0.14 * sqrt(ea)) * 
           ((gwgen_data_temp[i,"tmax"] + 273.2)^4 + (gwgen_data_temp[i,"tmin"] + 273.2)^4)/2 * 
           (1.35 * rs_rs0 - 0.35) # estimated net outgoing longwave radiation
-        r_ng <- (1 - albedoPM) * r_s - r_nl # net radiation
+        r_ng <- (1 - albedo) * r_s - r_nl # net radiation
         pet <- max((0.408 * ss * r_ng + gamma * 900 * u2 * (es - ea) / (gwgen_data_temp[i,"temp"] + 273.15))/
                      (ss + gamma * (1 + 0.34 * u2)),0)
         
@@ -345,7 +354,14 @@ for(yr in unique(toa_data$year)){
       }
       
       netrad <- r_ng
-      petPM <- pet
+      
+      # calculate FAO PM pet
+      r_nl <- 4.903e-09 * (0.34 - 0.14 * sqrt(ea)) * 
+        ((gwgen_data_temp[i,"tmax"] + 273.2)^4 + (gwgen_data_temp[i,"tmin"] + 273.2)^4)/2 * 
+        (1.35 * rs_rs0 - 0.35) # estimated net outgoing longwave radiation
+      r_ng <- (1 - albedoPM) * r_s - r_nl # net radiation
+      petPM <- max((0.408 * ss * r_ng + gamma * 900 * u2 * (es - ea) / (gwgen_data_temp[i,"temp"] + 273.15))/
+                   (ss + gamma * (1 + 0.34 * u2)),0)
       
     }
     
@@ -366,11 +382,12 @@ for(yr in unique(toa_data$year)){
   gc()
   
   e <- Sys.time()
+  p()
+  # cat(paste0("Runtime: ", round(as.numeric(e-b)), "m \n"))
   
-  cat(paste0("Runtime: ", round(as.numeric(e-b)), "m \n"))
-  
-}
-
+}})
+end_time <- Sys.time()
+cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
 gwgen_data$glo <- round((gwgen_data$glo/1000),4) #convert to MJ.m-2
 gwgen_data$pet <- round(gwgen_data$pet, 4)
 

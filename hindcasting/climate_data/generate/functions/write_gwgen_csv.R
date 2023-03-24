@@ -115,6 +115,14 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, 
   data <- data[!is.na(data$tmin),]
   data <- data[with(data, order(id, yr, month)),]
   
+  # check if some rare points miss data (landmask may change bewteen year-15 and year +15), and remove them
+  nobs <- data %>% group_by(id) %>% count()
+  nobs_max <- max(nobs$n)
+  nobs_incomplete <- nobs %>% filter(n != nobs_max)
+  cat(paste0(nrow(nobs_incomplete), " cells are incomplete. Removing them..."))
+  data <- data %>% filter(!(id %in% nobs_incomplete$id))
+  
+  
   cat(paste0("Number of cells with data: ", nrow(data)/length(rmonths$min:rmonths$max), "\n"))
   
   if(debug_wet){

@@ -8,7 +8,7 @@
 # debug option (strange wet days without precipitation ?)
 # + some wind and cloud data are missing (in rare case)
 
-write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debug_wet = F, debug_wndcld = F, debug_years = F){
+write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, WHC_present, debug_wet = F, debug_wndcld = F, debug_years = F){
   
   outname <-   ifelse(!is.na(years [2]) ,paste0(years[1], "_",years[2],"BP"), paste0(years[1], "_BP"))
   
@@ -101,6 +101,7 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   mid_year <- (years[1]+years[2])/2
   alt <- load_altitude_ICE6GC(year = mid_year, folder = "D:/climate/ICE-6G-C", folder_hadcm3b = "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw", extent)
   alt_r <- rast(alt[,c("lon", "lat", "alt")])
+  crs(alt_r) <- crs(r_tmin)
   r_tmin <- mask(r_tmin, alt_r)
   r_tmax <- mask(r_tmax, alt_r)
   r_pre <- mask(r_pre, alt_r)
@@ -109,8 +110,20 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   r_uwind <- mask(r_uwind, alt_r)
   r_vwind <- mask(r_uwind, alt_r)
   
+  # mask with WHC data (from present)
+  WHC_present_r <- rast(WHC_present[,c("lon", "lat", "whc")])
+  WHC_present_r <- aggregate(WHC_present_r, 5, na.rm = T)
+  WHC_present_r <- terra::resample(WHC_present_r, alt_r, method = "bilinear")
+  WHC_present_r <- mask(WHC_present_r, alt_r)
+  crs(WHC_present_r) <- crs(r_tmin)
+  r_tmin <- mask(r_tmin, WHC_present_r)
+  r_tmax <- mask(r_tmax, WHC_present_r)
+  r_pre <- mask(r_pre, WHC_present_r)
+  r_wet <- mask(r_wet, WHC_present_r)
+  r_cloud <- mask(r_cloud, WHC_present_r)
+  r_uwind <- mask(r_uwind, WHC_present_r)
+  r_vwind <- mask(r_uwind, WHC_present_r)
   
-  ncells_with_data <- freq(r_tmin, value=NA)$count[1]
   cat(paste0("Number of cells: ", ncell(r_tmin), "\n"))
   cat(paste0("Number of NA cells: ", freq(r_tmin, value=NA)$count[1], "\n"))
   
@@ -151,6 +164,7 @@ write_gwgen_csv_2rasters <- function(years, extent, source_dir, output_dir, debu
   
   if(debug_wndcld){
     data <- na.locf(data, na.rm=FALSE) # carry the last observation forward to replace rare missing wind/cloud values
+    data[data$cloud > 1, "cloud"] <- 1
   }
   
   fwrite(data, file = file.path(output_dir, paste0(outname, "_gwgen.csv")), 

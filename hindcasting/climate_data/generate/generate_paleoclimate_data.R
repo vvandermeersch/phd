@@ -18,7 +18,7 @@ options(future.globals.maxSize= 850*1024^2)
 
 # Setup folders
 raw_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw" # folder with HadCM3B datafiles
-out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg_cor" # output folder, 0.5deg
+out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg" # output folder, 0.5deg
 ds_out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/phenofit_format/downscaled_01deg" # output folder, 0.1deg
 
 
@@ -26,9 +26,9 @@ ds_out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/phenofit_format/downscaled_
 # years <- c(985, 1015)
 
 # Choose extent
-extent <- extent(c(-14,40,34,72))
+extent <- ext(c(-10,40,34,71))
 
-for(year in seq(2000, 16000, 2000)){
+for(year in c(2500, 6500, 7000, 7500)){
   years <- c(year -15, year + 15)
   try(source(file.path(wd, "scripts", "paleoclimate_main.R")))
   gc()
@@ -52,8 +52,12 @@ for(year in seq(17000, 1000, -2000)){
   glo_file <- paste0("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_data/generate/outputs/",
                      yrb, "_", yre,
                      "BP_glorad.csv")
-  format_gwgen_to_phenofit_addvar(input_file, toa_file, addvar = "TOA", pd_folder = out_clim_dir, debug_first_row = FALSE)
-  format_gwgen_to_phenofit_addvar(input_file, glo_file, addvar = "cld", pd_folder = out_clim_dir, debug_first_row = FALSE)
+  format_gwgen_to_phenofit_addvar(input_file, toa_file, addvar = "TOA", 
+                                  pd_folder = out_clim_dir, debug_first_row = FALSE, WHC_present = WHC_present)
+  format_gwgen_to_phenofit_addvar(input_file, glo_file, addvar = "cld", 
+                                  pd_folder = out_clim_dir, debug_first_row = FALSE, WHC_present = WHC_present)
+  format_gwgen_to_phenofit_addvar(input_file, glo_file, addvar = "wind", 
+                                  pd_folder = out_clim_dir, debug_first_row = FALSE, WHC_present = WHC_present)
   # format_gwgen_to_phenofit_addvar(input_file, toa_file, addvar = "mbar", pd_folder = out_clim_dir, debug_first_row = FALSE)
   
 }

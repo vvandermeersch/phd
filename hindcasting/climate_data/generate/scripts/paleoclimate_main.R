@@ -8,7 +8,7 @@
 
 # Author : V. Van der Meersch
 
-cat(paste0("Doing year ", years[2]-15, "\n"))
+message(paste0("Doing year ", years[2]-15))
 
 
 ########################
@@ -21,10 +21,10 @@ cat(paste0("Doing year ", years[2]-15, "\n"))
 # Write csv input file for GWGEN
 if((years[2]-15) %in% seq(2000, 20000, 2000)){
   input_file <- write_gwgen_csv_2rasters(years, extent, raw_clim_dir, output_dir = file.path(wd, "inputs"), 
-                                debug_wet = TRUE, debug_wndcld = TRUE, debug_years = FALSE)
+                                         WHC_present = WHC_present, debug_wet = TRUE, debug_wndcld = TRUE, debug_years = FALSE)
 }else{
   input_file <- write_gwgen_csv(years, extent, raw_clim_dir, output_dir = file.path(wd, "inputs"), 
-                                debug_wet = TRUE, debug_wndcld = TRUE, debug_years = FALSE)
+                                WHC_present = WHC_present, debug_wet = TRUE, debug_wndcld = TRUE, debug_years = FALSE)
 }
 
 
@@ -66,8 +66,10 @@ source(file.path(wd, "scripts", "compute_glo_radiation.R")) # much more faster i
 # 3. PHENOFIT-based formatting #
 ################################
 
-# All variables except PET (see below)
-phenofit_yr <- format_gwgen_to_phenofit(input_file, glo_file, pd_folder = out_clim_dir, debug_first_row = T)
+mid_year <- (years[1]+years[2])/2
+alt <- load_altitude_ICE6GC(year = mid_year, folder = "D:/climate/ICE-6G-C", folder_hadcm3b = "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw", extent)
+phenofit_yr <- format_gwgen_to_phenofit(input_file, glo_file, pd_folder = out_clim_dir, debug_first_row = T, 
+                                        alt= alt, WHC_present = WHC_present)
 
 
 
