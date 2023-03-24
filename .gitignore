@@ -48,8 +48,13 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/correlative_models/fit/ecv/gam/fit
 
 **/present_calibration/calibration_paper/first_revision/_cache
+**/present_calibration/calibration_paper/second_revision/_cache
+**/present_calibration/calibration_paper/second_revision/cache
 **/present_calibration/soil_data/download/vrt_files
+**/present_calibration/calibration_paper/second_revision/figs
 
 **/migration/MigClim/simulation_test
 **/migration/MigClim/small_test
 **/migration/MigClim/bretagne11kBP
+
+**/hindcasting/climate_data/diagnostic
