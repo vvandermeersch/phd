@@ -11,29 +11,35 @@ library(ggnewscale)
 library(terra)
 library(raster)
 
-output_folder <- "D:/simulations/phenofit/paleo/test"
+output_folder <- "D:/simulations/phenofit/paleo/05deg"
 hadcm3b_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw"
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
 
-ext <- extent(c(-14,40,34,72))
+ext <- ext(c(-14,40,34,72))
+
+mod <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica/Fagus_sylvatica_VVanderMeersch.rds")
 
 # loop on years
 
-for(year in seq(11000, 10000, -200)){
+for(year in c(500, 1000, 1500, 2000, 3000, 3500, 4000, 4500, 5000, 5500, 6000)){
   
-  fitness <- readRDS(file.path(output_folder, paste0(year, "BP"), "fitness.rds"))
+  fitness <- readRDS(file.path(output_folder, paste0(year, "BP.rds")))
+  pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
   
-  ice_sheet <- load_icesheet(year, folder = hadcm3b_folder, sea_ice = F, extent = ext)
+  ice_sheet <- load_icesheet(year, folder = hadcm3b_folder, sea_ice = FALSE, extent = ext)
   ice_sheet[ice_sheet$ice > 1, "ice"] <- 1
   ice_sheet[ice_sheet$ice < 0.05, ] <- NA
   
   # altitude <- load_altitude(year, folder = hadcm3b_folder, extent = ext, dscale = T)
   
   plot <- ggplot() +
-    geom_raster(data = fitness, aes(fill = value, x = lon, y = lat)) +
+    geom_raster(data = fitness, aes(fill = pred, x = lon, y = lat)) +
+    geom_point(data = pollen[pollen$pres == 1,], aes(x = lon, y = lat), col = "white", fill = "#009B72", shape = 21, size = 1) +
+    geom_point(data = pollen[pollen$pres == 0,], aes(x = lon, y = lat), col = "white", shape = 4, size = 0.5) +
     theme_void() +
     ylab("") +
     xlab("") +
-    scale_fill_gradient2(low = "#edede1", mid = "#B4E0AA", high = "#488B49", limits = c(0,1), breaks = c(0,0.5,1), midpoint = 0.5) +
+    scale_fill_gradientn(colours = c("#ff9ea0", "#f8961e", "#f9c74f", "#43aa8b", "#577590"), breaks = c(0,0.25,0.5,0.75,1), limits = c(0,1)) +
     guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", frame.linewidth = 0.3,
                                  ticks = FALSE)) +
     theme(legend.title=element_blank(), legend.position = "none", 
@@ -52,10 +58,10 @@ for(year in seq(11000, 10000, -200)){
 }
 
 
+scale_fill_gradientn(colours = c("#f94144", "#f8961e", "#f9c74f", "#43aa8b", "#577590"), breaks = c(0,0.25,0.5,0.75,1), limits = c(0,1))
 
 
-
-
+  scale_fill_gradient2(low = "#edede1", mid = "#B4E0AA", high = "#488B49", limits = c(0,1), breaks = c(0,0.5,1), midpoint = 0.5) +
 
 ggplot() +
   geom_raster(data = altitude, aes(fill = alt, x = lon, y = lat)) +
