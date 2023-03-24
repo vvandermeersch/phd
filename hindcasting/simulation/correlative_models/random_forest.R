@@ -8,6 +8,7 @@ sim_dir <- "D:/simulations/csdm/random_forest/paleo"
 clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
 
 library(randomForest)
+library(dplyr)
 
 # Setup
 species <- "fagus_sylvatica"
@@ -24,7 +25,7 @@ rfmod <- readRDS(file.path(model_dir, species, "random_forest_finalcov_fullmodel
 soil_predictors <- readRDS(file.path(clim_dir, "soil_predictors.rds"))
 
 # Simulation loop
-for(year in seq(21000,1000, -2000)){
+for(year in c(5000, 5500, 6000)){
   clim_predictors <- readRDS(file.path(clim_dir, paste0("predictors_", year, "BP.rds")))
   predictors <- left_join(clim_predictors, soil_predictors) %>%
     na.omit()
