@@ -7,20 +7,20 @@ setwd("D:/climate/ERA5-Land/raw") # folder where files will be downloaded
 # Python config
 use_python("C:/Users/vandermeersch/AppData/Local/Programs/Python/Python310/python.exe", required=T)
 cdsapi <- import("cdsapi")
-source_python("C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/download/ERA5_land_download.py") # custom script
+source_python("C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/climate_data/download/ERA5_land_download_2.py") # custom script
 
 
 # select the variable; name must be a valid ERA5 CDS API name
-var <- 'potential_evaporation'
+var <- 'total_precipitation'
 
 # For valid keywords, see Table 2 of:
-# https://datastore.copernicus-climate.eu/documents/app-c3s-daily-era5-statistics/C3S_Application-Documentation_ERA5-daily-statistics-v2.pdf
+# https://confluence.ecmwf.int/display/CKB/ERA5-Land%3A+data+documentation#ERA5Land:datadocumentation-parameterlistingParameterlistings
 
 
 
 
 # Select years
-years <- as.character(1969:2000)
+years <- as.character(1950:1968)
 
 # Maximum number of per-user requests that access the online CDS data is 2
 # plan(multisession, workers = 2) ?!

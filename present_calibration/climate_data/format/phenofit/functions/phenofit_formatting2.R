@@ -70,18 +70,17 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
         # Get time
         ntime <- dim(raster_nc)[3]
         
-        
-        # Loop on days
-        for(day in 1:(ntime/24)){
+        if(var %in% c("total_precipitation", "potential_evaporation", "surface_solar_radiation_downwards")){
           
-          start <- 1+(day-1)*24
-          end <- 24*day
+          if(mn == "01"){ntime <- ntime + 1}
           
-          if(var %in% c("total_precipitation", "potential_evaporation", "surface_solar_radiation_downwards")){
-            
+          
+          # Loop on days
+          for(day in 1:(ntime)){
+              
             # ERA5-Land : accumulated from the beginning of the forecast to the end of the forecast step
             # i.e. daily value of day D is the step 24 value = 00h00 of the day D+1
-            if(end == ntime){
+            if(day == ntime){
               # for the last day of the month...
               if(mn == "12"){
                 file <- paste0(var, "_", yr+1, "_", "01", ".nc") # next year if december...
@@ -91,32 +90,58 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
               raster_nc <- brick(paste0(rd_folder, file), varname=var_name)
               daily_value <- subset(raster_nc, 1) 
             }else{
-              daily_value <- subset(raster_nc, end+1)
+              if(mn == "01"){
+                daily_value <- subset(raster_nc, day)
+              }else{
+                daily_value <- subset(raster_nc, day+1)
+              }
+              
             }
             
-          }else{
+            # Convert units (e.g. Kelvin to Celsius)
+            values(daily_value) <- convert_units(daily_value, var)
+            
+            if(init){
+              # Create dataframe
+              phenofit_format_df <- as.data.frame(daily_value, xy=TRUE)
+              # Inverse lon and lat
+              phenofit_format_df <- phenofit_format_df[,c(2,1,3)]
+              init <- FALSE
+            }else{
+              daily_value_df <- as.data.frame(daily_value, xy=FALSE)
+              phenofit_format_df <- cbind(phenofit_format_df, daily_value_df)
+            }
+          
+          }
+        
+        }else{
+          
+          # Loop on days
+          for(day in 1:(ntime/24)){
+            
+            start <- 1+(day-1)*24
+            end <- 24*day
             
             hourly_value <- subset(raster_nc, start:end)
             
             NAvalue(hourly_value) <- -Inf
             daily_value <- calc(hourly_value, fun = eval(parse(text=stat)))
             
-          } 
-          
-          # Convert units (e.g. Kelvin to Celsius)
-          values(daily_value) <- convert_units(daily_value, var)
-          
-          if(init){
-            # Create dataframe
-            phenofit_format_df <- as.data.frame(daily_value, xy=TRUE)
-            # Inverse lon and lat
-            phenofit_format_df <- phenofit_format_df[,c(2,1,3)]
-            init <- FALSE
-          }else{
-            daily_value_df <- as.data.frame(daily_value, xy=FALSE)
-            phenofit_format_df <- cbind(phenofit_format_df, daily_value_df)
+            # Convert units (e.g. Kelvin to Celsius)
+            values(daily_value) <- convert_units(daily_value, var)
+            
+            if(init){
+              # Create dataframe
+              phenofit_format_df <- as.data.frame(daily_value, xy=TRUE)
+              # Inverse lon and lat
+              phenofit_format_df <- phenofit_format_df[,c(2,1,3)]
+              init <- FALSE
+            }else{
+              daily_value_df <- as.data.frame(daily_value, xy=FALSE)
+              phenofit_format_df <- cbind(phenofit_format_df, daily_value_df)
+            }
           }
-          
+
         }
         
         # Update progression

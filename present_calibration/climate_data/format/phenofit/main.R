@@ -34,34 +34,34 @@ processeddata_folder <- "D:/climate/ERA5-Land/phenofit_format/"
 
 ## Run
 
-phenofit_formatting2(1969:2000, "2m_temperature", 'mean', rawdata_folder, processeddata_folder, ncores=5)
+phenofit_formatting2(2001:2020, "2m_temperature", 'mean', rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
-phenofit_formatting2(1969:2000, "2m_temperature", "min", rawdata_folder, processeddata_folder, ncores=5)
+phenofit_formatting2(2001:2020, "2m_temperature", "min", rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
-phenofit_formatting2(1969:2000, "2m_temperature", "max", rawdata_folder, processeddata_folder, ncores=5)
+phenofit_formatting2(2001:2020, "2m_temperature", "max", rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
-phenofit_formatting2(1969:2000, "total_precipitation", "sum", rawdata_folder, processeddata_folder, ncores=5)
+phenofit_formatting2(1950:1968, "total_precipitation", "sum", rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
-phenofit_formatting2(1969:2000, "surface_solar_radiation_downwards", "sum", rawdata_folder, processeddata_folder, ncores=5)
+phenofit_formatting2(1950:1968, "surface_solar_radiation_downwards", "sum", rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
 phenofit_formatting2(1969:1999, "potential_evaporation", "sum", rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
-phenofit_processing_and_formatting2(1969:2000, "wind", "mean", rawdata_folder, processeddata_folder, ncores=5) #used only for ETP calculation
+phenofit_processing_and_formatting2(1950:1968, "wind", "mean", rawdata_folder, processeddata_folder, ncores=5) #used only for ETP calculation
 gc()
 
-phenofit_processing_and_formatting2(1969:2000, "relative_humidity", "mean", rawdata_folder, processeddata_folder, ncores=5)
+phenofit_processing_and_formatting2(1950:1968, "relative_humidity", "mean", rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
-phenofit_processing_and_formatting2(1969:2000, "relative_humidity", "min", rawdata_folder, processeddata_folder, ncores=5) #used only for ETP calculation
+phenofit_processing_and_formatting2(1950:1968, "relative_humidity", "min", rawdata_folder, processeddata_folder, ncores=5) #used only for ETP calculation
 gc()
 
-phenofit_processing_and_formatting2(1969:2000, "relative_humidity", "max", rawdata_folder, processeddata_folder, ncores=5) #used only for ETP calculation
+phenofit_processing_and_formatting2(1950:1968, "relative_humidity", "max", rawdata_folder, processeddata_folder, ncores=5) #used only for ETP calculation
 gc()
 
 
@@ -85,7 +85,7 @@ system.time(phenofit_compute_PET2(2000, processeddata_folder, method = "PenmanMo
 gc()
 
 
-phenofit_compute_PET2(1969:2000, processeddata_folder, method = "PenmanMonteith", ncores=2)
+phenofit_compute_PET2(1950:1968, processeddata_folder, method = "PenmanMonteith", ncores=2)
 
 
 ## Evapotranspiration without zero and NA
