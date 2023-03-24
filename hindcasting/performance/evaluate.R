@@ -12,32 +12,92 @@ sim_folder <- "D:/simulations/phenofit/paleo/test2"
 sim_folder <- "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica"
 pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
 
-models <- data.frame(model = c("phenofit",
-                               "phenofit_inverse", 
+# models <- data.frame(model = c("phenofit",
+#                                "phenofit_inverse", 
+#                                "random_forest",
+#                                "lasso_glm",
+#                                "brt",
+#                                "gam",
+#                                "biomod"),
+#                folder = c("D:/simulations/phenofit/paleo/05deg",
+#                           "D:/simulations/phenofit/paleo/test4_inverse", 
+#                           "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
+#                           "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
+#                           "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
+#                           "D:/simulations/csdm/gam/paleo/fagus_sylvatica",
+#                           "D:/simulations/csdm/biomod/paleo/fagus_sylvatica"))
+
+models <- data.frame(name = c("phenofit",
+                               "phenofit_fitted",
                                "random_forest",
-                               "lasso_glm"),
-               folder = c("D:/simulations/phenofit/paleo/test2",
-                          "D:/simulations/phenofit/paleo/test2_inverse", 
-                          "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
-                          "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica"))
+                               "lasso_glm",
+                               "brt",
+                               "gam",
+                               "biomod"),
+                     simfolder = c("D:/simulations/phenofit/paleo/05deg",
+                                "D:/simulations/phenofit/paleo/05deg_fitted",
+                                "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/biomod/paleo/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/backward/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/biomod/fit/fagus_sylvatica"),
+                     mod = c("Fagus_sylvatica_VVanderMeersch.rds",
+                             "cmaes_fit_subset4_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds",
+                             "biomod_finalcov_fullmodel.rds"))
+
 
 model_performance <- lapply(1:nrow(models),function(i){
   mod <- models[i,]
-  perf <-lapply(seq(17000,1000,-2000), function(year){
-    fitness <- readRDS(file.path(mod$folder, paste0(year, "BP.rds")))
+  perf <-lapply(c(500, 1000, 1500, 2000, 3000, 3500, 4000, 4500, 5000, 5500, 6000), function(year){
+    fitness <- readRDS(file.path(mod$simfolder, paste0(year, "BP.rds")))
     pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
   
     fitness <- left_join(fitness, pollen, by = c("lat", "lon"))
-
-    boyce_accumulate <- ecospat.boyce(fit = fitness$pred, obs = na.omit(fitness[fitness$pres == 1,]$pred), 
+    
+    # boyce index
+    boyce_ind <- ecospat.boyce(fit = fitness$pred, obs = na.omit(fitness[fitness$pres == 1,]$pred), 
                                       nclass=0, window.w="default", res=100, 
-                                      PEplot = F, rm.duplicate = F,  method = 'pearson' )
+                                      PEplot = FALSE, rm.duplicate = FALSE,  method = 'pearson' )
   
-    eval_obj <- evalmod(scores = na.omit(fitness)$pred, labels = na.omit(fitness)$pres)
-    auc_accumulate <- precrec::auc(eval_obj)
+    # auc
+    fitness <- na.omit(fitness)
+    eval_obj <- evalmod(scores = fitness$pred, labels = fitness$pres)
+    aucroc <- precrec::auc(eval_obj)
+    
+    # binarized predictions
+    ths <- readRDS(file.path(mod$modfolder, mod$mod))$best_threshold
+    fitness$bin_pred <- 0
+    fitness[fitness$pred >= ths, "bin_pred"] <- 1
+    
+    # confusion matrix
+    tp <- nrow(fitness[fitness$bin_pred == 1 & fitness$pres == 1,])
+    fp <- nrow(fitness[fitness$bin_pred == 1 & fitness$pres == 0,])
+    tn <- nrow(fitness[fitness$bin_pred == 0 & fitness$pres == 0,])
+    fn <- nrow(fitness[fitness$bin_pred == 0 & fitness$pres == 1,])
+    
+    # metrics
+    sens = tp/(tp+fn)
+    spec = tn/(tn+fp)
+    opr = fp/(tp+fp) # overprediction rate
+    upr = fn/(tp+fn) # underprediction rate
+    tss = sens + spec - 1  
   
-    return(data.frame(year = year, bi = boyce_accumulate$cor, auc = round(auc_accumulate$aucs[1],2), 
-              npollen_pres = nrow(pollen[pollen$pres == 1,]), npollen = nrow(pollen), mod = mod$model))})
+    return(data.frame(year = year, 
+                      bi = boyce_ind$cor, auc = round(aucroc$aucs[1],2), 
+                      sens = sens, spec= spec, opr = opr, upr = upr, tss = tss,
+                      npollen_pres = nrow(pollen[pollen$pres == 1,]), 
+                      npollen = nrow(pollen), mod = mod$name))})
   return(do.call(rbind.data.frame, perf))
   })
 
@@ -50,6 +110,15 @@ ggplot(data = model_performance) +
   scale_x_reverse() +
   scale_y_continuous(
     name = "AUC") +
+  theme_minimal()
+
+ggplot(data = model_performance) +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "red") +
+  geom_line(aes(x = year, y = tss, col = mod)) +
+  geom_point(aes(x = year, y = tss, col = mod)) +
+  scale_x_reverse() +
+  scale_y_continuous(
+    name = "TSS") +
   theme_minimal()
 
 ggplot(data = model_performance) +
