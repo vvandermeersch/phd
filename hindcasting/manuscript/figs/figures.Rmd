@@ -1,0 +1,21 @@
+---
+title: "Figures"
+author: "Victor Van der Meersch"
+date: "22/03/2023"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/manuscript/figs"
+```
+
+## Climate overview
+
+```{r climateoverview, fig.height = 5, fig.width = 7, dev=c('png'), dpi = 600}
+source(file.path(wd, "climate_overview", "script.R"))
+climateoverview_figure
+```
+
