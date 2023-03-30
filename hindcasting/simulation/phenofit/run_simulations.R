@@ -16,8 +16,8 @@ source(file.path(wd, "functions/read_mean_outputvalue.R"))
 species_file <- "C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Fagus_sylvatica_VVanderMeersch.species"
 # species_file <- "D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/CMAES/subset_4/cmaes_fit_subset4_rep1.species"
 # species_file <- "C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Abies_alba_VVanderMeersch2.species"
-output_folder <- "D:/simulations/phenofit/paleo/05deg"
-climate_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg"
+output_folder <- "D:/simulations/phenofit/paleo/05deg_wocor"
+climate_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg_wocor"
 command_file <- file.path(wd, "phenofit","command_file.txt")
 
 
@@ -30,7 +30,7 @@ run <- paste(capsis_settings$cd_java8, capsis_settings$java8, capsis_settings$cd
 
 # simulation loop
 
-for(year in c(2500)){
+for(year in c(5000)){
   yr_b <- as.character(- year - 14)
   yr_e <- as.character(- year + 15)
   command_file_setup(command_file, species_file, output_folder, climate_folder,
