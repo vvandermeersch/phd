@@ -10,6 +10,14 @@ load_raster <- function(yr, var, dir, wnd = 15){
     var_fd <- "temp_mm_1_5m_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr"
     var_suf <- "temp_mm_1_5m_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_"
     var <- "temp_mm_1_5m"
+  }else if(var == "tempmin"){
+    var_fd <- "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr"
+    var_suf <- "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_"
+    var <- "tempmin_av"
+  }else if(var == "tempmax"){
+    var_fd <- "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr"
+    var_suf <- "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_"
+    var <- "tempmax_av"
   }
   
   if(yr %in% seq(20000, 2000, -2000)){
@@ -31,7 +39,7 @@ load_raster <- function(yr, var, dir, wnd = 15){
     # data in one netcdf file
     file_spec <- years_to_file(years)
     rmonths <- year_to_months(years[1], years[2], file_spec$max)
-    r_var <- rast(file.path(data_dir, var_fd, 
+    r_var <- rast(file.path(dir, var_fd, 
                              paste0(var_suf, file_spec$name, ".nc")),
                    subds = var, lyrs = rmonths$min:rmonths$max, 
                    opts="HONOUR_VALID_RANGE=NO")
