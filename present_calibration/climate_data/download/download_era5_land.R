@@ -11,7 +11,7 @@ source_python("C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/cli
 
 
 # select the variable; name must be a valid ERA5 CDS API name
-var <- 'total_precipitation'
+var <- 'surface_solar_radiation_downwards'
 
 # For valid keywords, see Table 2 of:
 # https://confluence.ecmwf.int/display/CKB/ERA5-Land%3A+data+documentation#ERA5Land:datadocumentation-parameterlistingParameterlistings
@@ -30,7 +30,7 @@ years_1 <- years[1:(length(years)%/%2)]
 years_2 <- years[(length(years)%/%2+1):length(years)]
 
 #Run script
-era5_land(years = years_1, var = var)
+era5_land(years = as.character(2016:2017), var = var)
 
 
 

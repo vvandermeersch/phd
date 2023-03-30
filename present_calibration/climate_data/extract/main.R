@@ -64,4 +64,4 @@ filter_df$lon <- round(filter_df$lon, 1)
 filter_df <- filter_df %>% dplyr::select(-c("value1", "value2"))
 
 out_folder <- paste0(processeddata_folder, "transformed/")
-phenofit_extract_all_climate(1969:2000, processeddata_folder, out_folder, "PenmanMonteith", filter = filter_df)
+phenofit_extract_all_climate(2001:2020, processeddata_folder, out_folder, "PenmanMonteith", filter = filter_df)

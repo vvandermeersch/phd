@@ -75,11 +75,19 @@ phenofit_processing_and_formatting2 <- function(years, var, stat, rd_folder, pd_
         # Get time
         ntime <- dim(raster_nc_1)[3]
         
+        if(yr == 1950 & mn == "01"){ntime <- ntime + 1} # particular case, very first hour of ERA5-land data is missing
+        
         # Loop on days
         for(day in 1:(ntime/24)){
           
           start <- 1+(day-1)*24
           end <- 24*day
+          
+          # particular case, very first hour of ERA5-land data is missing (January 1950)
+          if(yr == 1950 & mn == "01" & day == 1){end <- end - 1} else if(yr == 1950 & mn == "01"){
+            start <- start - 1 
+            end <- end - 1
+          }
           
           if(var == "wind"){
             

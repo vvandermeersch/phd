@@ -72,7 +72,7 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
         
         if(var %in% c("total_precipitation", "potential_evaporation", "surface_solar_radiation_downwards")){
           
-          if(mn == "01"){ntime <- ntime + 1}
+          if(yr == 1950 & mn == "01"){ntime <- ntime + 1} # particular case, very first day of ERA5-land data is missing
           
           
           # Loop on days
@@ -83,6 +83,7 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
             if(day == ntime){
               # for the last day of the month...
               if(mn == "12"){
+                
                 file <- paste0(var, "_", yr+1, "_", "01", ".nc") # next year if december...
               }else{
                 file <- paste0(var, "_", yr, "_", months[which(months==mn)+1], ".nc")
@@ -90,7 +91,7 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
               raster_nc <- brick(paste0(rd_folder, file), varname=var_name)
               daily_value <- subset(raster_nc, 1) 
             }else{
-              if(mn == "01"){
+              if(yr == 1950 & mn == "01"){ # particular case, very first day of ERA5-land data is missing
                 daily_value <- subset(raster_nc, day)
               }else{
                 daily_value <- subset(raster_nc, day+1)
@@ -116,11 +117,19 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
         
         }else{
           
+          if(yr == 1950 & mn == "01"){ntime <- ntime + 1} # particular case, very first hour of ERA5-land data is missing
+          
           # Loop on days
           for(day in 1:(ntime/24)){
             
             start <- 1+(day-1)*24
             end <- 24*day
+            
+            # particular case, very first hour of ERA5-land data is missing (January 1950)
+            if(yr == 1950 & mn == "01" & day == 1){end <- end - 1} else if(yr == 1950 & mn == "01"){
+              start <- start - 1 
+              end <- end - 1
+            }
             
             hourly_value <- subset(raster_nc, start:end)
             
