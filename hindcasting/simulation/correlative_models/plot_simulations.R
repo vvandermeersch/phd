@@ -5,7 +5,7 @@
 #                                 #
 ###################################
 
-wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/correlative_models/gam"
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/correlative_models/random_forest"
 library(ggplot2)
 library(ggnewscale)
 library(terra)
@@ -17,15 +17,15 @@ ext <- ext(c(-14,40,34,72))
 
 
 # setup
-output_folder <- "D:/simulations/csdm/gam/paleo"
+output_folder <- "D:/simulations/csdm/random_forest/paleo"
 species <- "fagus_sylvatica"
-mod <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica/gam_finalcov_fullmodel.rds")
+mod <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica/random_forest_finalcov_fullmodel.rds")
 
 
 
 # loop on years
 
-for(year in c(500, 1000, 1500, 2000, 3000, 3500, 4000, 4500, 5000, 5500, 6000)){
+for(year in c(6500, 7000, 7500, 8000, 8500, 9000)){
   
   fitness <- readRDS(file.path(sim_dir, species, paste0(year, "BP.rds")))
   pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
