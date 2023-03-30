@@ -32,43 +32,42 @@ models <- data.frame(name = c("phenofit",
                                "random_forest",
                                "lasso_glm",
                                "brt",
-                               "gam",
-                               "biomod"),
+                               "gam"),
                      simfolder = c("D:/simulations/phenofit/paleo/05deg",
                                 "D:/simulations/phenofit/paleo/05deg_fitted",
                                 "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
                                 "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
                                 "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
-                                "D:/simulations/csdm/gam/paleo/fagus_sylvatica",
-                                "D:/simulations/csdm/biomod/paleo/fagus_sylvatica"),
+                                "D:/simulations/csdm/gam/paleo/fagus_sylvatica"),
                      modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/backward/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/biomod/fit/fagus_sylvatica"),
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
                      mod = c("Fagus_sylvatica_VVanderMeersch.rds",
                              "cmaes_fit_subset4_rep1.rds",
                              "random_forest_finalcov_fullmodel.rds",
                              "lasso_glm_finalcov_fullmodel.rds",
                              "brt_finalcov_fullmodel.rds",
-                             "gam_finalcov_fullmodel.rds",
-                             "biomod_finalcov_fullmodel.rds"))
+                             "gam_finalcov_fullmodel.rds"))
 
 
 model_performance <- lapply(1:nrow(models),function(i){
   mod <- models[i,]
-  perf <-lapply(c(500, 1000, 1500, 2000, 3000, 3500, 4000, 4500, 5000, 5500, 6000), function(year){
+  perf <-lapply(seq(500,9000,500), function(year){
     fitness <- readRDS(file.path(mod$simfolder, paste0(year, "BP.rds")))
     pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
   
     fitness <- left_join(fitness, pollen, by = c("lat", "lon"))
     
     # boyce index
-    boyce_ind <- ecospat.boyce(fit = fitness$pred, obs = na.omit(fitness[fitness$pres == 1,]$pred), 
-                                      nclass=0, window.w="default", res=100, 
-                                      PEplot = FALSE, rm.duplicate = FALSE,  method = 'pearson' )
+    # boyce_ind <- ecospat.boyce(fit = fitness$pred, obs = na.omit(fitness[fitness$pres == 1,]$pred), 
+    #                                   nclass=0, window.w="default", res=100, 
+    #                                   PEplot = FALSE, rm.duplicate = TRUE,  method = 'spearman' )$cor
+    
+    boyce_ind <- as.numeric(Boyce(obs = fitness[fitness$pres == 1, c("lon", "lat")], pred = rast(fitness[,c(2,1,3)]), main = "Boyce index",
+                                  res = 100)$Boyce)
   
     # auc
     fitness <- na.omit(fitness)
@@ -91,11 +90,13 @@ model_performance <- lapply(1:nrow(models),function(i){
     spec = tn/(tn+fp)
     opr = fp/(tp+fp) # overprediction rate
     upr = fn/(tp+fn) # underprediction rate
-    tss = sens + spec - 1  
+    tss = sens + spec - 1
+    sorensen = 2*tp/(fn + 2*tp + fp)
   
     return(data.frame(year = year, 
-                      bi = boyce_ind$cor, auc = round(aucroc$aucs[1],2), 
+                      bi = boyce_ind, auc = round(aucroc$aucs[1],2), 
                       sens = sens, spec= spec, opr = opr, upr = upr, tss = tss,
+                      sorensen = sorensen,
                       npollen_pres = nrow(pollen[pollen$pres == 1,]), 
                       npollen = nrow(pollen), mod = mod$name))})
   return(do.call(rbind.data.frame, perf))
@@ -113,7 +114,7 @@ ggplot(data = model_performance) +
   theme_minimal()
 
 ggplot(data = model_performance) +
-  geom_hline(yintercept=0.5, linetype="dashed", color = "red") +
+  geom_hline(yintercept=0, linetype="dashed", color = "red") +
   geom_line(aes(x = year, y = tss, col = mod)) +
   geom_point(aes(x = year, y = tss, col = mod)) +
   scale_x_reverse() +
