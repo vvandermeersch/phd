@@ -183,12 +183,12 @@ with_progress({
   gwgen_data_temp <- gwgen_data[gwgen_data$year == yr,]
   
   # arbitrary correction term for cloudiness because of overestimated generated values by GWGEN
-  # not necessarily the best way to do it...
-  if(year >= 12000){
-    gwgen_data_temp$mean_cloud <- 0.95*gwgen_data_temp$mean_cloud
-  }else if(year < 12000){
-    gwgen_data_temp$mean_cloud <- 0.92*gwgen_data_temp$mean_cloud
-  }
+  # not necessarily the best way to do it... REMOVED
+  # if(year >= 12000){
+  #   gwgen_data_temp$mean_cloud <- 0.95*gwgen_data_temp$mean_cloud
+  # }else if(year < 12000){
+  #   gwgen_data_temp$mean_cloud <- 0.92*gwgen_data_temp$mean_cloud
+  # }
   
   
   plan(multisession, workers = ncores)

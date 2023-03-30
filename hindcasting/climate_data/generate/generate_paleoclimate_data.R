@@ -18,8 +18,8 @@ options(future.globals.maxSize= 850*1024^2)
 
 # Setup folders
 raw_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw" # folder with HadCM3B datafiles
-out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg" # output folder, 0.5deg
-ds_out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/phenofit_format/downscaled_01deg" # output folder, 0.1deg
+out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg_wocor" # output folder, 0.5deg
+ds_out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/downscaled_01deg" # output folder, 0.1deg
 
 
 # Year interval in BP (BP = before present, pre-industrial, i.e. 1950)
@@ -28,7 +28,7 @@ ds_out_clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/phenofit_format/downscaled_
 # Choose extent
 extent <- ext(c(-10,40,34,71))
 
-for(year in c(2500, 6500, 7000, 7500)){
+for(year in c(2500, 3500, 4500, 5500, 6500, 7500, 8500, 9500)){
   years <- c(year -15, year + 15)
   try(source(file.path(wd, "scripts", "paleoclimate_main.R")))
   gc()

@@ -5,7 +5,7 @@
 
 # author : V. Van der Meersch - 20/10/2022
 
-downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, out_folder, ncores){
+downscale_with_altitude <- function(yr, hr_alt, in_folder, out_folder, ncores, foc_extrapol = FALSE){
   
   plan(multisession, workers = ncores)
   
@@ -15,13 +15,16 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   glo <- data.frame(fread(file.path(in_folder, paste0("HadCM3B_glo_", yr, "_dly.fit"))))
   
   # Load data
-  # alt <- fread(file.path(in_folder, "HadCM3B_Altitude.fit"))
-  # alt <- rast(alt[, c(2,1,3)])
-  alt <- resample(hr_alt, rast(tmax[, c(2,1)]))
-  .alt <- wrap(alt)
+  if(foc_extrapol){
+    alt <- aggregate(hr_alt, 3, na.rm = T)
+    alt <- resample(alt, rast(tmax[, c(2,1,3)]))
+    .alt <- wrap(alt)
+  }else{
+    alt <- fread(file.path(in_folder, "HadCM3B_Altitude.fit"))
+    alt <- rast(alt[, c(2,1,3)])
+  }
   
-  # High res altitude to raster format
-  # hr_alt <- rasterFromXYZ(hr_alt[, c(2,1,3)])
+  
   
   # Create rasters
   tmax_reg <- rast()
@@ -44,12 +47,16 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
     tmean_d <- rast(tmean[, c(2,1,day)])
     glo_d <- rast(glo[, c(2,1,day)])
     
-    ##### JUST TEMPORARY ######
-    tmax_d <- mask(tmax_d, alt)
-    tmin_d <- mask(tmin_d, alt)
-    tmean_d <- mask(tmean_d, alt)
-    glo_d <- mask(glo_d, alt)
-    ##########################
+    if(foc_extrapol){
+      tmax_d <- focal(tmax_d, w = 3, fun = "mean", na.policy ="only")
+      tmin_d <- focal(tmin_d, w = 3, fun = "mean", na.policy ="only")
+      tmean_d <- focal(tmean_d, w = 3, fun = "mean", na.policy ="only")
+      glo_d <- focal(glo_d, w = 3, fun = "mean", na.policy ="only")
+      tmax_d <- mask(tmax_d, alt)
+      tmin_d <- mask(tmin_d, alt)
+      tmean_d <- mask(tmean_d, alt)
+      glo_d <- mask(glo_d, alt)
+    }
     
     # create objects that can be passed over a serialized connection
     .tmax_d <- wrap(tmax_d)
@@ -88,6 +95,7 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
     glo_reg <- c(glo_reg, glo_regd)
     
   }
+  cat("test\n")
   
   # 2. interpolate the slope to the high-resolution grid
   hr_tmax_reg <- resample(tmax_reg, hr_alt)
@@ -100,6 +108,14 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   tmin_rast <- rast(lapply(3:ncol(tmin), function(day) rast(tmin[, c(2,1,day)])))
   tmean_rast <- rast(lapply(3:ncol(tmax), function(day) rast(tmean[, c(2,1,day)])))
   glo_rast <- rast(lapply(3:ncol(glo), function(day) rast(glo[, c(2,1,day)])))
+  
+  if(foc_extrapol){
+    tmax_rast <- mask(focal(tmax_rast, w = 3, fun = "mean", na.policy ="only"), alt)
+    tmin_rast <- mask(focal(tmin_rast, w = 3, fun = "mean", na.policy ="only"), alt)
+    tmean_rast <- mask(focal(tmean_rast, w = 3, fun = "mean", na.policy ="only"), alt)
+    glo_rast <- mask(focal(glo_rast, w = 3, fun = "mean", na.policy ="only"), alt)
+  }
+  
   hr_tmax <- resample(tmax_rast, hr_alt)
   hr_tmin <- resample(tmin_rast, hr_alt)
   hr_tmean <- resample(tmean_rast, hr_alt)
@@ -115,10 +131,10 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   hr_glo_cor <- hr_glo + hr_glo_reg * (hr_alt - coarse_alt_hr)
   
   # 6. transform to matrix
-  tmax_data <- lapply(1:nlayers(hr_tmax_cor), function(i){na.omit(as.data.frame(subset(hr_tmax_cor, i)))})
-  tmin_data <- lapply(1:nlayers(hr_tmin_cor), function(i){na.omit(as.data.frame(subset(hr_tmin_cor, i)))})
-  tmean_data <- lapply(1:nlayers(hr_tmean_cor), function(i){na.omit(as.data.frame(subset(hr_tmean_cor, i)))})
-  glo_data <- lapply(1:nlayers(hr_glo_cor), function(i){na.omit(as.data.frame(subset(hr_glo_cor, i)))})
+  tmax_data <- lapply(1:dim(hr_tmax_cor)[3], function(i){na.omit(as.data.frame(subset(hr_tmax_cor, i)))})
+  tmin_data <- lapply(1:dim(hr_tmin_cor)[3], function(i){na.omit(as.data.frame(subset(hr_tmin_cor, i)))})
+  tmean_data <- lapply(1:dim(hr_tmean_cor)[3], function(i){na.omit(as.data.frame(subset(hr_tmean_cor, i)))})
+  glo_data <- lapply(1:dim(hr_glo_cor)[3], function(i){na.omit(as.data.frame(subset(hr_glo_cor, i)))})
   tmax <- do.call(cbind, tmax_data)
   tmin <- do.call(cbind, tmin_data)
   tmean <- do.call(cbind, tmean_data)
@@ -134,11 +150,12 @@ downscale_with_altitude <- function(phenofit_file_pattern, hr_alt, in_folder, ou
   glo_file <- create_phenofit_file(yr, var = "glo", out_folder)
   
   # Write files
-  write.table(cbind(latlon, tmin), file = tmin_file, append = T, sep= "\t", row.names = F, col.names = F)
-  write.table(cbind(latlon, tmax), file = tmax_file, append = T, sep= "\t", row.names = F, col.names = F)
-  write.table(cbind(latlon, tmean), file = tmean_file, append = T, sep= "\t", row.names = F, col.names = F)
-  write.table(cbind(latlon, glo), file = glo_file, append = T, sep= "\t", row.names = F, col.names = F)
+  write.table(cbind(latlon, tmin), file = tmin_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
+  write.table(cbind(latlon, tmax), file = tmax_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
+  write.table(cbind(latlon, tmean), file = tmean_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
+  write.table(cbind(latlon, glo), file = glo_file, append = T, sep= "\t", row.names = FALSE, col.names = FALSE)
   
   plan(sequential)
+  gc()
   
 }
