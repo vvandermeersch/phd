@@ -7,10 +7,11 @@ countries_EUForest <- c("Austria", "Belarus", "Belgium", "Bulgaria", "Croatia", 
                         "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "United Kingdom")
 other_countries <- c("Bosnia and Herzegovina", "Republic of Serbia", "Macedonia", "Greece",
                      "Kosovo", "Albania", "Montenegro", "Malta", "Liechtenstein", 
-                     "Luxembourg", "Ukraine", "Turkey", "Georgia")
+                     "Luxembourg", "Ukraine", "Turkey", "Georgia", "Russia")
 countries <- c(countries_EUForest, other_countries)
 world_map <- ne_countries(scale="medium",returnclass = 'sf')
 eu_map <- world_map %>% filter(sovereignt %in% countries)
+eu_map <- st_make_valid(eu_map)
 eu_map_cropped <- eu_map %>% 
   st_crop(st_bbox(c(xmin = -12, xmax = 45, ymax = 71, ymin = 32), crs = st_crs(4326)))
 
