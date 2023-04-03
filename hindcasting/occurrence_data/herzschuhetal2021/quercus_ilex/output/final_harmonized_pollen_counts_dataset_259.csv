@@ -1,0 +1,17 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cyperaceae"	"Droseraceae"	"Ericales"	"Fabaceae"	"Larix"	"Lentibulariaceae"	"Onagraceae"	"Orobanchaceae"	"Papaveraceae"	"Picea"	"Pinaceae"	"Pinus"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Ranunculaceae"	"Rosaceae"	"Rubiaceae"	"Salix"	"Saxifragaceae"	"Thalictrum"	"Tsuga"
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	0	"AWI"	0	7362	9885	8433	143	0	0	1	0	146	0	0	0	3	0	2	0	1	0	0	0	0	0	0	0	5	1	0	0	0	0	4	1	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	35	"AWI"	35	8252	10863	9563	44	1	1	9	8	56	1	0	4	38	0	7	1	0	0	0	0	0	0	0	0	22	1	1	1	0	0	9	0	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	65	"AWI"	65	9216	11537	10527	56	4	0	13	13	63	0	0	9	26	0	5	1	0	1	0	0	0	0	0	0	28	8	0	0	0	0	22	1	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	105	"AWI"	105	11000	12312	11719	48	0	0	5	3	86	1	1	2	30	3	13	2	0	0	1	0	0	1	1	0	16	2	0	0	0	0	19	3	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	135	"AWI"	135	12056	12806	12498	53	2	0	8	9	118	0	0	4	18	0	15	1	0	0	0	0	0	0	0	0	23	3	0	3	0	0	14	0	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	170	"AWI"	170	13410	13867	13604	42	1	0	1	9	62	0	0	8	19	0	10	1	0	0	1	0	0	1	0	8	34	0	1	0	0	0	13	1	0	1
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	215	"AWI"	215	13989	15219	14499	56	2	0	3	14	63	0	0	7	1	0	6	1	2	0	0	0	0	0	0	0	44	3	3	0	0	0	7	0	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	265	"AWI"	265	14702	16173	15466	9	4	1	75	6	9	0	0	12	2	0	1	2	0	0	0	2	0	0	0	0	156	1	0	7	0	0	4	0	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	325	"AWI"	325	16221	16957	16584	37	3	0	29	14	57	0	0	10	13	0	1	1	0	0	0	0	0	0	0	0	128	0	0	1	0	0	5	1	1	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	355	"AWI"	355	16583	18014	17127	22	1	2	53	4	21	2	0	15	4	0	3	1	0	0	0	0	0	0	0	0	130	2	0	11	0	0	8	1	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	385	"AWI"	385	16913	18872	17695	43	0	5	39	16	37	2	3	32	6	0	1	3	0	0	1	0	0	0	0	0	127	7	0	2	0	2	7	0	1	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	435	"AWI"	435	17602	20085	18662	31	2	4	41	17	37	2	0	21	11	0	0	6	1	0	0	0	1	0	0	0	92	1	0	4	0	0	6	1	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	460	"AWI"	460	17996	20684	19143	22	0	0	12	15	38	0	0	9	3	0	1	1	0	0	0	2	0	0	0	0	62	4	0	7	0	0	1	0	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	480	"AWI"	480	18318	21159	19534	36	1	4	15	6	37	3	0	27	12	0	2	0	0	0	0	0	0	0	0	0	75	5	1	7	0	0	11	4	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	500	"AWI"	500	18642	21580	19919	39	2	3	23	5	65	0	0	9	9	0	0	0	0	0	0	0	0	0	0	0	104	1	0	1	2	0	5	0	0	0
+253	259	"Berelyekh River, Indigirka Lowland"	70.58333	145	525	"AWI"	525	19011	22178	20399	51	2	2	8	13	116	0	0	14	17	0	2	5	1	0	0	0	0	0	0	0	92	7	1	2	2	0	13	1	0	0

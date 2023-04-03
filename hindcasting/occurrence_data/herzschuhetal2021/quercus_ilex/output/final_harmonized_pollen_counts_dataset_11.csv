@@ -1,0 +1,14 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Boraginaceae"	"Brassicaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cyperaceae"	"Ericales"	"Larix"	"Onagraceae"	"Picea"	"Pinus"	"Poaceae"	"Polygonaceae"	"Portulacaceae"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Saxifragaceae"	"Thalictrum"
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	0	"AWI"	0	924	1094	1007	57	0	0	5	0	27	0	0	2	3	7	2	251	6	0	98	22	0	0	1	0	12	1	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	50	"AWI"	50	2079	3560	2934	11	0	0	1	0	3	0	0	0	0	6	2	75	1	0	56	12	1	0	0	0	1	1	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	150	"AWI"	150	4459	6265	5385	59	1	0	1	0	18	0	2	0	1	12	0	93	1	1	26	24	0	0	1	0	2	0	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	270	"AWI"	270	6381	7124	6827	38	7	0	13	7	46	0	3	0	2	42	0	162	0	1	13	62	1	0	3	0	12	3	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	340	"AWI"	340	6646	7498	7099	82	0	0	12	0	141	0	1	0	1	22	0	124	2	1	13	20	0	0	2	0	3	1	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	400	"AWI"	400	6840	7733	7304	15	1	0	16	0	25	0	1	0	0	24	0	178	1	1	14	41	3	0	2	0	6	0	1
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	510	"AWI"	510	7226	8095	7690	23	7	0	5	8	36	0	2	0	2	30	0	109	0	0	4	41	0	0	5	0	2	4	1
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	690	"AWI"	690	8099	8509	8313	61	0	1	35	5	83	0	7	0	1	7	0	22	1	1	15	150	0	1	11	0	30	7	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	720	"AWI"	720	8235	8639	8423	15	3	0	9	10	31	0	14	0	8	31	1	108	2	1	32	21	0	0	11	0	1	1	1
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	800	"AWI"	800	8561	9316	8966	43	6	0	17	18	70	1	1	0	1	21	1	116	1	1	14	12	0	0	5	19	40	6	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	820	"AWI"	820	8703	9420	9113	3	1	0	0	0	3	0	0	0	1	1	0	1	0	0	1	1	0	0	0	0	200	0	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	870	"AWI"	870	8911	10167	9450	17	2	0	1	15	49	0	9	0	3	17	2	30	1	0	8	27	0	0	1	0	16	0	0
+11	11	"Konus Exposure, Adycha River"	67.75	135.58333	920	"AWI"	920	9067	10882	9756	6	1	0	5	0	13	0	2	0	1	17	1	50	0	0	10	12	0	0	2	0	1	1	0

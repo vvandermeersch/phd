@@ -1,0 +1,16 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Acer"	"Alnus"	"Amaranthaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Carya"	"Cupressaceae"	"Cyperaceae"	"Elaeagnaceae"	"Fraxinus"	"Indeterminable"	"Juglans"	"Larix"	"Onagraceae"	"Ostrya.Carpinus"	"Picea"	"Pinus"	"Poaceae"	"Quercus"	"Salix"	"Tilia"	"Tsuga"	"Ulmus"
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	150	"AWI"	150	8022	9284	8707	0	0	0	0	0	0	0	1	0	2	0	0	9	0	0	0	0	49	35	8	0	0	0	0	3
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	190	"AWI"	190	8711	9779	9300	0	0	0	1	0	0	0	0	0	3	0	0	2	0	2	0	0	72	19	1	1	0	0	0	1
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	210	"AWI"	210	9062	10018	9598	0	0	0	0	0	0	0	0	0	36	0	0	1	0	2	0	0	48	14	0	0	0	0	0	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	230	"AWI"	230	9414	10247	9899	0	0	0	0	0	0	0	0	0	10	3	0	4	0	6	0	0	66	12	3	0	0	0	0	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	250	"AWI"	250	9786	10479	10197	0	0	0	0	0	0	0	0	0	6	1	0	7	0	8	0	0	68	10	4	0	0	0	0	1
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	270	"AWI"	270	10106	10752	10478	0	0	0	0	0	0	0	0	0	8	0	0	1	0	4	0	0	73	12	0	2	0	0	0	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	290	"AWI"	290	10410	11006	10756	1	0	0	0	0	0	0	0	0	4	2	0	2	0	4	0	1	65	16	2	2	0	0	0	1
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	310	"AWI"	310	10712	11267	11043	1	0	0	0	0	0	0	0	0	6	1	0	5	0	6	1	0	68	8	0	3	2	0	0	1
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	330	"AWI"	330	10988	11656	11343	0	0	1	0	0	0	0	1	0	11	0	0	1	0	2	0	0	62	19	3	0	0	0	1	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	350	"AWI"	350	11282	12003	11651	0	0	0	0	2	0	1	0	0	7	2	0	4	0	1	1	0	68	9	2	0	0	1	0	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	370	"AWI"	370	11595	12321	11957	0	0	0	0	0	3	0	0	0	7	2	0	1	0	3	0	0	73	8	2	1	0	0	0	1
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	390	"AWI"	390	11906	12621	12276	1	0	1	0	0	0	0	1	0	22	0	0	1	0	2	0	0	51	4	7	2	0	0	0	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	400	"AWI"	400	12054	12767	12432	0	0	0	0	1	0	0	0	0	14	1	0	3	0	0	1	0	70	11	0	2	0	0	0	0
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	410	"AWI"	410	12213	12903	12587	0	0	0	0	0	0	0	0	1	23	2	0	1	0	1	0	0	60	10	2	0	0	0	0	1
+1604	1655	"Lockport Gulf Section"	43.16667	-78.71667	440	"AWI"	440	12647	13398	13042	0	2	0	1	0	0	2	1	0	11	0	3	0	1	0	0	0	62	9	0	8	0	0	0	0

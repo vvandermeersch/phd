@@ -1,0 +1,4 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Anacardiaceae"	"Apiaceae"	"Aristotelia"	"Asteraceae"	"Austrocedrus"	"Boraginaceae"	"Brassicaceae"	"Buddleja"	"Caryophyllaceae"	"Cyperaceae"	"Ephedraceae"	"Fabaceae"	"Indeterminable"	"Liliaceae"	"Maytenus"	"Nothofagus"	"Poaceae"	"Polygonaceae"	"Rhamnaceae"	"Rumex"	"Salix"	"Saxegothaea"	"Schoepfiaceae"	"Verbenaceae"	"Vivianiaceae"	"Weinmannia"
+778	798	"Encantado"	-40.66667	-71.13333	1	"AWI"	1	243	513	373	1	39	2	0	4	18	28	7	2	0	2	12	1	25	0	4	6	1	4	2	0	0	16	1	0	4
+778	798	"Encantado"	-40.66667	-71.13333	2	"AWI"	2	635	980	797	0	0	2	0	6	14	26	1	0	1	0	16	4	6	0	5	14	0	2	0	0	0	15	0	0	0
+778	798	"Encantado"	-40.66667	-71.13333	3	"AWI"	3	1032	1436	1226	0	34	2	19	4	26	33	0	0	0	3	13	5	10	3	9	15	0	8	0	1	1	23	0	2	6

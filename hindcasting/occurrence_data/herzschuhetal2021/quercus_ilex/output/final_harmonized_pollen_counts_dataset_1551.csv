@@ -1,0 +1,11 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caprifoliaceae"	"Caryophyllaceae"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Montiaceae"	"Pinus"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Thalictrum"
+1513	1551	"Kresta Gulf Exposure"	66	-179	0	"AWI"	0	2316	3333	2852	88	0	16	34	88	1	51	124	118	11	1	116	85	1	22	23	11	48	5
+1513	1551	"Kresta Gulf Exposure"	66	-179	5	"AWI"	5	2435	3456	2980	73	0	27	14	95	1	1	339	183	1	0	56	40	7	8	1	27	56	1
+1513	1551	"Kresta Gulf Exposure"	66	-179	30	"AWI"	30	3169	3993	3601	89	0	41	18	117	1	6	215	151	1	0	76	53	23	12	11	41	38	6
+1513	1551	"Kresta Gulf Exposure"	66	-179	50	"AWI"	50	3779	4410	4088	76	0	30	20	164	1	5	84	201	5	0	44	84	10	6	5	43	36	0
+1513	1551	"Kresta Gulf Exposure"	66	-179	100	"AWI"	100	4903	5795	5335	101	0	16	8	191	0	4	48	200	12	4	39	26	0	0	4	66	29	8
+1513	1551	"Kresta Gulf Exposure"	66	-179	160	"AWI"	160	6333	7339	6833	101	1	8	7	307	8	0	38	205	8	4	43	45	0	0	4	40	29	4
+1513	1551	"Kresta Gulf Exposure"	66	-179	190	"AWI"	190	7078	8077	7588	144	0	22	22	279	1	4	36	226	4	1	38	23	1	5	13	61	19	17
+1513	1551	"Kresta Gulf Exposure"	66	-179	220	"AWI"	220	7866	8774	8341	109	1	24	6	194	6	12	52	360	1	0	13	69	6	25	6	40	24	6
+1513	1551	"Kresta Gulf Exposure"	66	-179	250	"AWI"	250	8678	9430	9094	64	0	12	12	252	1	12	12	452	1	0	4	12	12	13	1	23	80	17
+1513	1551	"Kresta Gulf Exposure"	66	-179	290	"AWI"	290	9538	10630	10083	140	0	23	6	234	6	11	23	401	1	1	0	17	1	0	0	82	16	6

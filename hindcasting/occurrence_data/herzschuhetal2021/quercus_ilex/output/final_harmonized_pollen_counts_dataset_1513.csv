@@ -1,0 +1,15 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Acer"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caryophyllaceae"	"Castanea"	"Corylus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Fagus"	"Fraxinus"	"Juglans"	"Liliaceae"	"Myrica"	"Ostrya.Carpinus"	"Phellodendron"	"Picea"	"Pinus"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Tilia"	"Ulmus"
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	10	"AWI"	10	-43	1075	319	6	0	43	2	2	3	0	0	1	0	0	18	21	0	0	0	5	3	56	0	0	10	7	34	0	1	52	4	7	1	6
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	20	"AWI"	20	177	1510	816	4	0	60	0	1	18	2	0	0	0	0	4	19	0	0	0	5	4	31	0	0	5	3	90	0	0	77	0	0	0	14
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	30	"AWI"	30	566	1878	1352	0	0	28	0	1	6	3	0	0	0	0	0	0	1	0	0	0	18	71	0	0	0	1	11	0	0	30	0	0	0	6
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	40	"AWI"	40	1266	2084	1772	16	0	0	1	0	5	1	0	1	0	0	8	300	0	0	0	6	0	22	0	1	11	3	2	0	0	55	0	0	0	13
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	50	"AWI"	50	2003	2735	2289	7	4	0	0	0	12	13	0	0	0	1	0	66	3	3	0	1	0	0	0	0	0	4	16	2	0	120	0	0	0	7
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	58	"AWI"	58	2518	3192	2868	2	2	0	0	0	14	17	0	0	0	0	0	5	2	0	0	5	0	0	0	0	5	4	15	0	0	87	0	0	0	5
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	65	"AWI"	65	2961	3666	3356	7	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0	11	8	2	0	0	90	0	0	0	1
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	75	"AWI"	75	3509	4236	3913	1	0	8	0	0	0	0	0	0	0	0	0	0	1	0	0	7	0	0	0	0	0	8	11	0	0	118	0	0	0	8
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	90	"AWI"	90	3852	4674	4295	2	1	0	2	0	8	2	0	0	1	0	0	0	2	1	0	4	0	0	0	0	0	3	6	0	0	220	0	0	1	7
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	95	"AWI"	95	3951	4741	4378	4	1	0	2	6	5	0	0	1	0	0	6	13	0	3	1	3	0	2	7	0	0	1	7	0	0	219	0	0	0	8
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	115	"AWI"	115	4267	5078	4695	0	0	0	0	8	5	0	0	5	0	1	24	2	6	0	0	1	0	2	1	0	0	0	20	0	0	152	0	0	0	12
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	130	"AWI"	130	4508	5304	4945	0	1	5	0	6	0	0	0	0	0	0	1	0	14	0	0	1	0	0	0	0	0	0	2	0	0	82	0	0	0	5
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	150	"AWI"	150	4935	5545	5274	0	0	0	0	6	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	3	0	0	0	74	0	0	0	2
+1476	1513	"Khlebnikov Stream Exposure 5858"	43.73386	145.4882	160	"AWI"	160	5145	5805	5481	1	0	0	3	7	2	3	0	0	0	0	5	12	0	0	0	6	0	4	0	0	19	16	1	0	1	114	0	0	0	1

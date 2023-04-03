@@ -1,0 +1,15 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Acer"	"Alnus"	"Amaranthaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Carya"	"Caryophyllaceae"	"Castanea"	"Cornus"	"Corylus"	"Cyperaceae"	"Elaeagnaceae"	"Ericales"	"Fabaceae"	"Fagus"	"Fraxinus"	"Hypericaceae"	"Indeterminable"	"Isoëtes"	"Juglans"	"Juniperus"	"Larix"	"Myrica"	"Onagraceae"	"Ostrya.Carpinus"	"Picea"	"Pinus"	"Poaceae"	"Populus"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Sambucus"	"Taxus"	"Thalictrum"	"Tilia"	"Tsuga"	"Ulmus"	"Viburnum"
+330	337	"Tourbière Caribou"	47.63972	-71.23583	220	"AWI"	220	5640	6421	5997	5	0	116	0	1	10	532	0	0	1	0	0	4	5	0	1	1	3	0	1	4	336	0	0	1	2	0	10	9	29	34	0	27	0	0	3	0	1	0	0	1	6	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	225	"AWI"	225	5717	7076	6193	3	0	112	0	5	10	239	0	0	0	1	0	6	38	0	0	0	0	0	0	0	162	0	0	1	4	0	1	0	0	56	0	41	1	0	14	0	0	0	2	1	14	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	235	"AWI"	235	5878	8364	6581	4	6	111	2	7	10	265	0	2	0	0	0	1	25	1	1	0	1	6	0	3	13	0	0	0	2	0	2	0	0	34	0	41	0	0	15	0	0	0	0	2	8	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	240	"AWI"	240	5984	8654	6818	0	0	67	1	3	5	157	0	0	0	0	0	0	16	0	0	0	0	0	0	3	6	0	0	0	0	0	1	0	54	14	2	20	1	0	15	0	0	0	0	1	14	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	245	"AWI"	245	6064	9075	7041	3	0	87	1	4	6	206	0	0	0	0	0	1	23	0	2	0	0	0	0	5	7	1	0	0	3	1	1	0	0	32	0	35	0	0	20	0	1	1	0	2	11	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	250	"AWI"	250	6124	9624	7248	1	0	83	0	9	4	200	0	0	0	1	1	0	16	0	5	0	1	0	0	0	1	1	0	0	1	0	0	0	0	16	5	30	0	0	20	0	1	1	0	1	6	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	120	"AWI"	120	1611	2943	2339	13	0	14	0	3	0	180	0	0	1	0	0	0	16	0	1	0	7	0	0	0	0	0	0	1	0	0	2	0	0	1	0	7	0	0	0	0	0	0	0	4	5	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	135	"AWI"	135	1989	3140	2635	34	0	14	0	4	0	225	0	0	0	2	0	4	24	0	10	0	10	0	0	1	0	1	0	4	0	0	0	0	0	0	0	4	0	0	0	0	0	0	0	1	6	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	150	"AWI"	150	2480	3314	2917	35	0	7	0	0	0	171	0	0	0	0	0	0	45	0	2	0	7	0	0	0	0	0	0	2	0	0	0	0	0	0	0	6	0	0	0	0	0	0	0	5	3	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	160	"AWI"	160	2912	3724	3252	16	5	14	1	3	0	298	0	0	0	1	0	0	33	0	0	0	8	6	0	0	0	0	0	0	0	0	2	115	0	1	0	10	0	0	0	0	0	0	0	3	4	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	175	"AWI"	175	3234	4697	3879	41	0	14	0	3	0	299	1	1	0	0	0	0	21	0	0	0	5	0	0	0	0	1	0	2	0	0	0	0	0	0	0	12	0	0	0	1	0	1	1	1	3	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	185	"AWI"	185	3467	5409	4336	8	0	16	1	2	0	339	0	0	0	0	0	0	26	0	2	0	7	4	0	1	0	1	0	4	0	0	1	0	0	0	0	9	1	0	2	0	1	0	0	7	4	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	200	"AWI"	200	3942	5868	5097	17	0	15	0	2	0	233	0	0	0	0	0	0	16	0	1	0	2	0	0	0	1	1	0	3	0	0	1	0	0	3	0	4	0	0	0	0	1	0	0	6	5	0
+330	337	"Tourbière Caribou"	47.63972	-71.23583	210	"AWI"	210	5004	5996	5533	9	0	9	1	0	0	247	0	0	0	0	0	1	11	0	1	0	5	2	0	5	0	0	0	3	0	0	1	72	0	2	0	7	0	0	0	0	0	0	0	10	4	0

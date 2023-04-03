@@ -1,0 +1,10 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Amaryllidaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Gentianaceae"	"Iridaceae"	"Juniperus"	"Lamiaceae"	"Onagraceae"	"Orobanchaceae"	"Pinus"	"Plantaginaceae"	"Plumbaginaceae"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Populus"	"Ranunculaceae"	"Rhododendron"	"Rosaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Saxifragaceae"	"Thalictrum"
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	30	"AWI"	30	8656	10993	10074	16	0	0	0	10	0	20	0	1	0	140	0	0	1	0	0	1	0	0	1	0	0	21	2	0	0	1	0	0	0	0	1	0	1
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	150	"AWI"	150	10332	12248	11184	20	0	0	3	7	0	10	0	0	0	110	0	0	2	0	0	4	1	0	1	0	1	50	1	0	0	1	0	0	0	0	1	0	1
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	300	"AWI"	300	11130	14758	12701	49	0	0	1	7	0	31	0	1	16	102	0	0	0	0	0	1	0	0	0	0	0	14	0	0	0	2	0	0	0	0	0	0	0
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	450	"AWI"	450	12200	16371	14354	72	0	0	1	4	0	30	0	0	0	30	0	0	1	0	0	0	0	0	3	0	0	6	1	0	0	0	0	0	0	0	1	1	2
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	600	"AWI"	600	13834	17552	15928	30	0	0	0	5	0	30	0	3	0	70	0	0	0	0	0	0	0	0	3	0	0	24	2	0	0	0	0	0	1	0	5	0	1
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	940	"AWI"	940	17396	21005	18659	51	1	1	0	4	36	37	5	0	0	24	0	0	0	1	1	0	0	0	0	0	1	27	0	0	0	1	0	0	0	0	2	0	1
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	1050	"AWI"	1050	17960	23307	19895	40	0	0	4	15	42	24	0	0	25	33	0	0	0	0	0	0	1	0	6	1	0	80	1	0	1	0	0	12	0	0	7	0	1
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	100	"AWI"	100	9935	11497	10663	185	0	0	0	0	0	110	0	0	0	2	49	0	1	0	0	0	1	0	4	0	0	10	0	0	0	0	2	0	0	0	1	0	0
+1577	1623	"Ledovyi Obryu Exposure, Southern Section"	64.1	171.18333	800	"AWI"	800	16743	18524	17471	11	1	0	4	44	11	21	1	3	24	30	0	1	1	0	0	1	0	1	1	1	1	140	1	4	0	12	0	0	1	1	10	0	6

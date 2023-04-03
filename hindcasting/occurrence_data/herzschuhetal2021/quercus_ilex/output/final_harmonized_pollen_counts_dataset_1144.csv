@@ -1,0 +1,5 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caryophyllaceae"	"Corylus"	"Juglans"	"Lamiaceae"	"Liliaceae"	"Myrica"	"Ostrya.Carpinus"	"Picea"	"Pinus"	"Poaceae"	"Quercus"	"Rosaceae"	"Saxifragaceae"	"Tilia"	"Ulmus"
+1111	1144	"Il'inka Terrace"	47.96667	142.16667	60	"AWI"	60	315	1015	637	120	0	0	22	0	70	0	1	1	0	6	1	0	0	75	4	0	0	0	0	0	0
+1111	1144	"Il'inka Terrace"	47.96667	142.16667	90	"AWI"	90	734	1378	1018	130	26	0	6	15	0	0	0	0	9	0	0	1	0	62	1	130	90	0	2	4	0
+1111	1144	"Il'inka Terrace"	47.96667	142.16667	120	"AWI"	120	1117	2077	1574	8	0	3	3	8	6	70	0	1	0	0	0	0	1	0	1	121	3	5	2	3	12
+1111	1144	"Il'inka Terrace"	47.96667	142.16667	180	"AWI"	180	2103	3476	2671	0	81	0	3	0	0	78	0	2	6	0	0	5	0	61	3	0	8	0	0	0	0
