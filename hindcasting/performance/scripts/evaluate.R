@@ -7,25 +7,11 @@ library(ecospat)
 library(dplyr)
 library(precrec)
 library(ggplot2)
+library(modEvA)
+library(terra)
 
-sim_folder <- "D:/simulations/phenofit/paleo/test2"
-sim_folder <- "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica"
+
 pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
-
-# models <- data.frame(model = c("phenofit",
-#                                "phenofit_inverse", 
-#                                "random_forest",
-#                                "lasso_glm",
-#                                "brt",
-#                                "gam",
-#                                "biomod"),
-#                folder = c("D:/simulations/phenofit/paleo/05deg",
-#                           "D:/simulations/phenofit/paleo/test4_inverse", 
-#                           "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
-#                           "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
-#                           "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
-#                           "D:/simulations/csdm/gam/paleo/fagus_sylvatica",
-#                           "D:/simulations/csdm/biomod/paleo/fagus_sylvatica"))
 
 models <- data.frame(name = c("phenofit",
                                "phenofit_fitted",
@@ -66,7 +52,8 @@ model_performance <- lapply(1:nrow(models),function(i){
     #                                   nclass=0, window.w="default", res=100, 
     #                                   PEplot = FALSE, rm.duplicate = TRUE,  method = 'spearman' )$cor
     
-    boyce_ind <- as.numeric(Boyce(obs = fitness[fitness$pres == 1, c("lon", "lat")], pred = rast(fitness[,c(2,1,3)]), main = "Boyce index",
+    boyce_ind <- as.numeric(Boyce(obs = fitness[fitness$pres == 1, c("lon", "lat")], pred = rast(fitness[,c(2,1,3)]), 
+                                  main = "Boyce index", plot= FALSE,
                                   res = 100)$Boyce)
   
     # auc
@@ -99,61 +86,73 @@ model_performance <- lapply(1:nrow(models),function(i){
                       sorensen = sorensen,
                       npollen_pres = nrow(pollen[pollen$pres == 1,]), 
                       npollen = nrow(pollen), mod = mod$name))})
-  return(do.call(rbind.data.frame, perf))
-  })
+  return(do.call(rbind.data.frame, perf))}
+)
 
 model_performance <- do.call(rbind.data.frame, model_performance)
 
-ggplot(data = model_performance) +
+auc_plot <- ggplot(data = model_performance) +
   geom_hline(yintercept=0.5, linetype="dashed", color = "red") +
   geom_line(aes(x = year, y = auc, col = mod)) +
   geom_point(aes(x = year, y = auc, col = mod)) +
-  scale_x_reverse() +
+  scale_x_reverse(breaks = seq(0,9000,1000),
+                  name = "Years (BP)") +
   scale_y_continuous(
     name = "AUC") +
-  theme_minimal()
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(data = model_performance) +
+tss_plot <- ggplot(data = model_performance) +
   geom_hline(yintercept=0, linetype="dashed", color = "red") +
   geom_line(aes(x = year, y = tss, col = mod)) +
   geom_point(aes(x = year, y = tss, col = mod)) +
-  scale_x_reverse() +
+  scale_x_reverse(breaks = seq(0,9000,1000),
+                  name = "Years (BP)") + 
   scale_y_continuous(
     name = "TSS") +
-  theme_minimal()
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(data = model_performance) +
+boyceindex_plot <- ggplot(data = model_performance) +
   geom_hline(yintercept=0, linetype="dashed", color = "red") +
   geom_line(aes(x = year, y = bi, col = mod)) +
   geom_point(aes(x = year, y = bi, col = mod)) +
-  scale_x_reverse() +
+  scale_x_reverse(breaks = seq(0,9000,1000),
+                  name = "Years (BP)") +
   scale_y_continuous(
     name = "Boyce index") +
-  theme_minimal()
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
-
-ggplot(data = model_performance_phenofit) +
-  geom_line(aes(x = year, y = npollen)) +
-  geom_point(aes(x = year, y = npollen)) +
-  geom_line(aes(x = year, y = npollen_pres), col ="green") +
-  geom_point(aes(x = year, y = npollen_pres), col ="green") +
-  scale_x_reverse() +
+sorensen_plot <- ggplot(data = model_performance) +
+  geom_line(aes(x = year, y = sorensen, col = mod)) +
+  geom_point(aes(x = year, y = sorensen, col = mod)) +
+  scale_x_reverse(breaks = seq(0,9000,1000),
+                  name = "Years (BP)") +
   scale_y_continuous(
-    name = "Num. pollen obs.") +
-  theme_minimal()
+    name = "Sørensen index") +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
+
+
   
   
 # Load climate novelty
-climdist_df <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_novelty/save/ERA5Land_baseline.rds")
-mod_perf_climdist <- left_join(model_performance, climdist_df)
-
-ggplot(data = mod_perf_climdist[mod_perf_climdist$year <= 17000,]) +
-  geom_hline(yintercept=0.5, linetype="dashed", color = "red") +
-  geom_line(aes(x = median, y = auc, col = mod)) +
-  geom_point(aes(x = median, y = auc, col = mod)) +
-  xlab("Climate novelty") +
-  scale_y_continuous(
-    name = "AUC") +
-  theme_minimal()
+# climdist_df <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_novelty/save/ERA5Land_baseline.rds")
+# mod_perf_climdist <- left_join(model_performance, climdist_df)
+# 
+# ggplot(data = mod_perf_climdist[mod_perf_climdist$year <= 17000,]) +
+#   geom_hline(yintercept=0.5, linetype="dashed", color = "red") +
+#   geom_line(aes(x = median, y = auc, col = mod)) +
+#   geom_point(aes(x = median, y = auc, col = mod)) +
+#   xlab("Climate novelty") +
+#   scale_y_continuous(
+#     name = "AUC") +
+#   theme_minimal()
   
 
