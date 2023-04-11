@@ -14,8 +14,75 @@ wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/manuscript/figs"
 
 ## Climate overview
 
-```{r climateoverview, fig.height = 5, fig.width = 7, dev=c('png'), dpi = 600}
+```{r climateoverview, fig.height = 5, fig.width = 7, dev=c('png'), dpi = 600, eval = F}
 source(file.path(wd, "climate_overview", "script.R"))
 climateoverview_figure
 ```
+```{r climateoverview2, fig.height = 5, fig.width = 7, dev=c('png'), dpi = 600, eval = T}
+source(file.path(wd, "climate_overview", "script_black.R"))
+climateoverview_figure
+```
 
+## Performance metrics
+
+### Fagus sylvatica
+
+```{r fagussylvatica_performance, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/05deg",
+                                "D:/simulations/phenofit/paleo/05deg_fitted",
+                                "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/backward/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
+                     mod = c("Fagus_sylvatica_VVanderMeersch.rds",
+                             "cmaes_fit_subset4_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+source(file.path(wd, "performance_metrics", "evaluate.R"))
+performance_figure
+
+```
+
+### CSDMs calibrated on 1950-1980 period
+
+```{r fagussylvatica_performance5180, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
+models <- data.frame(name = c("Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     simfolder = c("D:/simulations/csdm/random_forest/paleo_cal5180/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo_cal5180/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo_cal5180/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo_cal5180/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/gam/fit/fagus_sylvatica"),
+                     mod = c("random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+source(file.path(wd, "performance_metrics", "evaluate.R"))
+performance_figure
+
+```

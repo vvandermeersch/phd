@@ -6,6 +6,8 @@ library(dplyr)
 library(ggplot2)
 library(cowplot)
 library(extrafont)
+library(zoo)
+library(data.table)
 
 years <- c(15, seq(1000,15000,1000), 17000, 19000, 21000)
 hadcm3b_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
@@ -18,7 +20,6 @@ climdist_df[climdist_df$year == 15, "year"] <- 0
 
 # load temperature
 past_temp <- sapply(years, function(yr){
-  print(yr)
   data <- readRDS(file.path(hadcm3b_dir, paste0("predictors_", yr, "BP.rds"))) %>% 
     dplyr::select(bio1)
   return(c(mean = mean(data$bio1), 
@@ -51,9 +52,9 @@ main_plot <- ggplot() +
                color ="white", size = 0.8, linetype = "dashed") +
   geom_segment(aes(x = 12900, xend = 12900, y = -23, yend = 11), 
                color ="white", size = 0.8, linetype = "dashed") +
-  geom_segment(aes(x = 11700, xend = 11700, y = -23, yend = 13.7), color ="white", size = 1) +
-  geom_segment(aes(x = 11700, xend = 11400, y = 11, yend = 12.4), color ="grey70", size = 0.8) +
-  geom_segment(aes(x = 11400, xend = 11700, y = 12.3, yend = 13.7), color ="grey70", size = 0.8) +
+  geom_segment(aes(x = 11700, xend = 11700, y = -23, yend = 13.2), color ="white", size = 1) +
+  geom_segment(aes(x = 11700, xend = 11400, y = 11, yend = 12.4), color ="black", size = 0.8) +
+  geom_segment(aes(x = 11400, xend = 11700, y = 12.3, yend = 13.7), color ="black", size = 0.8) +
   geom_ribbon(data = pasttemp_df, aes(x = year, ymin = q25, ymax = q75), fill = "#b7efc5", alpha = 0.5) +
   geom_line(data = pasttemp_df, aes(x = year, y = q25), col = "#25a244", size = 0.5) +
   geom_line(data = pasttemp_df, aes(x = year, y = q75), col = "#25a244", size = 0.5) +
@@ -65,27 +66,27 @@ main_plot <- ggplot() +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(), 
-        axis.ticks.x = element_line(colour = "grey70", size = 0.7, linetype = "solid"),
-        axis.ticks.y = element_line(colour = "grey70", size = 0.7, linetype = "solid"),
-        axis.line.x = element_line(colour = "grey70", size = 0.7, linetype = "solid"),
+        axis.ticks.x = element_line(colour = "black", size = 0.7, linetype = "solid"),
+        axis.ticks.y = element_line(colour = "black", size = 0.7, linetype = "solid"),
+        axis.line.x = element_line(colour = "black", size = 0.6, linetype = "solid"),
         axis.ticks.length=unit(.1, "cm"),
-        axis.text = element_text(colour = "grey50", family= "Noto Sans", size = 9),
-        axis.title = element_text(colour = "grey50", family= "Noto Sans", size = 9),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
         axis.title.y = element_text(margin = margin(r = 0)),
-        legend.text = element_text(colour = "grey50", family= "Noto Sans", size = 8),
-        legend.title = element_text(colour = "grey50", family= "Noto Sans", size = 8),
+        legend.text = element_text(colour = "black", family= "Noto Sans", size = 8),
+        legend.title = element_text(colour = "black", family= "Noto Sans", size = 8),
         legend.title.align = 0.5, legend.position = "bottom",
         legend.key.height = unit(0.3, 'cm'), legend.key.width = unit(1, 'cm'),
         legend.box.margin=margin(-10,-10,-10,-10)) +
-  annotate("text", x = 16500, y = 12.4, label = "LATE PLEISTOCENE", color = "grey60", family= "Noto Sans", size = 4) +
-  annotate("text", x = 6000, y = 12.4, label = "HOLOCENE", color = "grey60", family= "Noto Sans", size = 4) +
+  annotate("text", x = 16500, y = 12.4, label = "LATE PLEISTOCENE", color = "black", family= "Noto Sans", size = 4) +
+  annotate("text", x = 6000, y = 12.4, label = "HOLOCENE", color = "black", family= "Noto Sans", size = 4) +
   annotate("text", x = 12400, y = -15.3, label = "Younger Dryas", color = "white", angle = 90,
            family= "Noto Sans") +
   annotate("text", x = 13900, y = -15.3, label = "Bølling-Allerød", color = "white", angle = 90,
            family= "Noto Sans") +
-  geom_rect(aes(xmin=0, xmax=21000, ymin=-23, ymax= 13.7), fill = NA, color = "grey70", size = 0.8) +
-  geom_segment(aes(x = 0, xend = 21000, y = 11, yend = 11), color ="grey70", size = 0.6) +
-  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "grey70", frame.linewidth = 0.3,
+  geom_rect(aes(xmin=0, xmax=21000, ymin=-23, ymax= 13.7), fill = NA, color = "black", size = 0.8) +
+  geom_segment(aes(x = 0, xend = 21000, y = 11, yend = 11), color ="black", size = 0.6) +
+  guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", frame.linewidth = 0.3,
                                ticks = FALSE))
 
 
@@ -94,7 +95,7 @@ main_plot <- ggplot() +
 CO2_plot <- ggplot() +
   geom_line(data = CO2_data, aes(y = conc, x = year)) +
   geom_point(data = CO2_data, aes(y = conc, x = year), size = 1)+
-  geom_rect(aes(xmin=0, xmax=21000, ymin=180, ymax= 285), fill = NA, color = "grey70", size = 0.8) +
+  geom_rect(aes(xmin=0, xmax=21000, ymin=180, ymax= 285), fill = NA, color = "black", size = 0.8) +
   labs(y = "C02 (ppmv)", x = "") +
   scale_y_continuous(limits = c(175, 285), position = "right", breaks = c(275, 250, 225, 200),
                      expand = c(0, 0)) +
@@ -104,21 +105,56 @@ CO2_plot <- ggplot() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(), 
         axis.ticks.x = element_blank(),
-        axis.ticks.y = element_line(colour = "grey70", size = 0.7, linetype = "solid"),
+        axis.ticks.y = element_line(colour = "black", size = 0.7, linetype = "solid"),
         axis.line.x = element_blank(),
-        axis.text.y = element_text(colour = "grey50", family= "Noto Sans", size = 9),
+        axis.text.y = element_text(colour = "black", family= "Noto Sans", size = 9),
         axis.text.x = element_blank(),
-        axis.title.y.right = element_text(colour = "grey50", family= "Noto Sans", size = 9,
+        axis.title.y.right = element_text(colour = "black", family= "Noto Sans", size = 9,
                                           margin = margin(l = 5), hjust = 0.25))
+
+# evolution of delta O18
+d18O_data <- data.frame(fread("D:/climate/NGRIP/ngrip-d18o-50yr.txt", skip = 79, dec = "."))
+d18O_data$Age <- as.numeric(gsub(",", "", d18O_data$Age)) # comma as thousand sep
+d18O_data$Age <- as.numeric(d18O_data$Age)-50 #ageBP
+d18O_data$d18O <- as.numeric(d18O_data$d18O)
+d18O_data <- d18O_data[d18O_data$Age <= 21000 & d18O_data$Age >= 0,] %>%
+  group_by(Age) %>%
+  dplyr::summarize(d18O = mean(d18O, na.rm=TRUE))
+
+d18O_plot <- ggplot() +
+  geom_segment(aes(x = 14700, xend = 14700, y = -44, yend = -32.5), 
+               color ="grey", size = 0.8, linetype = "dashed") +
+  geom_segment(aes(x = 12900, xend = 12900, y = -44, yend = -32.5), 
+               color ="grey", size = 0.8, linetype = "dashed") +
+  geom_segment(aes(x = 11700, xend = 11700, y = -44, yend = -32.5), 
+               color ="grey", size = 1) +
+  geom_line(data = d18O_data, aes(y = d18O, x = Age), color = "#A22482") +
+  geom_rect(aes(xmin=0, xmax=21000, ymin=-44, ymax= -32.5), fill = NA, color = "black", size = 0.8) +
+  labs(y = expression(delta^18*O), x = "") +
+  scale_y_continuous(limits = c(-44, -32.5), position = "right", breaks = c(-42, -40, -38,  -36, -34),
+                     expand = c(0, 0)) +
+  scale_x_reverse(breaks = c(20000, 15000, 10000, 5000, 0)) +
+  coord_cartesian(xlim=c(20050, 950)) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(), 
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(colour = "black", size = 0.7, linetype = "solid"),
+        axis.line.x = element_blank(),
+        axis.text.y = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.text.x = element_blank(),
+        axis.title.y.right = element_text(colour = "black", family= "Noto Sans", size = 9,
+                                          margin = margin(l = 5)))
+
 
 
 climateoverview_figure <- plot_grid(
-  CO2_plot,
+  d18O_plot,
   NULL,
   main_plot,
   ncol = 1,
   align = "v",
-  rel_heights = c(0.5, -0.154, 1.5)
+  rel_heights = c(0.6, -0.15, 1.5)
 ) 
 
 
