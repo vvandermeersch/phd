@@ -3,9 +3,9 @@
 # GAM paleosimulations #
 #----------------------#
 
-model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit"
-sim_dir <- "D:/simulations/csdm/gam/paleo_wocor"
-clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format_wocor"
+model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/gam/fit"
+sim_dir <- "D:/simulations/csdm/gam/paleo_cal5180"
+clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
 
 library(mgcv)
 
@@ -25,7 +25,7 @@ soil_predictors <- readRDS(file.path(clim_dir, "soil_predictors.rds"))
 
 
 # Simulation loop
-for(year in c(5000)){
+for(year in seq(500,9000,500)){
   clim_predictors <- readRDS(file.path(clim_dir, paste0("predictors_", year, "BP.rds")))
   predictors <- left_join(clim_predictors, soil_predictors) %>%
     na.omit()
