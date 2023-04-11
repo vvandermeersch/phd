@@ -12,6 +12,7 @@ module weathergenmod
 ! 2011, Shawn Koppenhoefer, EPFL
 ! 2016, Philipp Sommer, UNIL
 ! 2020, Jed Kaplan, HKU, jed.kaplan@hku.hk
+! Slight modification by Victor Van der Meersch in 2023, to avoid rare cases where Tmin>Tmax
 
 use parametersmod, only : sp,dp,i4,hsp
 use randomdistmod, only : randomstate
@@ -493,6 +494,36 @@ tmin = resid(1) * tmin_sd + tmin_mn
 ! maximum temperature
 
 tmax = resid(2) * tmax_sd + tmax_mn
+
+!-----
+! added a check to avoid Tmin>Tmax (added by Victor Van der Meersch)
+
+do while (tmin>tmax)
+
+	! draw four random numbers from a normal distribution
+
+	do i = 1,4
+	  call ran_normal(rndst,unorm(i))
+	end do
+
+	! calculate today's residuals for weather variables
+	! this captures the cross correlation between variables and within and internal temporal autocorrelation
+
+	resid = matmul(A,resid) + matmul(B,unorm)  !Richardson 1981, eqn 5; WGEN tech report eqn. 3
+
+	! calculate the weather variables as a function of the mean and standard deviation modified by the residual
+
+	!-----
+	! minimum temperature
+
+	tmin = resid(1) * tmin_sd + tmin_mn
+
+	!-----
+	! maximum temperature
+
+	tmax = resid(2) * tmax_sd + tmax_mn
+	
+end do
 
 !-----
 ! cloud fraction
