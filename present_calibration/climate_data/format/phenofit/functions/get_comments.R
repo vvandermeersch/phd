@@ -4,7 +4,7 @@
 
 get_comments <- function(var){
   if(var=='glo'){
-    return("Variable : daily global radiation (MJ/mÂ²)")
+    return("Variable : daily global radiation (MJ/m²)")
   }
   else if(var=='pre'){
     return("Variable : daily precipitation, comprising rain and snow (mm)")
@@ -16,13 +16,16 @@ get_comments <- function(var){
     return("Variable : daily mean 2m relative humidity (%) calculated with vapor pressure ratio (Clausius-Clapeyron relation)")
   }
   else if(var=='tmn'){
-    return("Variable : daily mimimal 2m temperature (Â°C)")
+    return("Variable : daily mimimal 2m temperature (°C)")
   }
   else if(var=='tmp'){
-    return("Variable : daily mean 2m temperature (Â°C)")
+    return("Variable : daily mean 2m temperature (°C)")
   }
   else if(var=='tmx'){
-    return("Variable : daily maximal 2m temperature (Â°C)")
+    return("Variable : daily maximal 2m temperature (°C)")
+  }
+  else if(var=='dtm'){
+    return("Variable : daily mean 2m dewpoint temperature (°C)")
   }
   else if(var=='wnd'){
     return("Variable : daily mean 10m wind speed (m/s) - used only to compute evapotranspiration")

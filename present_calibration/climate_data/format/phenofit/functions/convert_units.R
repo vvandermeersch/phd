@@ -3,7 +3,7 @@
 # author : V. Van der Meersch
 
 convert_units <- function(value, var){
-  if(var == "2m_temperature"){
+  if(var == "2m_temperature" | var == "2m_dewpoint_temperature"){
     # Kelvin to Celsius
     value_c <- sapply(value, function(i){i-273.15})
   }

@@ -63,6 +63,7 @@ phenofit_processing_and_formatting2 <- function(years, var, stat, rd_folder, pd_
       
       # Loop on months
       for(mn in months){
+        print(mn)
         
         # Names of the files
         file_1 <- paste0(var_1, "_", yr, "_", mn, ".nc")

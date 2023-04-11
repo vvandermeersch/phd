@@ -11,7 +11,7 @@ source_python("C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/cli
 
 
 # select the variable; name must be a valid ERA5 CDS API name
-var <- 'surface_solar_radiation_downwards'
+var <- '10m_u_component_of_wind'
 
 # For valid keywords, see Table 2 of:
 # https://confluence.ecmwf.int/display/CKB/ERA5-Land%3A+data+documentation#ERA5Land:datadocumentation-parameterlistingParameterlistings
@@ -20,7 +20,7 @@ var <- 'surface_solar_radiation_downwards'
 
 
 # Select years
-years <- as.character(1950:1968)
+years <- as.character(2001:2020)
 
 # Maximum number of per-user requests that access the online CDS data is 2
 # plan(multisession, workers = 2) ?!
@@ -30,7 +30,7 @@ years_1 <- years[1:(length(years)%/%2)]
 years_2 <- years[(length(years)%/%2+1):length(years)]
 
 #Run script
-era5_land(years = as.character(2016:2017), var = var)
+era5_land(years = years_1, var = var)
 
 
 

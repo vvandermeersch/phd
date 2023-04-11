@@ -18,7 +18,7 @@ source(paste0(wd, 'functions/phenofit_extract_climate.R')) ## Extract climate
 
 processeddata_folder <- "D:/climate/ERA5-Land/phenofit_format/"
 speciesdata_folder <- "D:/species/"
-out_folder <- paste0(processeddata_folder, "pinus_pinaster_extraction/1000pres_1000abs/subset_2/")
+out_folder <- paste0(processeddata_folder, "betula_pendula_extraction/1000pres_1000abs/subset_2/")
 processeddata_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed/"
 
 
@@ -32,14 +32,14 @@ processeddata_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed/"
 # fagussylvatica_occ$lat <- round(fagussylvatica_occ$lat, 1)
 # fagussylvatica_occ$lon <- round(fagussylvatica_occ$lon, 1)
 
-load("D:/species/processed/pinus_pinaster/1000pres_1000abs/occurrence_subset_2.Rdata")
+load("D:/species/processed/betula_pendula/1000pres_1000abs/occurrence_subset_2.Rdata")
 
 #species_occurrence <- data_frame(lon = c(8.5, 8.6, 8.5, 8.6), lat = c(36.1, 36.1, 36.0, 36.0), pres = c(1,1,1,1)) # points in TUnisia for F Mouillot
 
-phenofit_extract_climate(1969, "Pinus pinaster", species_occurrence, processeddata_folder, out_folder, "PenmanMonteith")
+phenofit_extract_climate(1969, "Betula pendula", species_occurrence, processeddata_folder, out_folder, "PenmanMonteith")
 for( yr in 1970:2000){
   print(yr)
-  phenofit_extract_climate(yr, "Pinus pinaster", species_occurrence, processeddata_folder, out_folder, "PenmanMonteith")
+  phenofit_extract_climate(yr, "Betula pendula", species_occurrence, processeddata_folder, out_folder, "PenmanMonteith")
 }
 
 
@@ -64,4 +64,5 @@ filter_df$lon <- round(filter_df$lon, 1)
 filter_df <- filter_df %>% dplyr::select(-c("value1", "value2"))
 
 out_folder <- paste0(processeddata_folder, "transformed/")
+processeddata_folder <- paste0(processeddata_folder, "not_transformed")
 phenofit_extract_all_climate(2001:2020, processeddata_folder, out_folder, "PenmanMonteith", filter = filter_df)

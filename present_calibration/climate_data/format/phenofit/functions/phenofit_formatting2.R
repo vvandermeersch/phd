@@ -26,7 +26,8 @@ phenofit_formatting2 <- function(years, var, stat, rd_folder, pd_folder, ncores=
   if(var == "wind" | var == "relative_humidity"){
     stop("For wind or relative humidity, you need to use phenofit_processing_and_formatting function !")
   }
-  else if( !(var %in% c("2m_temperature", "total_precipitation", "surface_solar_radiation_downwards", "potential_evaporation")) ){
+  else if( !(var %in% c("2m_temperature", "total_precipitation", "surface_solar_radiation_downwards", 
+                        "potential_evaporation", "2m_dewpoint_temperature")) ){
     stop("Cannot recognize the variable you asked for !")
   }
   

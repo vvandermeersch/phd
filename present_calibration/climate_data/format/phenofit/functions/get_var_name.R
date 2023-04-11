@@ -7,13 +7,13 @@ get_var_name <- function(var, stat=NULL, type){
   long_names <- c("2m_temperature", "total_precipitation", "surface_solar_radiation_downwards", "surface_pressure", 
                   "wind", "relative_humidity", "2m_dewpoint_temperature", "10m_u_component_of_wind", "10m_v_component_of_wind",
                   "potential_evaporation")
-  era5_names <- c("t2m", "tp", "ssrd", "ps",  NA, NA, "d2m", "u10", "v10", "pev")
+  era5_names <- c("t2m", "tp", "ssrd", "ps",  NA, NA, "dpt", "u10", "v10", "pev")
   
   if(type == "ERA5"){ return(era5_names[which(long_names == var)]) }
   
   if(type == "PHENOFIT" | type=="Phenofit"){
     if(stat=="mean"){
-      phenofit_names <- c("tmp", NA, NA, "prs", "wnd", "RH", NA, NA, NA, NA)
+      phenofit_names <- c("tmp", NA, NA, "prs", "wnd", "RH", "dtm", NA, NA, NA)
       return(phenofit_names[which(long_names == var)])
     }
     if(stat=="max"){

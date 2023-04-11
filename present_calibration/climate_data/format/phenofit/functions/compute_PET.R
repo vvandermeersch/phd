@@ -19,7 +19,7 @@ compute_PET <- function(data, elev, lat_rad, constants, alpha = 0.23, method){
     
     Ta <- (data$Tmax + data$Tmin)/2
     
-    # Saturated vapour pressure
+    # Saturated vapour pressure (August–Roche–Magnus approximation)
     vs_Tmax <- 0.6108 * exp(17.27 * data$Tmax/(data$Tmax + 237.3))
     vs_Tmin <- 0.6108 * exp(17.27 * data$Tmin/(data$Tmin + 237.3))
     vas <- (vs_Tmax + vs_Tmin)/2
