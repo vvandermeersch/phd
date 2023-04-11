@@ -38,7 +38,8 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/hindcasting/climate_data/generate/inputs
 **/hindcasting/climate_data/diagnostic/gwgen_jed
 **/hindcasting/simulation/phenofit/output
-**/hindcasting/occurrence_data/herzschuhetal2021
+**/hindcasting/occurrence_data/herzschuhetal2021/LegacyPollen/example_dataset
+**/hindcasting/occurrence_data/herzschuhetal2021/LegacyAge
 
 **/correlative_models/old
 **/correlative_models/fit/ecv/biomod/fit
@@ -46,6 +47,13 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/correlative_models/fit/ecv/random_forest/fit
 **/correlative_models/fit/ecv/lasso_glm/fit
 **/correlative_models/fit/ecv/gam/fit
+
+**/correlative_models/old
+**/correlative_models/fit/ecv_5180/biomod/fit
+**/correlative_models/fit/ecv_5180/brt/fit
+**/correlative_models/fit/ecv_5180/random_forest/fit
+**/correlative_models/fit/ecv_5180/lasso_glm/fit
+**/correlative_models/fit/ecv_5180/gam/fit
 
 **/present_calibration/calibration_paper/first_revision/_cache
 **/present_calibration/calibration_paper/second_revision/_cache
