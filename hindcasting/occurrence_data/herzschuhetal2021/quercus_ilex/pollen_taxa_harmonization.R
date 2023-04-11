@@ -12,7 +12,7 @@ psamples <- samples(psite)
 
 psamples <- psamples %>%
   group_by(siteid, datasetid, sitename, lat, long, depth) %>%
-  dplyr::filter(units == "NISP") %>%
+  dplyr::filter(units %in% c("NISP", "NISP digitized")) %>%
   dplyr::select(siteid, datasetid, sitename, lat, long, depth, variablename, value) %>%
   pivot_wider(names_from = variablename, values_from = value, values_fn=sum) %>%
   ungroup()

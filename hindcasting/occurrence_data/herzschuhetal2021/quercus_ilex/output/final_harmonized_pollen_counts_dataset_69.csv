@@ -1,9 +1,0 @@
-"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Alnus"	"Amaranthaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cedrus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Larix"	"Liliaceae"	"Montiaceae"	"Onagraceae"	"Papaveraceae"	"Picea"	"Pinaceae"	"Pinus"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Ranunculaceae"	"Rosaceae"	"Rumex"	"Salix"	"Saxifragaceae"	"Tsuga"	"Urticaceae"	"Valerianaceae"
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	20	"AWI"	20	1740	2016	1888	0	6	0	4	0	0	2	0	3	0	5	8	0	3	0	0	2	0	0	0	0	21	0	0	0	2	0	26	0	0	1	1
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	100	"AWI"	100	1880	2141	2021	0	78	0	14	0	0	0	0	3	1	39	21	1	0	0	0	2	0	0	0	0	15	1	0	0	0	0	57	0	2	0	0
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	200	"AWI"	200	2056	2294	2188	2	31	0	18	4	0	0	0	4	0	73	28	1	2	1	1	5	1	0	0	0	43	2	0	1	0	3	19	2	2	0	0
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	300	"AWI"	300	2220	2481	2360	0	0	1	3	3	0	0	0	2	0	20	3	3	0	0	0	10	0	0	0	0	8	0	0	3	0	0	9	0	0	0	0
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	400	"AWI"	400	2388	2659	2529	1	33	0	5	0	0	0	0	0	0	30	19	0	0	0	0	1	0	0	1	0	145	0	0	0	0	0	14	0	3	0	1
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	500	"AWI"	500	2554	2838	2700	5	32	0	12	0	0	1	0	5	0	24	24	0	6	0	0	6	0	11	0	38	39	0	0	1	0	0	11	0	4	0	0
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	600	"AWI"	600	2714	3016	2870	0	34	0	6	0	0	0	0	0	0	5	9	0	0	0	0	1	0	0	0	0	7	0	0	0	0	0	5	0	0	0	0
-69	69	"Amguema River Valley Exposure 2"	67.66667	178.6	700	"AWI"	700	2877	3194	3041	0	15	0	4	0	0	0	0	0	0	11	28	0	0	0	0	0	0	0	0	0	17	0	0	0	0	0	2	0	2	0	0

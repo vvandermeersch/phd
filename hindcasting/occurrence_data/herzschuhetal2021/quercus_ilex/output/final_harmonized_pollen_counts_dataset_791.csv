@@ -1,5 +1,0 @@
-"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caprifoliaceae"	"Caryophyllaceae"	"Cyperaceae"	"Ericales"	"Liliaceae"	"Montiaceae"	"Onagraceae"	"Pinus"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Saxifragaceae"	"Scrophulariaceae"
-772	791	"Elgygytgyn Stream Section"	67.41667	172.08333	0	"AWI"	0	5059	5373	5221	81	0	1	23	33	83	3	4	13	33	0	1	0	120	65	1	13	9	0	2	10	7
-772	791	"Elgygytgyn Stream Section"	67.41667	172.08333	15	"AWI"	15	5198	5501	5354	81	0	0	6	0	76	2	2	27	51	0	2	1	89	5	1	10	9	0	1	11	3
-772	791	"Elgygytgyn Stream Section"	67.41667	172.08333	45	"AWI"	45	5477	5748	5620	145	0	0	9	0	144	1	5	22	103	1	0	0	120	9	1	0	10	0	2	5	8
-772	791	"Elgygytgyn Stream Section"	67.41667	172.08333	85	"AWI"	85	5836	6096	5973	76	1	0	8	2	70	1	5	27	30	0	0	0	87	20	1	0	12	0	7	3	4

@@ -9778,6 +9778,7 @@ Morus-type,Morus
 Moscharia,Asteraceae
 Mougeotia,Delete
 Mougeotia cf. M. gracillima (type HdV-61),Delete
+"Mougeotia cf. M. gracillima (type 61, HdV)",Delete
 Mougeotia laetevirens,Delete
 "Mougeotia sp. (type 313C, HdV)",Delete
 "Mougeotia sp. (type 313D, HdV)",Delete
@@ -11805,6 +11806,7 @@ Polygonum-type (tricolporate),Polygonaceae
 Polygonum-type sensu lato,Polygonaceae
 Polygonus,Polygonaceae
 Polykrikos kofoidii,Delete
+Polykrikos kofoidii (cyst),Delete
 Polylepis,Polylepis
 Polylepis (rugulate),Polylepis
 Polylepis/Acaena,Polylepis
@@ -12134,6 +12136,7 @@ Protium obtusifolium,Protium
 Protium undiff.,Protium
 Protium-type,Protium
 Protoperidinium stellatum,Delete
+Protoperidinium stellatum (cyst),Delete
 Proustia,Asteraceae
 Proxapertites aff. P. tertiaria,Delete
 Proxapertites minutus,Delete
@@ -12215,6 +12218,7 @@ Pseudopediastrum boryanum-type,Delete
 Pseudopediastrum brevicorne,Delete
 Pseudopediastrum integrum,Delete
 Pseudopediastrum kawraiskyi,Delete
+Pseudopediastrum subgranulatum,Delete
 Pseudoroegneria,Poaceae
 Pseudoroegneria spicata,Poaceae
 Pseudoschizaea,Delete
@@ -12740,6 +12744,7 @@ Rhabdadenia,Apocynaceae
 Rhabdadenieae,Apocynaceae
 Rhabditophora,Delete
 Rhabdocoela,Delete
+Rhabdocoela undiff.,Delete
 "Rhabdocoela (type 353, HdV)",Delete
 Rhamnaceae,Rhamnaceae
 Rhamnaceae cf. Colubrina glandulosa,Colubrina
@@ -15745,6 +15750,7 @@ Vallea,Vallea
 Vallea-type,Vallea
 Valsaria,Delete
 Valsaria-type (type HdV-263),Delete
+"Valsaria-type (type 263, HdV)",Delete
 Vangueria,Vangueria
 Vangueria acutiloba,Vangueria
 Vangueria madagascariensis,Vangueria

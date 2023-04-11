@@ -1,7 +1,0 @@
-"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Alnus"	"Amaranthaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caryophyllaceae"	"Corylus"	"Cyperaceae"	"Ephedraceae"	"Fabaceae"	"Juglans"	"Ostrya.Carpinus"	"Phellodendron"	"Picea"	"Pinus"	"Poaceae"	"Quercus"	"Syringa"	"Tilia"	"Ulmus"
-228	230	"Lower Barabaschevka River Exposure 594"	43.13333	131.6	220	"AWI"	220	3915	5731	4872	1	41	6	104	5	115	1	0	6	0	4	15	3	16	16	0	2	51	5	3	39
-228	230	"Lower Barabaschevka River Exposure 594"	43.13333	131.6	240	"AWI"	240	4398	6103	5319	6	31	15	50	0	0	0	0	1	1	0	29	4	2	0	0	1	50	19	8	12
-228	230	"Lower Barabaschevka River Exposure 594"	43.13333	131.6	330	"AWI"	330	7020	8192	7607	0	1	0	11	0	0	0	0	26	0	0	22	20	0	0	0	0	145	1	2	17
-228	230	"Lower Barabaschevka River Exposure 594"	43.13333	131.6	400	"AWI"	400	8985	11884	10168	2	4	0	5	0	0	0	0	21	0	0	33	30	3	0	0	42	131	0	6	10
-228	230	"Lower Barabaschevka River Exposure 594"	43.13333	131.6	310	"AWI"	310	6524	7386	6890	1	13	1	9	0	0	0	1	3	0	0	23	8	2	0	0	4	137	2	5	9
-228	230	"Lower Barabaschevka River Exposure 594"	43.13333	131.6	350	"AWI"	350	7821	8946	8323	1	4	0	11	1	0	0	0	0	0	0	19	13	0	0	0	61	131	0	1	19

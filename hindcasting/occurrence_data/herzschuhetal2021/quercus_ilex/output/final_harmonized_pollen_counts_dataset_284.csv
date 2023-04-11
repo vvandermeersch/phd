@@ -1,4 +1,0 @@
-"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caprifoliaceae"	"Caryophyllaceae"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Larix"	"Orobanchaceae"	"Pinus"	"Poaceae"	"Polemoniaceae"	"Polygonaceae"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Saxifragaceae"	"Scrophulariaceae"
-278	284	"Bludlivaya River"	69.06667	148.4	470	"AWI"	470	24550	28182	26479	5	0	45	0	18	2	6	1	4	0	2	95	2	23	2	3	18	3	12	0	1
-278	284	"Bludlivaya River"	69.06667	148.4	1100	"AWI"	1100	32549	35492	34156	133	16	8	8	113	0	3	10	4	0	311	0	5	19	0	0	4	0	42	2	23
-278	284	"Bludlivaya River"	69.06667	148.4	1800	"AWI"	1800	41086	44085	42547	54	0	13	3	123	0	7	0	50	1	14	0	23	89	0	1	0	1	10	0	0
