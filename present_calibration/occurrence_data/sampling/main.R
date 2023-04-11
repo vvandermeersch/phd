@@ -37,7 +37,7 @@ speciesdata_folder <- "D:/species/"
 
 
 ## Compute bioclim variables... save in bioclimdata_folder
-#compute_biovars2(1969:2000, processeddata_folder, bioclimdata_folder, ncores=3)
+compute_biovars2(1950:1968, processeddata_folder, bioclimdata_folder, ncores=3)
 gc()
 
 
