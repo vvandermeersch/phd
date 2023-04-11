@@ -3,14 +3,13 @@
 
 # First use: present climate, added some modifications (to correct polar night effect...), see version 1
 
-# Second use: past climate, don't use extraterrestrial radiation anymore (formula for solar declination and distance Earth-Sun are not valid in the past)
-# Simple way: direct use of Rso and Rs (we have these data)
-# Also modify formula for actual vapour pressure, following approximation of Allen et al. (1998), because we do not have RH or TDew in the past
+# Second use: past climate, using cloudiness
+# Modify formula for actual vapour pressure, following approximation of Allen et al. (1998), because we do not have RH or TDew in the past
 
-# data: Tmax, Tmin, Rso (clear-sky surface solar radiation downward), Rs (surface solar radiation downward = global radiation), uz (wind speed)
+# data: Tmax, Tmin, Rs (surface solar radiation downward = global radiation), uz (wind speed)
 # elev : ground elevation above mean sea level in m
 
-compute_PET2 <- function(data, elev, constants, alpha = 0.23){
+compute_PET <- function(data, elev, constants, alpha = 0.23){
   
   z0 <- 0.02 # short crop, i.e. method for FAO-56 hypothetical short grass
   
@@ -31,13 +30,13 @@ compute_PET2 <- function(data, elev, constants, alpha = 0.23){
   delta <- 4098 * (0.6108 * exp((17.27 * Ta)/(Ta + 237.3)))/((Ta + 237.3)^2) # slope of vapour pressure curve
   gamma <- 0.00163 * P/constants$lambda # psychrometric constant
   
-  R_so <- data$Rso
+  Rs_Rso <- 1-0.29*(data$cld + (data$cld)^2) # Antoine et al, 1996
   
   R_s <- data$Rs
   
   R_nl <- constants$sigma * (0.34 - 0.14 * sqrt(vabar)) * 
     ((data$Tmax + 273.2)^4 + (data$Tmin + 273.2)^4)/2 * 
-    (1.35 * R_s/R_so - 0.35) # estimated net outgoing longwave radiation
+    (1.35 * Rs_Rso - 0.35) # estimated net outgoing longwave radiation
   R_nsg <- (1 - alpha) * R_s # net incoming shortwave radiation - water or other evaporative surface with specified Albedo
   R_ng <- R_nsg - R_nl
   
