@@ -4,7 +4,7 @@ output:
     fig_caption: true
 #bibliography: master.bib
 biblio-style: apsr
-title: "PHENOFIT parametrization of *F. sylvatica*"
+title: "PHENOFIT parametrization of *Q. robur*"
 # thanks: "Replication files are available on the author's Github account (http://github.com/svmiller). **Current version**: `r format(Sys.time(), '%B %d, %Y')`; 
 # keywords: "pandoc, r markdown, knitr"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
@@ -59,41 +59,39 @@ alt$lon <- round(alt$lon, 1)
 
 # Lizzie sites
 sites <- matrix(c(
-  43.038560, 11.846579,
-  45.357721, 9.896506,
-  47.290201, 8.256797,
-  49.172526, 8.968161,
-  51.359586, 10.028342,
-  53.092191, 10.275534,
-  56.061279, 13.557157,
-  57.609649, 14.435134,
-  59.171276, 14.398552
-  ), ncol = 2, byrow = T
-)
-
-sites <- as.data.frame(sites) 
+  41.951439, 2.027988,
+  43.842566, 2.192783,
+  44.473105, 2.643222,
+  46.316695, 3.653965,
+  47.480196, 4.730625,
+  49.088362, 5.741367,
+  50.576362, 6.829013,
+  51.998509, 8.850498,
+  53.133686, 10.311679),
+  ncol = 2, byrow = T)
+sites <- as.data.frame(sites)
 names(sites) <- c("lat", "lon")
 
 ```
 
 ```{r data, include=FALSE}
 # Simulation (at European scale) folder
-sim_dir <- "D:/simulations/phenofit/forward/fagus_sylvatica/EvolLett2019"
+sim_dir <- "D:/simulations/phenofit/forward/quercus_robur/ADuputie"
 
 # Species presence points and pres/abs points
-load("D:/species/processed/fagus_sylvatica/fagus_sylvatica_occ_rs.Rdata")
-load("D:/species/processed/fagus_sylvatica/fagus_sylvatica_presabs.Rdata")
+load("D:/species/processed/quercus_robur/quercusrobur_occ_rs.Rdata")
+load("D:/species/processed/quercus_robur/quercusrobur_presabs.Rdata")
 
 # Load fitness
 fitness <- read_mean_outputvalue(sim_dir, "Fitness") # all Europe
-fitness_presabs <- read_mean_outputvalue(sim_dir, "Fitness", points = fagussylvatica_presabs) # only on pres/abs points
+fitness_presabs <- read_mean_outputvalue(sim_dir, "Fitness", points = quercusrobur_presabs) # only on pres/abs points
 
 # AUC on pres/abs points 
-auc_presabs <- auc(roc(fitness_presabs, as.factor(fagussylvatica_presabs$pres)))
+auc_presabs <- auc(roc(fitness_presabs, as.factor(quercusrobur_presabs$pres)))
 
 # Boyce index on pres points (Hirzel et al. 2006)
 # the Boyce index is probably the most appropriate reliability metric for presence‐only data (Leroy et al. 2018)
-presence_records <- left_join(alt, fagussylvatica_presabs, by = c('lat', 'lon')) %>% dplyr::select(-c('alt'))
+presence_records <- left_join(alt, quercusrobur_presabs, by = c('lat', 'lon')) %>% dplyr::select(-c('alt'))
 fitness_obs <- fitness[which(presence_records$pres == 1)]
 
 boyce_index <- c(0,0,0)
@@ -120,9 +118,9 @@ boyce_index["kendall"] <- boyce_list$cor
 # best_threshold <- thresholds[which(youden_index == max(youden_index))]
 
 # On every points
-youden_index <- sensitivity(fitness_presabs, as.factor(fagussylvatica_presabs$pres))$measure +
-  specificity(fitness_presabs, as.factor(fagussylvatica_presabs$pres))$measure -1
-thresholds <- roc(fitness_presabs, as.factor(fagussylvatica_presabs$pres))$cutoffs
+youden_index <- sensitivity(fitness_presabs, as.factor(quercusrobur_presabs$pres))$measure +
+  specificity(fitness_presabs, as.factor(quercusrobur_presabs$pres))$measure -1
+thresholds <- roc(fitness_presabs, as.factor(quercusrobur_presabs$pres))$cutoffs
 best_threshold <- thresholds[which(youden_index == max(youden_index))]
 
 
@@ -134,7 +132,7 @@ best_threshold <- thresholds[which(youden_index == max(youden_index))]
 
 ## 1. Insights on the model performance
 
-- Species : *Fagus sylvatica* (J. Gauzere parametrization)
+- Species : *Quercus robur* (A. Duputie parametrization)
 - Discrimination metric: AUC on all presence/absence points = `r round(auc_presabs, 3)`  
 - Reliability metric: Boyce index on all presence points = `r round(boyce_index, 3)` (*Spearman, Pearson, Kendall*)
 
@@ -154,8 +152,8 @@ eu_map_cropped <- eu_map %>%
 
 
 ggplot() + 
-  geom_raster(data = fagussylvatica_presabs[fagussylvatica_presabs$pres==1,], aes(x = lon, y = lat), color = NA, fill = "#5eb88a", alpha=1) +
-  geom_raster(data = fagussylvatica_presabs[fagussylvatica_presabs$pres==0,], aes(x = lon, y = lat), color = NA, fill = "#f5cfc6", alpha=0.5) +
+  geom_raster(data = quercusrobur_presabs[quercusrobur_presabs$pres==1,], aes(x = lon, y = lat), color = NA, fill = "#5eb88a", alpha=1) +
+  geom_raster(data = quercusrobur_presabs[quercusrobur_presabs$pres==0,], aes(x = lon, y = lat), color = NA, fill = "#f5cfc6", alpha=0.5) +
   geom_sf(data = eu_map_cropped, fill = NA, alpha=0.1, color='grey', size = 0.1) +
   geom_point(data = sites, aes(x = lon, y = lat), shape=0) +
   theme_void() +
