@@ -55,12 +55,10 @@ models <- data.frame(name = c("PHENOFIT",
                              "brt_finalcov_fullmodel.rds",
                              "gam_finalcov_fullmodel.rds"))
 
-source(file.path(wd, "performance_metrics", "evaluate.R"))
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
 performance_figure
 
 ```
-
-### CSDMs calibrated on 1950-1980 period
 
 ```{r fagussylvatica_performance5180, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
 
@@ -82,7 +80,45 @@ models <- data.frame(name = c("Random Forest",
                              "brt_finalcov_fullmodel.rds",
                              "gam_finalcov_fullmodel.rds"))
 
-source(file.path(wd, "performance_metrics", "evaluate.R"))
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
 performance_figure
+
+```
+
+## Observed response curves
+
+### Fagus sylvatica 
+
+```{r fagussylvatica_response, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/05deg",
+                                "D:/simulations/phenofit/paleo/05deg_fitted",
+                                "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/backward/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
+                     mod = c("Fagus_sylvatica_VVanderMeersch.rds",
+                             "cmaes_fit_subset4_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+calibration_predictors <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/calibration_predictors.rds")
+
+source(file.path(wd, "performance_metrics", "response_curve.R"))
+response_figure
 
 ```
