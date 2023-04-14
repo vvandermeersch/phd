@@ -41,6 +41,7 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/hindcasting/occurrence_data/herzschuhetal2021/LegacyPollen/example_dataset
 **/hindcasting/occurrence_data/herzschuhetal2021/LegacyAge
 **/hindcasting/occurrence_data/herzschuhetal2021/quercus_ilex/output
+**/hindcasting/occurrence_data/herzschuhetal2021/quercus/output
 
 **/correlative_models/old
 **/correlative_models/fit/ecv/biomod/fit
