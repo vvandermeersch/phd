@@ -1,0 +1,12 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Acer"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Cornus"	"Corylus"	"Cupressaceae"	"Cyperaceae"	"Ericales"	"Euonymus"	"Fabaceae"	"Fagus"	"Fraxinus"	"Lamiaceae"	"Oleaceae"	"Ostrya.Carpinus"	"Picea"	"Pinus"	"Plantaginaceae"	"Poaceae"	"Polygonaceae"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Saxifragaceae"	"Tilia"	"Ulmus"	"Urticaceae"
+15679	24034	"Iosipovo"	51.19892	28.02352	10	"AWI"	10	65	1405	502	0	8	2	2	2	4	2	4	0	6	4	4	4	0	0	0	2	2	0	4	2	178	2	4	0	4	2	2	2	0	4	2	2
+15679	24034	"Iosipovo"	51.19892	28.02352	23	"AWI"	23	550	2278	1252	0	9	4	3	0	0	18	0	0	6	2	5	1	0	3	0	0	0	0	6	0	154	0	4	0	5	3	0	3	1	5	3	1
+15679	24034	"Iosipovo"	51.19892	28.02352	35	"AWI"	35	1054	3027	1950	2	6	2	0	0	0	16	0	0	6	2	4	10	0	0	2	0	2	0	6	0	160	0	4	0	4	0	0	0	0	4	0	0
+15679	24034	"Iosipovo"	51.19892	28.02352	45	"AWI"	45	1560	3556	2517	2	6	2	0	2	2	10	0	0	6	2	3	5	0	4	2	0	2	0	7	2	166	0	5	2	2	0	0	0	0	3	0	0
+15679	24034	"Iosipovo"	51.19892	28.02352	55	"AWI"	55	2098	4069	3104	0	11	0	2	0	2	11	4	2	7	0	4	2	2	3	4	1	4	1	11	0	161	0	3	0	1	0	3	2	0	0	0	0
+15679	24034	"Iosipovo"	51.19892	28.02352	65	"AWI"	65	2683	4579	3669	0	16	0	3	4	3	16	0	4	5	1	5	3	0	3	0	1	0	0	10	2	140	0	4	2	8	0	0	0	0	4	3	0
+15679	24034	"Iosipovo"	51.19892	28.02352	75	"AWI"	75	3327	4989	4267	2	15	0	2	0	0	15	0	0	6	1	3	4	1	0	0	0	2	2	3	0	153	0	6	0	8	3	2	2	0	2	0	0
+15679	24034	"Iosipovo"	51.19892	28.02352	85	"AWI"	85	4032	5333	4845	0	15	0	0	0	0	16	3	2	5	0	4	2	0	0	0	0	5	0	2	3	148	2	5	0	7	0	4	2	0	5	2	1
+15679	24034	"Iosipovo"	51.19892	28.02352	95	"AWI"	95	4988	5623	5370	1	17	0	0	3	2	19	0	1	7	0	6	2	3	0	0	0	0	3	0	0	157	0	5	0	0	2	2	2	2	3	3	0
+15679	24034	"Iosipovo"	51.19892	28.02352	105	"AWI"	105	5723	7487	6514	0	15	0	0	2	0	15	0	0	4	3	2	2	2	2	0	0	2	0	3	5	156	0	8	0	3	0	5	3	0	3	0	1
+15679	24034	"Iosipovo"	51.19892	28.02352	115	"AWI"	115	7350	8228	7894	0	14	2	0	4	1	15	0	0	4	2	4	3	0	3	0	2	2	0	2	0	160	2	2	0	2	0	2	0	0	3	2	0

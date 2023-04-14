@@ -1,0 +1,13 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Boraginaceae"	"Brassicaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cistaceae"	"Cornus"	"Corylus"	"Cyperaceae"	"Fabaceae"	"Indeterminable"	"Juniperus"	"Lamiaceae"	"Picea"	"Pinus"	"Plantaginaceae"	"Poaceae"	"Polemoniaceae"	"Populus"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Rumex"	"Salix"	"Saxifragaceae"	"Sorbus"	"Thalictrum"	"Ulmus"	"Urticaceae"	"Viburnum"
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	0	"AWI"	0	8522	8904	8676	1	0	0	0	0	0	6	1	5	0	0	0	1	166	22	0	0	0	0	0	73	0	0	0	0	3	3	0	0	41	0	0	0	26	0	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	8	"AWI"	8	8795	9270	9002	0	2	2	0	0	0	6	0	0	0	0	0	0	145	40	0	0	0	0	0	131	0	0	0	0	1	0	0	0	19	0	0	0	29	0	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	16	"AWI"	16	9050	9618	9321	0	2	1	0	1	0	9	0	1	0	0	0	0	132	21	0	0	0	0	0	155	0	0	0	0	0	0	0	1	36	0	0	0	12	1	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	24	"AWI"	24	9349	9944	9641	0	0	1	1	0	0	8	0	3	0	0	0	0	127	19	0	0	0	0	0	203	0	0	0	2	0	0	0	0	16	0	0	0	4	0	1
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	32	"AWI"	32	9668	10243	9958	0	0	0	0	0	0	206	0	1	0	0	0	2	8	58	0	0	1	1	0	83	0	0	0	5	0	0	0	0	17	0	0	0	0	0	5
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	40	"AWI"	40	9999	10519	10275	0	0	1	0	3	0	145	0	0	0	0	1	0	0	39	0	0	0	0	0	86	0	31	0	0	0	1	0	0	60	17	2	0	0	0	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	48	"AWI"	48	10400	10766	10587	0	0	2	0	1	0	150	0	0	1	0	0	2	1	17	0	0	0	0	0	86	0	0	0	6	0	2	0	0	84	0	1	1	1	3	13
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	56	"AWI"	56	10705	11142	10901	0	1	9	0	0	0	12	0	0	0	0	0	0	0	19	0	0	0	0	0	24	0	0	0	3	0	0	0	0	5	0	0	1	0	0	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	64	"AWI"	64	10958	11546	11214	0	0	6	0	0	0	4	0	2	0	0	0	0	0	20	0	0	2	0	0	20	0	0	1	2	0	1	0	0	1	0	0	0	0	0	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	72	"AWI"	72	11209	11944	11530	0	0	0	0	0	0	4	0	0	0	0	0	0	0	39	0	0	0	0	1	11	0	0	0	0	0	1	0	0	2	0	0	0	0	0	0
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	80	"AWI"	80	11465	12312	11848	0	0	1	0	0	0	8	0	1	0	0	0	0	0	50	0	0	1	0	1	6	0	0	0	1	0	0	0	0	0	0	0	0	0	0	1
+26065	46522	"William King Flour Mill"	51.55222	-0.48389	88	"AWI"	88	11724	12679	12165	0	0	0	0	1	0	7	0	0	0	0	0	0	0	65	0	0	1	0	0	14	0	0	2	0	0	0	0	0	2	0	0	0	0	0	0

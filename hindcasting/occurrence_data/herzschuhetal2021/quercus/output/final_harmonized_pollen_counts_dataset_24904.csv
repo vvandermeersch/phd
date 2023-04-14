@@ -1,0 +1,20 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Acer"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cistaceae"	"Corylus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Fagus"	"Fraxinus"	"Hypericaceae"	"Ilex"	"Juniperus"	"Lythraceae"	"Malvaceae"	"Ostrya.Carpinus"	"Picea"	"Pinus"	"Plantaginaceae"	"Poaceae"	"Polygonaceae"	"Populus"	"Prunus"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Solanaceae"	"Taxus"	"Tilia"	"Ulmus"	"Urticaceae"	"Viburnum"	"Vitaceae"
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	60	"AWI"	60	960	2063	1497	0	0	6	1	0	0	3	0	2	1	0	0	2	20	120	1	0	41	2	0	0	0	1	0	0	0	10	3	17	0	0	0	92	1	0	0	0	1	0	0	3	2	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	100	"AWI"	100	1970	3075	2562	0	1	11	0	1	0	0	0	4	0	1	0	0	27	109	0	0	63	6	0	0	0	0	0	0	0	11	3	21	0	0	0	126	1	0	0	1	0	0	0	1	4	0	0	1
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	110	"AWI"	110	2241	3300	2820	0	0	27	1	2	0	0	0	3	0	0	0	0	78	91	0	0	61	14	0	1	0	0	0	0	0	4	2	0	0	1	0	111	0	0	0	0	7	0	0	1	8	2	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	115	"AWI"	115	2404	3411	2954	0	0	7	0	0	0	0	0	0	0	0	0	0	32	79	0	0	26	8	0	0	0	0	0	0	0	3	0	0	0	0	0	103	0	0	0	1	1	0	0	3	4	2	1	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	120	"AWI"	120	2549	3516	3088	1	0	4	1	0	0	0	0	0	0	0	0	0	22	116	0	0	28	11	2	0	0	0	0	0	0	9	2	0	0	0	0	97	0	0	0	1	0	1	0	5	5	0	0	1
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	130	"AWI"	130	2874	3724	3349	1	0	8	0	0	0	0	0	1	0	0	0	3	29	255	0	0	10	12	1	0	0	0	0	2	0	8	0	0	0	0	0	68	2	0	0	0	0	0	0	5	3	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	140	"AWI"	140	3211	3888	3623	2	0	15	1	1	0	0	0	1	0	0	0	0	117	36	0	0	10	4	0	0	0	0	0	1	0	9	0	0	0	0	0	83	0	0	1	0	1	0	2	4	9	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	150	"AWI"	150	3672	4048	3885	4	0	8	1	0	3	0	0	0	1	0	0	0	50	41	0	0	19	6	0	0	0	0	0	0	0	13	0	0	0	0	0	128	0	0	0	0	2	0	1	12	6	0	0	1
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	160	"AWI"	160	3810	4267	4034	3	0	18	0	0	0	0	0	1	0	0	0	0	68	27	0	0	9	8	0	0	0	0	0	0	0	13	1	55	0	0	1	158	2	0	0	0	0	0	3	2	2	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	180	"AWI"	180	4086	4625	4334	0	0	16	0	0	0	1	0	1	0	0	0	1	31	119	0	0	12	6	0	0	0	0	0	1	0	10	1	0	0	0	0	159	1	0	0	0	1	0	0	5	1	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	205	"AWI"	205	4466	5033	4705	3	1	5	0	1	0	1	0	1	0	0	0	0	25	195	0	0	4	4	0	0	0	0	0	3	0	21	0	0	0	0	0	141	0	0	3	0	1	0	0	3	3	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	220	"AWI"	220	4771	5262	4922	1	0	6	0	17	0	2	0	1	0	0	0	0	27	205	0	0	3	0	0	0	0	0	0	0	0	13	2	0	0	0	0	108	2	0	4	0	2	0	1	2	4	0	2	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	225	"AWI"	225	4863	5363	5025	0	0	10	2	1	1	1	0	6	1	0	1	1	33	129	1	0	35	0	2	0	0	0	1	0	0	6	0	27	0	0	2	91	0	0	1	1	1	0	0	0	0	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	230	"AWI"	230	4924	5505	5136	0	0	13	1	0	0	0	0	10	1	0	0	0	20	152	0	0	30	3	0	0	0	0	0	0	0	13	3	25	0	0	0	97	3	0	1	1	1	0	0	1	0	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	245	"AWI"	245	5156	5917	5494	1	0	0	0	0	0	3	0	5	0	0	0	0	29	137	0	0	0	1	0	0	0	0	0	0	0	8	0	0	0	0	0	99	0	0	0	0	0	0	2	2	1	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	255	"AWI"	255	5343	6164	5729	0	0	7	1	0	1	1	0	6	0	0	0	0	56	108	0	0	0	6	0	0	0	0	1	0	1	16	2	0	1	0	0	119	1	0	3	0	2	0	5	1	7	0	1	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	260	"AWI"	260	5453	6289	5847	0	2	2	1	0	0	2	0	1	0	0	0	0	26	93	0	0	0	4	0	0	1	0	0	0	0	8	0	0	0	0	0	50	2	0	2	0	5	0	109	8	10	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	320	"AWI"	320	6988	7423	7260	0	0	2	0	0	1	0	0	1	0	0	0	0	48	37	1	0	0	4	0	0	0	0	0	0	0	13	0	0	0	0	0	88	1	0	1	0	20	0	0	2	14	0	0	0
+16122	24904	"Tourbière de Chavannes"	46.85222	2.37611	340	"AWI"	340	7423	7989	7643	0	0	1	0	0	0	0	0	0	0	0	0	0	11	1	0	0	0	0	0	0	0	0	0	1	0	14	0	0	0	0	0	1	1	0	0	0	1	0	0	13	3	0	0	0

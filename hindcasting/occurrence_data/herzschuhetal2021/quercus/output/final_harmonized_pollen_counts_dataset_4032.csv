@@ -1,0 +1,10 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Acer"	"Alnus"	"Amaranthaceae"	"Amaryllidaceae"	"Apiaceae"	"Asteraceae"	"Betula"	"Caprifoliaceae"	"Corylus"	"Ericales"	"Fagus"	"Ostrya.Carpinus"	"Pinus"	"Quercus"	"Rosaceae"	"Tilia"	"Ulmus"
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	20	"AWI"	20	-29	490	383	0	3	1	0	0	12	8	0	2	95	3	1	3	0	3	5	0
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	30	"AWI"	30	794	2096	1374	0	5	1	3	1	10	10	5	3	73	2	0	10	3	0	3	1
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	40	"AWI"	40	1737	3021	2451	0	2	1	1	4	7	6	1	2	79	6	1	10	3	0	1	1
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	50	"AWI"	50	3210	3611	3455	6	8	2	7	0	5	27	0	3	75	2	2	12	5	1	0	0
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	60	"AWI"	60	3641	4464	3997	0	20	0	1	1	2	40	0	8	17	0	3	55	7	15	0	3
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	70	"AWI"	70	4090	5068	4553	0	1	0	0	1	4	25	0	15	1	0	0	60	15	0	0	0
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	80	"AWI"	80	4627	5616	5127	0	0	0	2	0	4	16	0	16	5	0	1	80	8	0	0	0
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	90	"AWI"	90	5240	6077	5700	8	0	1	1	0	4	32	0	5	5	0	20	58	0	3	0	0
+3097	4032	"Puerto de las Estacas de Trueba"	43.12139	-3.70056	100	"AWI"	100	6023	6473	6266	7	11	2	2	0	4	25	0	16	2	0	0	70	8	0	0	1

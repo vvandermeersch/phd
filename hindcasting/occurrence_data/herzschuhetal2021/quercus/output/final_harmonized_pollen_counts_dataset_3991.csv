@@ -1,0 +1,20 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Caprifoliaceae"	"Corylus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Fagus"	"Frangula"	"Fraxinus"	"Ilex"	"Juglans"	"Orobanchaceae"	"Pinus"	"Plantaginaceae"	"Poaceae"	"Polygalaceae"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Ulmus"
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	10	"AWI"	10	-18	1765	458	14	0	1	0	2	12	12	0	188	388	391	0	2	0	5	0	0	0	5	44	213	4	10	2	24	2	5	4	2
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	20	"AWI"	20	238	2752	1143	63	0	2	0	0	0	35	0	824	122	220	0	0	0	3	1	1	0	4	15	142	1	43	1	16	1	0	6	1
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	30	"AWI"	30	648	3483	1854	38	0	2	0	0	0	64	0	121	38	281	3	0	0	4	0	0	4	1	0	123	1	40	1	0	0	0	4	2
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	40	"AWI"	40	1196	4149	2587	49	1	1	0	2	0	52	0	159	42	236	0	0	0	8	0	0	31	1	0	123	0	35	2	0	0	0	6	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	50	"AWI"	50	1768	4724	3322	45	0	0	0	1	0	55	0	155	15	218	0	0	0	8	0	0	2	11	3	56	0	26	5	0	0	0	35	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	60	"AWI"	60	2360	5202	4026	41	0	1	0	0	0	70	0	76	45	37	0	0	0	1	0	0	5	12	6	102	0	24	1	26	1	1	14	2
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	70	"AWI"	70	3170	5588	4759	37	0	0	0	0	0	47	0	190	1	0	0	0	0	5	0	0	10	84	0	28	0	24	1	0	0	0	7	3
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	80	"AWI"	80	4184	5858	5441	81	0	1	0	0	0	34	3	175	11	0	0	0	1	1	0	0	0	7	3	95	0	23	0	0	0	0	7	4
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	90	"AWI"	90	4670	6152	5801	52	0	2	0	0	0	18	0	31	11	0	0	0	0	0	0	0	0	49	0	71	0	31	4	19	2	0	40	0
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	100	"AWI"	100	4894	6440	5970	36	0	0	0	0	0	23	0	74	3	31	0	0	0	3	0	0	2	117	0	33	0	19	0	0	0	0	1	2
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	110	"AWI"	110	5193	6681	6149	45	0	0	1	0	0	34	0	121	16	0	0	0	0	0	0	0	2	87	0	58	0	29	1	0	0	0	2	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	120	"AWI"	120	5434	6890	6344	51	0	1	0	0	0	26	0	139	13	0	0	0	0	0	0	0	9	90	0	44	0	29	0	0	0	0	5	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	130	"AWI"	130	5642	7109	6529	46	0	1	1	0	0	10	0	80	2	6	0	0	0	0	0	0	15	118	0	3	0	22	0	0	0	0	1	4
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	140	"AWI"	140	5900	7286	6723	76	0	1	0	0	0	38	0	103	5	0	0	0	0	1	0	0	5	47	0	30	0	38	1	0	0	0	0	0
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	150	"AWI"	150	6155	7449	6919	55	0	0	0	0	0	45	0	179	7	0	0	0	0	0	0	0	25	53	0	21	0	42	0	0	1	0	6	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	160	"AWI"	160	6381	7620	7106	73	0	0	0	0	0	12	0	18	2	0	0	0	0	0	0	0	11	39	0	15	0	22	0	0	0	0	1	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	170	"AWI"	170	6632	7781	7292	96	0	0	0	0	0	11	0	83	6	0	0	0	0	0	0	0	1	56	0	10	0	32	0	0	1	0	5	5
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	180	"AWI"	180	6870	7934	7483	43	0	0	0	0	0	13	0	59	10	0	0	0	0	0	0	0	2	39	0	14	0	46	0	0	1	0	1	9
+3061	3991	"Clatteringshaws Loch"	55.07767	-4.2993	190	"AWI"	190	7115	8094	7666	9	0	0	0	0	0	94	0	102	15	0	0	0	0	0	0	0	1	36	0	2	0	5	0	0	1	0	0	6

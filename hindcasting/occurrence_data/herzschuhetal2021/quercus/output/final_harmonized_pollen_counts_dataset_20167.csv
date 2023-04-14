@@ -1,0 +1,13 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Acer"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caryophyllaceae"	"Cistaceae"	"Corylus"	"Cyperaceae"	"Ericales"	"Onagraceae"	"Pinus"	"Poaceae"	"Ranunculaceae"	"Rosaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Thalictrum"
+13446	20167	"Bosscherheide"	51.57861	6.09472	2	"AWI"	2	11961	12608	12278	0	0	0	4	0	10	1	1	1	0	241	0	0	8	34	0	0	0	0	2	1
+13446	20167	"Bosscherheide"	51.57861	6.09472	3	"AWI"	3	12026	12649	12335	1	1	0	1	0	25	0	0	0	0	212	0	0	7	51	0	2	0	0	2	1
+13446	20167	"Bosscherheide"	51.57861	6.09472	4	"AWI"	4	12084	12707	12397	0	0	0	2	0	25	1	0	0	0	198	0	0	15	58	2	0	0	1	1	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	5	"AWI"	5	12120	12773	12461	0	2	0	0	0	19	0	0	0	0	195	0	0	24	56	0	0	2	0	4	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	7	"AWI"	7	12250	12848	12574	0	0	0	2	0	16	0	0	0	0	217	0	1	15	47	0	0	0	0	2	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	8	"AWI"	8	12311	12896	12635	0	0	1	1	0	8	2	0	0	1	193	0	0	16	76	0	0	0	0	4	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	9	"AWI"	9	12364	12943	12696	0	0	0	2	2	10	0	3	0	2	108	0	0	32	142	0	0	0	0	3	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	10	"AWI"	10	12412	13000	12754	0	0	0	1	0	10	0	0	0	0	175	0	0	18	93	0	0	0	0	2	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	11	"AWI"	11	12666	13093	12913	0	0	0	1	0	9	0	0	0	0	130	0	0	150	9	0	0	1	0	1	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	12	"AWI"	12	12885	13198	13069	0	0	1	0	0	14	0	0	0	0	137	0	0	129	19	0	0	0	0	1	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	13	"AWI"	13	13050	13350	13227	0	0	1	2	0	15	0	0	0	0	129	0	0	146	8	0	0	0	0	0	0
+13446	20167	"Bosscherheide"	51.57861	6.09472	14	"AWI"	14	13163	13561	13391	0	1	1	1	0	30	0	0	0	0	164	0	0	68	34	0	0	0	0	2	0

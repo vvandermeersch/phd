@@ -1,0 +1,15 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Abies"	"Acer"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caryophyllaceae"	"Convolvulaceae"	"Corylus"	"Cyperaceae"	"Fabaceae"	"Fraxinus"	"Ilex"	"Lamiaceae"	"Ligustrum"	"Liliaceae"	"Picea"	"Pinus"	"Plantaginaceae"	"Plumbaginaceae"	"Poaceae"	"Polygonaceae"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Rumex"	"Salix"	"Sambucus"	"Saxifragaceae"	"Taxus"	"Tilia"	"Ulmus"	"Urticaceae"
+23819	41278	"Royal Albert Dock"	51.50778	0.045	40	"AWI"	40	399	906	632	0	1	17	36	1	0	0	0	1	51	1	0	4	13	0	0	0	0	0	0	0	1	0	0	125	0	6	2	0	1	0	0	0	0	1	0	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	74	"AWI"	74	927	1532	1220	0	0	10	10	2	0	0	0	0	9	1	0	5	41	0	0	0	0	0	4	2	8	0	0	162	0	9	2	0	0	0	0	0	0	0	5	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	91	"AWI"	91	1203	1836	1516	0	0	8	13	0	0	0	0	0	7	0	0	3	38	0	5	0	0	0	0	0	1	0	0	106	0	8	0	0	0	1	0	0	0	0	3	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	141	"AWI"	141	2052	2670	2368	0	1	29	47	2	1	1	0	2	33	0	0	13	22	0	4	0	0	0	0	0	6	0	0	88	1	18	2	0	0	0	0	0	0	2	0	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	158	"AWI"	158	2368	2940	2660	0	0	20	49	2	0	1	0	0	38	1	0	6	39	0	1	0	0	0	0	0	1	0	0	89	0	15	2	0	0	6	0	0	0	0	0	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	165	"AWI"	165	2492	3049	2781	1	0	52	25	8	0	0	0	0	28	1	0	7	19	0	1	0	0	0	1	0	3	0	0	87	0	27	5	0	1	3	0	0	0	0	2	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	185	"AWI"	185	2881	3353	3126	0	0	36	26	15	0	1	0	0	27	4	0	13	10	0	2	2	0	0	0	0	13	0	0	101	1	25	4	0	2	2	0	0	0	0	1	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	192	"AWI"	192	3026	3453	3246	0	0	47	9	8	1	0	0	1	7	1	0	8	60	0	4	0	0	0	0	1	2	0	0	101	1	23	6	0	0	2	0	0	0	0	5	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	201	"AWI"	201	3218	3580	3396	0	0	146	4	0	0	2	0	1	2	0	1	6	8	0	3	1	0	1	0	0	2	6	0	55	0	39	0	10	0	4	2	1	0	0	4	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	209	"AWI"	209	3384	3709	3534	0	1	114	0	1	1	0	0	1	0	0	0	14	4	0	4	0	0	0	0	0	1	0	0	7	0	30	0	0	1	6	0	0	14	5	4	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	217	"AWI"	217	3503	3868	3676	0	0	144	0	0	1	0	0	0	0	0	0	34	0	0	3	1	0	0	2	0	1	0	0	0	0	71	0	0	0	7	2	0	11	8	9	2
+23819	41278	"Royal Albert Dock"	51.50778	0.045	225	"AWI"	225	3627	4015	3818	0	0	214	0	0	2	0	0	1	0	0	0	14	1	0	4	1	0	0	0	0	0	0	0	0	0	44	0	0	0	3	0	0	7	3	6	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	243	"AWI"	243	3955	4317	4134	0	0	135	1	3	0	0	0	0	0	0	0	35	18	0	1	0	0	0	0	0	1	0	0	0	0	63	0	0	0	2	0	0	18	19	1	0
+23819	41278	"Royal Albert Dock"	51.50778	0.045	260	"AWI"	260	4220	4690	4434	0	0	159	0	0	0	0	0	2	1	0	0	29	27	0	2	0	0	0	0	1	3	0	0	19	0	23	0	0	0	3	0	0	3	23	2	0

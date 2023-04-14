@@ -1,0 +1,9 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caryophyllaceae"	"Corylus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Fagus"	"Geraniaceae"	"Ilex"	"Pinus"	"Plantaginaceae"	"Poaceae"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Salix"	"Ulmus"
+16236	25133	"Vauville"	49.63611	-1.84889	40	"AWI"	40	337	559	447	19	1	2	2	1	38	6	3	0	24	47	32	1	0	1	0	1	2	0	14	1	2	2	0
+16236	25133	"Vauville"	49.63611	-1.84889	50	"AWI"	50	459	688	572	27	3	1	1	1	10	12	1	0	47	29	13	0	0	0	1	4	2	26	12	0	3	3	0
+16236	25133	"Vauville"	49.63611	-1.84889	60	"AWI"	60	587	804	696	25	1	2	0	0	10	13	1	2	33	19	8	0	3	1	0	9	2	30	10	0	9	2	0
+16236	25133	"Vauville"	49.63611	-1.84889	70	"AWI"	70	720	917	818	30	0	2	0	5	0	13	0	0	56	6	0	0	0	0	0	6	5	0	12	0	9	6	0
+16236	25133	"Vauville"	49.63611	-1.84889	85	"AWI"	85	892	1127	1007	49	0	1	0	2	3	21	0	0	64	5	0	0	0	0	0	0	5	0	11	0	3	5	0
+16236	25133	"Vauville"	49.63611	-1.84889	90	"AWI"	90	952	1193	1068	8	1	4	0	0	0	2	0	0	17	13	0	0	0	0	0	2	1	0	14	0	3	10	1
+16236	25133	"Vauville"	49.63611	-1.84889	95	"AWI"	95	1010	1260	1130	32	3	15	0	3	0	7	0	0	16	13	0	0	0	0	1	0	4	0	8	0	0	12	1
+16236	25133	"Vauville"	49.63611	-1.84889	105	"AWI"	105	1132	1389	1255	62	2	2	2	0	27	10	0	1	29	31	23	0	0	0	4	1	4	33	23	10	3	1	1

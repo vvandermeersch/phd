@@ -1,0 +1,16 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Boraginaceae"	"Brassicaceae"	"Buxus"	"Campanulaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Cistaceae"	"Corylus"	"Cupressaceae"	"Cyperaceae"	"Ephedraceae"	"Ericales"	"Fabaceae"	"Fraxinus"	"Genista"	"Geraniaceae"	"Iridaceae"	"Lamiaceae"	"Liliaceae"	"Linaceae"	"Myrtus"	"Olea"	"Papaveraceae"	"Phillyrea"	"Pinus"	"Pistacia"	"Plantaginaceae"	"Plumbaginaceae"	"Poaceae"	"Polygonaceae"	"Quercus"	"Quercus.evg.type"	"Ranunculaceae"	"Rosaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Scrophulariaceae"	"Thalictrum"	"Thymelaeaceae"	"Ulmus"
+3309	4294	"Navarrés"	39.1	-0.68333	35	"AWI"	35	2276	3721	3075	1	2	0	0	0	1	0	0	0	0	0	1	0	0	2	32	0	5	0	0	0	0	0	0	1	0	0	0	0	0	62	0	1	0	26	0	6	31	0	0	0	0	0	0	0	0	1
+3309	4294	"Navarrés"	39.1	-0.68333	45	"AWI"	45	3442	4085	3709	0	1	11	6	0	1	0	0	0	0	0	6	3	0	0	129	0	3	0	0	0	1	0	0	0	0	0	1	0	0	53	1	9	0	44	0	4	58	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	55	"AWI"	55	3752	4835	4205	0	2	19	0	0	0	1	0	1	0	1	2	0	1	2	150	0	5	0	0	1	0	1	0	0	0	2	2	0	1	79	0	15	0	0	2	7	73	0	0	1	0	6	0	1	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	65	"AWI"	65	4008	5477	4647	0	5	0	3	5	1	0	1	0	0	0	0	0	0	2	24	0	2	2	2	0	0	0	0	0	0	0	5	2	2	96	5	6	0	0	0	2	89	0	1	0	0	1	0	0	2	1
+3309	4294	"Navarrés"	39.1	-0.68333	75	"AWI"	75	4325	5892	5111	1	1	12	6	0	1	0	1	0	1	1	0	0	0	3	36	0	3	0	0	0	1	0	0	0	0	0	1	1	0	79	0	6	0	0	0	6	51	3	0	0	0	1	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	85	"AWI"	85	4714	6252	5565	1	1	0	1	0	0	0	0	0	0	0	0	0	1	3	29	1	4	0	0	0	0	0	0	0	0	0	3	0	1	40	4	5	0	0	0	3	66	1	0	0	1	0	0	1	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	95	"AWI"	95	5256	6581	6008	0	1	0	5	0	0	0	0	0	0	0	0	0	0	2	49	0	0	0	0	0	0	0	0	0	0	0	0	0	1	62	0	4	0	0	0	4	27	0	0	0	0	0	3	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	105	"AWI"	105	6254	7032	6563	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	10	2	0	0	0	0	0	0	0	0	1	0	0	0	0	163	0	0	1	0	0	0	4	0	0	1	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	115	"AWI"	115	6831	9450	7752	0	6	2	6	9	0	0	0	0	0	0	0	0	0	0	6	0	0	0	0	0	0	0	0	0	0	0	0	0	0	120	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	125	"AWI"	125	7676	12642	9712	0	6	0	31	11	0	0	0	0	0	0	0	0	0	1	2	0	0	0	0	0	0	0	0	2	0	0	0	0	0	173	1	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	140	"AWI"	140	9774	14902	13012	0	1	0	10	11	0	0	0	0	0	0	0	0	0	2	14	1	0	0	0	0	0	0	0	0	0	0	0	0	0	212	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	150	"AWI"	150	14167	15563	14997	0	2	0	10	0	0	0	0	0	0	0	0	0	0	1	9	0	0	0	0	0	0	0	0	0	0	0	0	0	0	147	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	160	"AWI"	160	14853	18902	16254	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	5	1	0	0	0	0	0	0	0	0	0	0	0	0	0	252	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	170	"AWI"	170	15662	20381	17808	0	4	0	19	0	1	0	0	0	0	0	1	0	0	1	19	1	0	0	0	0	0	0	0	0	0	0	0	0	0	189	0	2	0	0	0	1	0	0	0	0	0	0	0	0	0	0
+3309	4294	"Navarrés"	39.1	-0.68333	180	"AWI"	180	16640	21541	19393	0	4	0	34	0	1	0	0	0	0	0	0	0	0	3	10	1	1	0	0	0	0	0	0	0	0	0	0	0	0	174	0	0	0	0	0	1	3	0	0	1	0	0	0	0	0	0

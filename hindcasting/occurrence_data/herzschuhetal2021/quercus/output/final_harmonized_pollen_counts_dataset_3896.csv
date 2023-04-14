@@ -1,0 +1,12 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Artemisia"	"Betula"	"Brassicaceae"	"Corylus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Ostrya.Carpinus"	"Picea"	"Pinus"	"Poaceae"	"Polygonaceae"	"Quercus"	"Ranunculaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Tilia"	"Ulmus"
+2992	3896	"Babozero"	66.375	37.51667	15	"AWI"	15	69	1217	454	1	2	10	245	4	0	21	7	7	0	5	23	18	1	0	2	0	1	4	0	0
+2992	3896	"Babozero"	66.375	37.51667	40	"AWI"	40	582	2387	1376	10	1	4	111	0	2	18	3	3	0	50	142	9	0	1	2	1	0	0	0	0
+2992	3896	"Babozero"	66.375	37.51667	65	"AWI"	65	1433	3230	2312	2	3	2	98	0	0	15	4	2	0	76	156	6	0	0	2	0	0	0	0	0
+2992	3896	"Babozero"	66.375	37.51667	90	"AWI"	90	2537	4118	3202	22	0	5	84	0	0	16	4	3	1	64	145	16	0	1	2	0	0	0	0	1
+2992	3896	"Babozero"	66.375	37.51667	115	"AWI"	115	3690	6236	4702	12	2	8	71	1	0	7	2	0	0	67	186	7	1	1	2	0	0	0	0	0
+2992	3896	"Babozero"	66.375	37.51667	140	"AWI"	140	4895	8373	6536	12	1	0	92	0	0	15	1	0	0	36	204	18	0	0	4	0	0	0	0	0
+2992	3896	"Babozero"	66.375	37.51667	169	"AWI"	169	6984	10094	8682	20	0	1	113	1	0	7	0	3	0	23	186	19	0	0	0	0	0	0	1	1
+2992	3896	"Babozero"	66.375	37.51667	195	"AWI"	195	9387	11291	10457	23	10	7	183	0	0	6	0	4	0	2	110	8	0	0	0	0	0	2	1	0
+2992	3896	"Babozero"	66.375	37.51667	220	"AWI"	220	10345	13065	11641	12	0	6	140	5	0	10	1	3	0	2	15	10	0	0	0	1	0	5	0	0
+2992	3896	"Babozero"	66.375	37.51667	245	"AWI"	245	11440	14328	12816	5	5	2	74	0	0	4	0	2	0	2	10	8	0	0	0	0	0	3	0	0
+2992	3896	"Babozero"	66.375	37.51667	270	"AWI"	270	12599	15534	14004	0	0	0	0	0	0	0	1	0	0	2	2	1	0	0	0	0	0	0	0	0

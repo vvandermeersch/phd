@@ -1,0 +1,10 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Acer"	"Alnus"	"Amaranthaceae"	"Amaryllidaceae"	"Apiaceae"	"Asteraceae"	"Betula"	"Corylus"	"Ericales"	"Fagus"	"Geraniaceae"	"Ostrya.Carpinus"	"Pinus"	"Poaceae"	"Quercus"	"Rosaceae"	"Tilia"	"Ulmus"
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	20	"AWI"	20	-3	3	0	14	40	6	2	0	22	34	10	30	8	0	6	4	0	0	10	0	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	30	"AWI"	30	413	897	628	0	22	1	0	10	8	50	5	15	22	0	0	0	32	5	1	0	8
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	40	"AWI"	40	972	1574	1258	0	34	2	1	5	1	56	10	34	16	1	4	3	8	2	0	0	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	50	"AWI"	50	1587	2196	1887	0	25	1	5	5	5	21	4	48	6	2	1	8	14	12	3	0	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	60	"AWI"	60	2280	2763	2505	0	90	3	1	1	6	28	8	60	0	1	1	16	0	7	1	0	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	70	"AWI"	70	2885	3489	3177	5	62	0	1	3	3	27	7	35	0	5	3	25	0	0	2	0	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	80	"AWI"	80	3506	4227	3859	12	15	10	0	0	6	45	15	40	0	0	0	37	0	3	9	2	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	90	"AWI"	90	4174	4904	4540	18	35	0	0	6	3	37	7	30	0	0	0	36	0	2	5	0	0
+14484	22681	"Pico del Sertal"	43.21527	-4.43613	100	"AWI"	100	4861	5548	5215	1	7	0	0	1	21	40	8	15	0	0	0	85	1	3	0	0	0

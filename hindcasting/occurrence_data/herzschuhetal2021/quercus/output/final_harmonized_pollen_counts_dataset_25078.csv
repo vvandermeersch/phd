@@ -1,0 +1,9 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Caryophyllaceae"	"Corylus"	"Cyperaceae"	"Ericales"	"Fabaceae"	"Fagus"	"Fraxinus"	"Pinus"	"Plantaginaceae"	"Poaceae"	"Quercus"	"Ranunculaceae"	"Rosaceae"	"Rumex"	"Salix"	"Thalictrum"	"Tilia"	"Ulmus"
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	170	"AWI"	170	1617	2019	1816	12	14	3	0	1	0	1	0	0	21	47	0	0	3	0	2	5	27	33	0	0	0	1	0	1	0
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	185	"AWI"	185	1939	2379	2155	8	60	0	0	1	7	5	0	0	12	49	3	0	5	0	1	7	24	33	0	0	2	0	0	0	1
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	200	"AWI"	200	2270	2730	2497	8	36	0	0	3	8	3	1	0	20	25	2	3	6	0	3	6	41	40	0	0	2	1	0	0	0
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	220	"AWI"	220	2710	3201	2952	13	15	0	0	3	11	3	1	1	11	27	1	2	5	1	0	5	35	31	0	1	1	0	0	0	0
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	230	"AWI"	230	2938	3431	3179	9	7	3	0	0	2	2	1	0	23	49	0	0	1	0	2	0	0	31	0	0	0	0	0	0	0
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	245	"AWI"	245	3277	3773	3520	9	15	3	0	0	5	1	1	0	16	55	0	0	0	0	0	2	0	21	0	0	1	0	0	0	0
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	260	"AWI"	260	3628	4103	3865	9	5	3	0	0	4	3	0	0	10	51	0	0	0	0	0	2	0	27	0	0	0	0	0	0	0
+16212	25078	"Anse de la Mare"	49.62528	-1.23083	270	"AWI"	270	3834	4362	4088	11	1	1	1	0	0	5	0	1	19	44	0	0	0	0	1	2	0	28	1	0	0	0	1	1	2

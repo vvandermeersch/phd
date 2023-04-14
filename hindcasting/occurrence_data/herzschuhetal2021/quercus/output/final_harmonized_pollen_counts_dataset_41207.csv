@@ -1,0 +1,14 @@
+"siteid"	"datasetid"	"sitename"	"lat"	"long"	"depth"	"Age_Source"	"minAgeBP"	"maxAgeBP"	"medianAgeBP"	"meanAgeBP"	"Acer"	"Alnus"	"Amaranthaceae"	"Apiaceae"	"Araliaceae"	"Artemisia"	"Asteraceae"	"Betula"	"Brassicaceae"	"Cannabaceae"	"Caprifoliaceae"	"Caryophyllaceae"	"Castanea"	"Convolvulaceae"	"Cornus"	"Corylus"	"Cyperaceae"	"Ericales"	"Frangula"	"Fraxinus"	"Lamiaceae"	"Lythraceae"	"Picea"	"Pinus"	"Plantaginaceae"	"Plumbaginaceae"	"Poaceae"	"Quercus"	"Ranunculaceae"	"Rhamnus"	"Rosaceae"	"Rubiaceae"	"Rumex"	"Salix"	"Sambucus"	"Santalaceae"	"Solanaceae"	"Sorbus"	"Taxus"	"Tilia"	"Ulmus"	"Urticaceae"	"Viburnum"
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	280	"AWI"	280	5525	5723	5634	0	201	2	2	2	1	0	16	1	0	0	0	0	0	0	63	13	0	0	1	0	0	0	24	0	0	0	89	0	0	0	0	0	4	0	0	0	0	1	37	8	20	0
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	290	"AWI"	290	5602	5795	5694	0	187	21	1	0	2	5	15	1	1	0	0	0	1	0	90	16	6	0	12	0	0	0	33	1	1	43	91	0	0	0	0	0	3	0	0	1	0	0	22	10	2	2
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	295	"AWI"	295	5622	5839	5721	1	229	7	1	0	1	0	13	3	2	0	0	0	0	0	63	22	0	0	12	0	0	1	23	0	0	26	112	0	0	0	1	0	2	0	0	0	1	1	20	11	5	1
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	300	"AWI"	300	5650	5864	5752	0	206	10	4	0	2	0	12	0	2	1	0	0	0	0	29	16	0	0	26	0	0	0	20	0	0	26	90	0	0	0	0	0	5	0	0	1	0	0	21	14	3	3
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	305	"AWI"	305	5669	5904	5783	0	194	14	0	2	2	0	8	0	1	0	0	0	0	1	98	14	0	0	16	0	0	0	20	1	0	0	103	0	0	0	0	0	5	0	0	0	1	0	19	12	3	2
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	310	"AWI"	310	5734	5967	5831	0	164	9	1	0	2	0	7	1	1	0	0	0	0	0	82	7	0	0	5	0	0	0	18	0	0	18	73	0	1	0	0	0	4	0	0	1	0	0	86	8	0	7
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	314	"AWI"	314	5763	6035	5877	0	338	5	0	1	0	2	7	0	0	0	0	0	0	0	95	4	0	0	4	0	0	0	15	0	0	0	42	0	0	0	0	0	0	0	0	0	0	0	6	9	0	0
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	320	"AWI"	320	5882	6200	6003	0	246	2	0	2	0	0	9	0	2	0	0	0	0	0	53	9	0	1	9	0	0	0	17	0	0	15	85	0	0	0	0	0	3	0	0	0	0	2	21	12	2	3
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	325	"AWI"	325	6258	6519	6390	0	433	0	0	0	0	0	0	0	9	0	0	0	0	0	16	2	0	0	3	0	1	0	7	0	0	0	93	0	0	0	0	0	4	0	0	0	0	0	4	3	0	1
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	330	"AWI"	330	6566	6917	6779	0	191	0	0	3	0	0	7	0	14	0	0	0	0	0	34	9	0	0	4	0	0	0	7	0	0	12	185	0	1	0	0	0	4	0	1	0	0	0	24	2	2	0
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	335	"AWI"	335	6777	7107	6970	1	192	1	3	2	0	0	5	1	5	0	0	0	0	0	39	8	0	0	10	0	0	0	10	0	0	0	187	0	0	0	0	0	3	0	0	0	0	0	30	13	0	0
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	340	"AWI"	340	6910	7143	7040	0	248	1	5	0	0	0	5	0	1	0	0	1	0	0	48	9	0	0	7	0	0	0	17	0	0	0	111	0	1	0	1	0	3	1	2	0	0	0	29	3	3	1
+23789	41207	"Bazel-Sluis"	51.13583	4.32306	345	"AWI"	345	6973	7255	7111	0	130	2	3	0	1	0	4	2	4	0	1	0	0	0	67	20	0	0	2	0	0	0	29	0	0	0	139	0	0	0	0	0	4	0	0	0	0	0	66	18	0	0
