@@ -1,26 +1,26 @@
 
-monthly_downscale_with_altitude <- function(yr_interval, in_folder, out_folder, 
+monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
+                                            in_folder, out_folder, 
                                             extent, WHC_present,
                                             ncores, foc_extrapol = FALSE){
   
   time_slice <- paste0(yr_interval[2], "_", yr_interval[1], "kyr")
-  years_list <- split(yr_interval[2]:yr_interval[1], ceiling(seq_along(yr_interval[2]:yr_interval[1])/500))[1:4]
-  if(yr_interval[1] == 0){years_list[["4"]] <- 500:0} # add 0BP
   
-  # create downscaled raster
-  r_tmin_HR <- rast()
-  r_tmax_HR <- rast()
+  # first version, downscaling by 500yr time slice
+  #years_list <- split(yr_interval[2]:yr_interval[1], ceiling(seq_along(yr_interval[2]:yr_interval[1])/500))[1:4]
+  #if(yr_interval[1] == 0){years_list[["4"]] <- 500:0} # add 0BP
   
-  # do the downscaling by 500-year time slice (//ICE-6G-C temporal resolution)
+  
+  # do the downscaling
   for(l in years_list){
     
     yrb <- l[length(l)]
     yre <- l[1]
     rmonths <- year_to_months(yrb, yre, yr_interval[2]) 
     
-    cat(paste0("Doing time slice ", yre,"-", yrb, " BP"))
+    cat(paste0("Doing time slice ", yre,"-", yrb, " BP\n"))
     
-    cat("Loading and cropping data")
+    cat("Loading and cropping data\n") # few minutes (~ 2-4min)
     start_time <- Sys.time()
     tmin_LR <- crop(rast(file.path(in_folder, "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                              paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", time_slice, ".nc")),
@@ -42,6 +42,11 @@ monthly_downscale_with_altitude <- function(yr_interval, in_folder, out_folder,
     alt_LR <- aggregate(alt_HR, 3, na.rm = T)
     alt_LR <- resample(alt_LR, subset(tmin_LR,1))
     
+    # reduce high-resolution (// computing-time of weather generator)
+    temp <- alt_HR
+    res(temp) <- c(0.25, 0.25)
+    alt_HR <- resample(alt_HR, temp)
+    
     # process WHC
     WHC_natres <- rast(WHC_present[,c(2,1,3)])
     WHC_LR <- resample(WHC_natres, alt_LR)
@@ -58,14 +63,14 @@ monthly_downscale_with_altitude <- function(yr_interval, in_folder, out_folder,
     tmax_reg_LR <- rast()
     tmin_reg_LR <- rast()
     
-    # 0. Extrapolate coastal cells (< 1 hour)
+    # 0. Extrapolate coastal cells
     if(foc_extrapol){
       cat("Extrapolating coastal cells\n")
       start_time <- Sys.time()
       tmax_LR <- mask(focal(tmax_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       tmin_LR <- mask(focal(tmin_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       end_time <- Sys.time()
-      cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
+      # cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     }
     
     # 0. Wrap rasters to pass them over a connection that serializes
@@ -75,7 +80,7 @@ monthly_downscale_with_altitude <- function(yr_interval, in_folder, out_folder,
     
     # 1. Quantify the change with height at the native coarse resolution 
     plan(multisession, workers = ncores)
-    cat("Computing max. temperature regressions\n") # (> 2 hours)
+    cat("Computing max. temperature regressions\n") # (~ 6min)
     start_time <- Sys.time()
     tmax_reg_LR <- future_lapply(1:dim(tmax_LR)[3], function(d){
       alt_LRw <- rast(.alt_LR) # load packed altitude
@@ -91,7 +96,7 @@ monthly_downscale_with_altitude <- function(yr_interval, in_folder, out_folder,
     tmax_reg_LR <- rast(lapply(tmax_reg_LR, rast))
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
-    cat("Computing min. temperature regressions\n") # (> 2 hours)
+    cat("Computing min. temperature regressions\n") # (~ 6min)
     start_time <- Sys.time()
     tmin_reg_LR <- future_lapply(1:dim(tmin_LR)[3], function(d){
       alt_LRw <- rast(.alt_LR) # load packed altitude
@@ -130,42 +135,23 @@ monthly_downscale_with_altitude <- function(yr_interval, in_folder, out_folder,
     cat("Writing final rasters\n")
     start_time <- Sys.time()
     time_slice_l <- paste0(yre, "_", yrb, "kyr")
-    writeRaster(tmax_HR, file.path(out_folder, "tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
+    writeCDF(tmin_HR, file.path(out_folder, "tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
                                      paste0("tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice_l, ".nc")),
-             overwrite=TRUE)
+             varname = "tempmin_av", overwrite=TRUE)
 
-    writeRaster(tmin_HR, file.path(out_folder, "tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
+    writeCDF(tmax_HR, file.path(out_folder, "tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
                                      paste0("tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice_l, ".nc")),
-             overwrite=TRUE)
+                varname = "tempmax_av", overwrite=TRUE)
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     
-    
-    #r_tmin_HR <- c(r_tmin_HR, tmin_HR)
-    #r_tmax_HR <- c(r_tmax_HR, tmax_HR)
-    
   }
   
-  # cat("Writing final rasters\n")
-  # writeRaster(r_tmin_HR, file.path(out_folder, "tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr", 
-  #                                  paste0("2tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice, ".nc")),
-  #          overwrite=TRUE)
-  # 
-  # writeCDF(r_tmax_HR, file.path(out_folder, "tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr", 
-  #                                  paste0("tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice, ".nc")),
-  #          overwrite=TRUE)
-              
-              
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 }
+
+.compute_reg_coef <- function(i, r, ralt){
+  adj_cells <- as.numeric(terra::adjacent(r, i, 8, include = T))
+  lin_reg <- lm(unlist(r[adj_cells]) ~ unlist(ralt[adj_cells]))
+  return(as.numeric(lin_reg$coefficients[2]))
+}
+

@@ -1,22 +1,25 @@
 
-monthly_downscale <- function(yr_interval, in_folder, out_folder, 
-                                            extent, WHC_present,
-                                            ncores, foc_extrapol = FALSE){
+monthly_downscale <- function(yr_interval, years_list = NULL,
+                              in_folder, out_folder, 
+                              extent, WHC_present,
+                              foc_extrapol = FALSE){
   
   time_slice <- paste0(yr_interval[2], "_", yr_interval[1], "kyr")
-  years_list <- split(yr_interval[2]:yr_interval[1], ceiling(seq_along(yr_interval[2]:yr_interval[1])/500))[1:4]
-  if(yr_interval[1] == 0){years_list[["4"]] <- 500:0} # add 0BP
   
-  # do the downscaling by 500-year time slice (//ICE-6G-C temporal resolution)
+  # first version, downscaling by 500yr time slice
+  # years_list <- split(yr_interval[2]:yr_interval[1], ceiling(seq_along(yr_interval[2]:yr_interval[1])/500))[1:4]
+  # if(yr_interval[1] == 0){years_list[["4"]] <- 500:0} # add 0BP
+  
+  # do the downscaling
   for(l in years_list){
     
     yrb <- l[length(l)]
     yre <- l[1]
     rmonths <- year_to_months(yrb, yre, yr_interval[2]) 
     
-    cat(paste0("Doing time slice ", yre,"-", yrb, " BP"))
+    cat(paste0("Doing time slice ", yre,"-", yrb, " BP \n"))
     
-    cat("Loading and cropping data")
+    cat("Loading and cropping data \n") # ~ 7-8min
     start_time <- Sys.time()
     alb_LR <- crop(rast(file.path(in_folder, "albedos_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                                    paste0("albedos_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", time_slice, ".nc")),
@@ -33,6 +36,9 @@ monthly_downscale <- function(yr_interval, in_folder, out_folder,
     vwind_LR <- crop(rast(file.path(in_folder, "v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                                   paste0("v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", time_slice, ".nc")),
                         subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO"), extent)
+    rd3_LR <- crop(rast(file.path(in_folder, "rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
+                                  paste0("rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", time_slice, ".nc")),
+                        subds = "rd3_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO"), extent)
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     
@@ -46,6 +52,11 @@ monthly_downscale <- function(yr_interval, in_folder, out_folder,
     # altitude at low resolution
     alt_LR <- aggregate(alt_HR, 3, na.rm = T)
     alt_LR <- resample(alt_LR, subset(pre_LR,1))
+    
+    # reduce high-resolution
+    temp <- alt_HR
+    res(temp) <- c(0.25, 0.25)
+    alt_HR <- resample(alt_HR, temp)
     
     # process WHC
     WHC_natres <- rast(WHC_present[,c(2,1,3)])
@@ -61,8 +72,9 @@ monthly_downscale <- function(yr_interval, in_folder, out_folder,
     cld_LR <- mask(cld_LR, WHC_LR)
     uwind_LR <- mask(uwind_LR, WHC_LR)
     vwind_LR <- mask(vwind_LR, WHC_LR)
+    rd3_LR <- mask(rd3_LR, WHC_LR)
     
-    # 0. Extrapolate coastal cells (< 1 hour)
+    # 0. Extrapolate coastal cells
     if(foc_extrapol){
       cat("Extrapolating coastal cells\n")
       start_time <- Sys.time()
@@ -71,8 +83,9 @@ monthly_downscale <- function(yr_interval, in_folder, out_folder,
       cld_LR <- mask(focal(cld_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       uwind_LR <- mask(focal(uwind_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       vwind_LR <- mask(focal(vwind_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
+      rd3_LR <- mask(focal(rd3_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       end_time <- Sys.time()
-      cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
+      # cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     }
     
     # 1. Interpolate coarse variables to the high-resolution
@@ -81,27 +94,30 @@ monthly_downscale <- function(yr_interval, in_folder, out_folder,
     cld_LR_HR <- resample(cld_LR, alt_HR)
     uwind_LR_HR <- resample(uwind_LR, alt_HR)
     vwind_LR_HR <- resample(vwind_LR, alt_HR)
-    
+    rd3_LR_HR <- resample(rd3_LR, alt_HR)
     
     # 2. Write data on disk
     cat("Writing final rasters\n")
     start_time <- Sys.time()
     time_slice_l <- paste0(yre, "_", yrb, "kyr")
-    writeRaster(alb_LR_HR, file.path(out_folder, "albedos_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
+    writeCDF(alb_LR_HR, file.path(out_folder, "albedos_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
                                    paste0("albedos_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_", time_slice_l, ".nc")),
-                overwrite=TRUE)
-    writeRaster(pre_LR_HR, file.path(out_folder, "precip_mm_srf_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
+             varname = "albedos", overwrite=TRUE)
+    writeCDF(pre_LR_HR, file.path(out_folder, "precip_mm_srf_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
                                    paste0("precip_mm_srf_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice_l, ".nc")),
-                overwrite=TRUE)
-    writeRaster(cld_LR_HR, file.path(out_folder, "totCloud_mm_ua_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
+             varname = "precip_mm_srf", overwrite=TRUE)
+    writeCDF(cld_LR_HR, file.path(out_folder, "totCloud_mm_ua_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
                                    paste0("totCloud_mm_ua_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice_l, ".nc")),
-                overwrite=TRUE)
-    writeRaster(uwind_LR_HR, file.path(out_folder, "u_mm_10m_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
+             varname = "totCloud_mm_ua", overwrite=TRUE)
+    writeCDF(uwind_LR_HR, file.path(out_folder, "u_mm_10m_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
                                    paste0("u_mm_10m_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_", time_slice_l, ".nc")),
-                overwrite=TRUE)
-    writeRaster(vwind_LR_HR, file.path(out_folder, "v_mm_10m_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
+             varname = "u_mm_10m", overwrite=TRUE)
+    writeCDF(vwind_LR_HR, file.path(out_folder, "v_mm_10m_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
                                    paste0("v_mm_10m_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_", time_slice_l, ".nc")),
-                overwrite=TRUE)
+             varname = "v_mm_10m", overwrite=TRUE)
+    writeCDF(rd3_LR_HR, file.path(out_folder, "rd3_mm_srf_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_24000_0kyr",
+                                    paste0("rd3_mm_srf_old_sims_1yrAvg_monthly_10minRes_noBias_Europe_", time_slice_l, ".nc")),
+             varname = "rd3_mm_srf", overwrite=TRUE)
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     
