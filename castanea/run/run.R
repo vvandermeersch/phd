@@ -11,7 +11,7 @@ library(vroom)
 ## Test data ----
 capsis_settings=list(cd_java8 ="cd C:/Program Files/Java/scripts", java8 ="java8.cmd",
                      cd ="cd/d D:/applications/capsis4_castanea && setmem 2000",
-                     castanea_run = "capsis -clfd -p script castaneaonly.myscripts.Simulation_EU_Victor", nb_lines_per_file = 2984
+                     castanea_run = "capsis -clfd -p script castaneaonly.myscripts.Simulation_EU_Victor", nb_lines_per_file = 5171
                      )
 
 sim_options <- list(command_file_suffix = "",
@@ -86,7 +86,30 @@ sim_options <- list(command_file_suffix = "",
 #              dbh = 10, n_trees_ha = 350, volume_ha = 180,
 #              age = 24, clumping = 0.56, LAI = 5.41, opt_vars = "-")
 # )
+# ventoux Hendrik : 10	350	180	24	0.56	5.41
+# Jagodzinski et al : dbh = 15.9, n_trees_ha = 1852, volume_ha = 283.4, age = 40, clumping = 0.5, LAI = 7
 
+
+# inv_options <- list(inventory_file_suffix = "",
+#                     general = list(cell_size = 20, start_year = 1970,
+#                                    lat = 44, lon = 5),
+#                     model = list(CO2_mode = "CO2_PAST_EVOLUTION", elevation_mode = "ELEVATION_EFFECT_FIXED",
+#                                  predawn_mode = "PREDAWN_CAMP", LAI_mode = "LAI_STAND", mortality_mode = "MORTALITY_RDI",
+#                                  phenology_mode = "PHENO_CASTANEA", fit2018_file = "fit2018/UniChillRenecofor_2021.fit2018",
+#                                  drought_on_respiration = "FALSE", soil_init = "SOIL_INIT_EQ", vegetation_type = "TYPE_VEG_STAND",
+#                                  temperature_on_photosynthesis = "TEMPERATURE_EFFECT_BERNACCHI",
+#                                  ETR_mode = "ETR_FAO", aero_mode = "AERO_FAO", i_frost = 3,
+#                                  simulate_reproduction = "FALSE", allocation_schema = "ALLOC_SCHEMA_DAVI2009",
+#                                  allocation_remain = "ALLOC_REMAIN_RESERVES", allocation_repro = "REPRO_OLD",
+#                                  potential_from_soil_texture = "true", stomata_stress = "STOMATA_STRESS_GRANIER",
+#                                  opt_cols = "-"),
+#                     init_wood_by_volume = "true",
+#                     output_type = 1,
+#                     stand = list(species_code = 12,
+#                                  macropor_prop = 0, fineroot_prop = 0.5,
+#                                  dbh = 15, n_trees_ha = 1200, volume_ha = 126,
+#                                  age = 42, clumping = 0.7, LAI = 6, opt_vars = "-")
+# )
 
 inv_options <- list(inventory_file_suffix = "",
                     general = list(cell_size = 20, start_year = 1970,
@@ -103,15 +126,15 @@ inv_options <- list(inventory_file_suffix = "",
                                  opt_cols = "-"),
                     init_wood_by_volume = "true",
                     output_type = 1,
-                    stand = list(species_code = 12,
+                    stand = list(species_code = 14,
                                  macropor_prop = 0, fineroot_prop = 0.5,
-                                 dbh = 15, n_trees_ha = 1200, volume_ha = 126,
-                                 age = 42, clumping = 0.7, LAI = 6, opt_vars = "-")
+                                 dbh = 14.66, n_trees_ha = 1286, volume_ha = 62.56,
+                                 age = 32, clumping = 0.61, LAI = 8, opt_vars = "-")
 )
+# h. davi renecofor site CHP_70
 
 
-# ventoux Hendrik : 10	350	180	24	0.56	5.41
-# Jagodzinski et al : dbh = 15.9, n_trees_ha = 1852, volume_ha = 283.4, age = 40, clumping = 0.5, LAI = 7
+
 
 load("D:/soil/processed/data_soil.Rdata")
 
@@ -150,7 +173,7 @@ data <- list(grid = grid_points, lat = data_soil[grid_points, "lat"], lon = data
              wilt = round(data_soil[grid_points, "WP"],3), stone = round(data_soil[grid_points, "crf_all"],3), 
              bulk = round(data_soil[grid_points, "bld"],3), soil_prop = soil_prop)
 
-species=list(name = "Quercus petraea", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
+species=list(name = "Quercus robur", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
 
 
 ## Create needed files ----
@@ -164,7 +187,7 @@ runlines <- read.table(file.path(wd, "run","runfile.txt"), sep='\t')
 
 ## Run the model ----
 
-ncores <- 26
+ncores <- 15
 list_lines <- split(1:nrow(runlines), cut(seq_along(1:nrow(runlines)), ncores, labels = FALSE))
 
 plan(multisession, workers = ncores)
