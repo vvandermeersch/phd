@@ -81,9 +81,11 @@ background$pres <- 0
 
 # Merge species presence and background points 
 presbg_points <- rbind(pres_points, background)
+saveRDS(presbg_points, file.path(wd, "calibration_points.rds"))
 presbg_points_sf <- sf::st_as_sf(presbg_points, coords = c("lon", "lat"), crs = "EPSG:4326")
 model_data <- terra::extract(r_pred, presbg_points_sf, df = TRUE, ID = FALSE)
 model_data$pres <- as.numeric(presbg_points_sf$pres)
+saveRDS(model_data, file.path(wd, "calibration_predictors.rds"))
 
 # Data for every species points
 presabs_points_sf <- sf::st_as_sf(presabs_points, coords = c("lon", "lat"), crs = "EPSG:4326")
