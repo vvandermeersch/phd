@@ -126,3 +126,14 @@ monthly_downscale <- function(yr_interval, years_list = NULL,
   }
   
 }
+
+#extract months (between 1 - 6000)
+.year_to_months <- function(yr_beg, yr_end, max_year){
+  
+  min_mn <- ((max_year-yr_end)+1)*12-11
+  max_mn <- ((max_year-yr_beg)+1)*12
+  
+  return(list(min = min_mn, max = max_mn))
+  
+}
+

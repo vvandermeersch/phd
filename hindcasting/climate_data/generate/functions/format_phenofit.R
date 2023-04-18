@@ -10,13 +10,15 @@ format_phenofit <- function(yr, tmin, tmax, pre, pet, glo, wind, tdew, alt, whc,
   tmax_df <- round(tmax_df[,c(2,1,3:ncol(tmax_df))],2)
   tmean <- (tmin+tmax)/2
   tmean_df <- as.data.frame(tmean, xy = T)
-  tmean_df <- round(tmin_df[,c(2,1,3:ncol(tmean_df))],2)
+  tmean_df <- round(tmean_df[,c(2,1,3:ncol(tmean_df))],2)
   pre_df <- as.data.frame(pre, xy = T)
   pre_df <- round(pre_df[,c(2,1,3:ncol(pre_df))],2)
   pet_df <- as.data.frame(pet, xy = T)
   pet_df <- round(pet_df[,c(2,1,3:ncol(pet_df))],2)
+  pet_df[is.na(pet_df)] <- 0
   glo_df <- as.data.frame(glo, xy = T)
   glo_df <- round(glo_df[,c(2,1,3:ncol(glo_df))],2)
+  glo_df[is.na(glo_df)] <- 0
   wind_df <- as.data.frame(wind, xy = T)
   wind_df <- round(wind_df[,c(2,1,3:ncol(wind_df))],2)
   tdew_df <- as.data.frame(tdew, xy = T)

@@ -139,6 +139,7 @@ generate_radiation_PET <- function(tmin, tmax, cloud, pre, wind, alt, ratm, dayl
     (ss + gamma * (1 + 0.34 * u2))
   pet[pet<0] <- 0
   
+  
   return(pet)
   
 }
