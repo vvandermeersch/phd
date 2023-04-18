@@ -1,7 +1,7 @@
 # function to run GWGEN in parallel
 # see gwgen() function
 
-gwgen_in_parallel <- function(input_file, wd, ncores){
+gwgen_in_parallel <- function(input_file, wd, ncores, dir_gwgen){
   
   # Split GWGEN csv file in several chunks
   my_file <- fread(input_file)
@@ -30,7 +30,7 @@ gwgen_in_parallel <- function(input_file, wd, ncores){
   
   gwgen_split_files <- future_lapply(split_files, function(x){
     
-    gwgen(x, output_dir = file.path(wd, "outputs", "temp"))
+    .gwgen(x, output_dir = file.path(wd, "outputs", "temp"), dir_gwgen)
     
   })
   
@@ -57,3 +57,41 @@ gwgen_in_parallel <- function(input_file, wd, ncores){
   return(output_file)
 
 }
+
+
+
+# function to launch GWGEN (Sommer & Kaplan, 2017)
+
+# it uses with a bat script which uses MinGW64 shell (must be installed)
+# see mingw_w64_gwgen.bat for details
+
+# author : V. Van der Meersch - 13/10/2022
+
+.gwgen <- function(input_file, output_dir, dir_gwgen){
+  
+  if(file.exists(file.path(output_dir, "error.temp"))){
+    rem <- file.remove(file.path(output_dir, "error.temp"))
+  }
+  
+  output_file <- file.path(output_dir, paste0(strsplit(basename(input_file), "\\.")[[1]][1], "_out.csv"))
+  
+  cmd_line <- paste("cd", dir_gwgen, "&&", "mingw_w64_gwgen.bat", input_file, output_file, output_dir, sep = " ")
+  
+  shell(cmd_line, mustWork = TRUE)
+  
+  start_time <- Sys.time()
+  while(!file.exists(file.path(output_dir, "check.temp")) & round(as.double(Sys.time()-start_time, units = "mins"), 1)< 60){
+    Sys.sleep(30)
+    if(file.exists(file.path(output_dir, "error.temp"))){
+      stop(paste0("Could not converge during daily weather generation with ", input_file, " !"))
+    }
+  }
+  
+  rem <- file.remove(file.path(output_dir, "check.temp"))
+  
+  cat("GWGEN run is over !\n")
+  
+  return(output_file)
+  
+}
+

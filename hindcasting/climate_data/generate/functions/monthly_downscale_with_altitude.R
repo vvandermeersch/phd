@@ -16,7 +16,7 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
     
     yrb <- l[length(l)]
     yre <- l[1]
-    rmonths <- year_to_months(yrb, yre, yr_interval[2]) 
+    rmonths <- .year_to_months(yrb, yre, yr_interval[2]) 
     
     cat(paste0("Doing time slice ", yre,"-", yrb, " BP\n"))
     
@@ -28,6 +28,9 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
     tmax_LR <- crop(rast(file.path(in_folder, "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                              paste0("tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", time_slice, ".nc")),
                    subds = "tempmax_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO"), extent)
+    pre_LR <- crop(rast(file.path(in_folder, "precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
+                                  paste0("precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", time_slice, ".nc")),
+                        subds = "precip_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO"), extent)
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     
@@ -58,10 +61,12 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
     alt_LR <- mask(alt_LR, WHC_LR)
     tmin_LR <- mask(tmin_LR, WHC_LR)
     tmax_LR <- mask(tmax_LR, WHC_LR)
+    pre_LR <- mask(pre_LR, WHC_LR)
     
     # 0. Create rasters
     tmax_reg_LR <- rast()
     tmin_reg_LR <- rast()
+    pre_reg_LR <- rast()
     
     # 0. Extrapolate coastal cells
     if(foc_extrapol){
@@ -69,6 +74,7 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
       start_time <- Sys.time()
       tmax_LR <- mask(focal(tmax_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       tmin_LR <- mask(focal(tmin_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
+      pre_LR <- mask(focal(pre_LR, w = 3, fun = "mean", na.policy ="only"), alt_LR)
       end_time <- Sys.time()
       # cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     }
@@ -77,6 +83,7 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
     .alt_LR <- wrap(alt_LR)
     .tmax_LR <- wrap(tmax_LR)
     .tmin_LR <- wrap(tmin_LR)
+    .pre_LR <- wrap(pre_LR)
     
     # 1. Quantify the change with height at the native coarse resolution 
     plan(multisession, workers = ncores)
@@ -112,16 +119,34 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
     tmin_reg_LR <- rast(lapply(tmin_reg_LR, rast))
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
+    cat("Computing precipitation regressions\n") # (~ 6min)
+    start_time <- Sys.time()
+    pre_reg_LR <- future_lapply(1:dim(pre_LR)[3], function(d){
+      alt_LRw <- rast(.alt_LR) # load packed altitude
+      pre_LRw <- rast(.pre_LR) # load packed climate
+      rd <- subset(pre_LRw, d) # layer for day d
+      regd <- rd # raster to keep regression coef.
+      regd[] <- NA
+      regcoef <- sapply(cells(rd), .compute_reg_coef, r = rd, ralt = alt_LRw)
+      regd[cells(rd)] <- as.numeric(regcoef)
+      .regd <- wrap(regd) # pack raster
+      return(.regd)
+    }, future.seed=TRUE)
+    pre_reg_LR <- rast(lapply(pre_reg_LR, rast))
+    end_time <- Sys.time()
+    cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     plan(sequential)
     gc(verbose = FALSE)
     
     # 2. Interpolate the slope to the high-resolution grid
     tmax_reg_LR_HR <- resample(tmax_reg_LR, alt_HR)
     tmin_reg_LR_HR <- resample(tmin_reg_LR, alt_HR)
+    pre_reg_LR_HR <- resample(pre_reg_LR, alt_HR)
     
     # 3. Interpolate coarse variables to the high-resolution
     tmax_LR_HR <- resample(tmax_LR, alt_HR)
     tmin_LR_HR <- resample(tmin_LR, alt_HR)
+    pre_LR_HR <- resample(pre_LR, alt_HR)
     
     # 4. Interpolate coarse elevation field at high resolution
     alt_LR_HR <- resample(alt_LR, alt_HR)
@@ -130,18 +155,23 @@ monthly_downscale_with_altitude <- function(yr_interval, years_list = NULL,
     cat("Applying height correction\n")
     tmax_HR <- tmax_LR_HR + tmax_reg_LR_HR * (alt_HR - alt_LR_HR)
     tmin_HR <- tmin_LR_HR + tmin_reg_LR_HR * (alt_HR - alt_LR_HR)
+    pre_HR <- pre_LR_HR + pre_reg_LR_HR * (alt_HR - alt_LR_HR)
+    pre_HR[pre_HR<0] <- 0 # check
     
     # 6. Write data on disk
     cat("Writing final rasters\n")
     start_time <- Sys.time()
     time_slice_l <- paste0(yre, "_", yrb, "kyr")
-    writeCDF(tmin_HR, file.path(out_folder, "tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
-                                     paste0("tempmin_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice_l, ".nc")),
+    writeCDF(tmin_HR, file.path(out_folder, "tempmin_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr",
+                                     paste0("tempmin_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", time_slice_l, ".nc")),
              varname = "tempmin_av", overwrite=TRUE)
 
-    writeCDF(tmax_HR, file.path(out_folder, "tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_24000_0kyr",
-                                     paste0("tempmax_av_old_sims_1yrAvg_monthly_10minRes_CRU_Europe_", time_slice_l, ".nc")),
+    writeCDF(tmax_HR, file.path(out_folder, "tempmax_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr",
+                                     paste0("tempmax_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", time_slice_l, ".nc")),
                 varname = "tempmax_av", overwrite=TRUE)
+    writeCDF(pre_HR, file.path(out_folder, "precip_mm_srf_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr",
+                                  paste0("precip_mm_srf_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", time_slice_l, ".nc")),
+             varname = "precip_mm_srf", overwrite=TRUE)
     end_time <- Sys.time()
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     
