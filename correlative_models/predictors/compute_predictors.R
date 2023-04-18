@@ -10,11 +10,11 @@ library(abind)
 #--------------------#
 # Bioclim predictors #
 #--------------------#
-bioclim_data_dir <- "D:/climate/ERA5-Land/bioclim_format_2"
+bioclim_data_dir <- "D:/climate/ERA5-Land/bioclim_format"
 
 # Mean of 31 years of bioclim data from ERA5-Land
 biovars_all <- list()
-for(i in as.character(1970:2000)){
+for(i in as.character(1951:1980)){
   load(paste0(bioclim_data_dir, "/biovars_", i, ".Rdata"))
   biovars_all <- append(biovars_all, list(biovars))
 }
@@ -55,7 +55,7 @@ clim_data_dir <- "D:/climate/ERA5-Land/phenofit_format/transformed"
 day_begin <- 152
 day_end <- 212
 water_bal_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   pet_file <- paste0(clim_data_dir, "/ERA5LAND_", "pet", "_", i, "_dly.fit")
   pet <- fread(pet_file, showProgress=F)
   names(pet)[1:2] <- c("lat", "lon")
@@ -84,7 +84,7 @@ day_begin <- 60
 day_end <- 304
 base_temp <- 0
 sumGDD_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean <- fread(tmean_file, showProgress = F)
   names(tmean)[1:2] <- c("lat", "lon")
@@ -107,7 +107,7 @@ day_begin <- 60
 day_end <- 304
 base_temp <- 5
 sumGDD_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean <- fread(tmean_file, showProgress = F)
   names(tmean)[1:2] <- c("lat", "lon")
@@ -130,7 +130,7 @@ day_begin <- 91
 day_end <- 273
 base_temp <- 5
 sumGDD_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean <- fread(tmean_file, showProgress = F)
   names(tmean)[1:2] <- c("lat", "lon")
@@ -153,7 +153,7 @@ rm(tmean, sumGDD_all)
 day_begin <- 305
 day_end <- 59
 ndays10_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean_n <- fread(tmean_file, showProgress = F)
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i-1, "_dly.fit")
@@ -182,7 +182,7 @@ rm(tmean_n, tmean_n1, ndays10_all)
 day_begin <- 305
 day_end <- 59
 ndays5_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean_n <- fread(tmean_file, showProgress = F)
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i-1, "_dly.fit")
@@ -212,7 +212,7 @@ day_begin <- 1
 day_end <- 212
 tfrost <- 0
 lastdfrost_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmin_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmn", "_", i, "_dly.fit")
   tmin <- fread(tmin_file, showProgress = F)
   names(tmin)[1:2] <- c("lat", "lon")
@@ -246,7 +246,7 @@ rm(tmin, lastdfrost_all)
 day_begin <- 91
 day_end <- 151
 ndaysinf5_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmin_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmn", "_", i, "_dly.fit")
   tmin_n <- fread(tmin_file, showProgress = F)
   names(tmin_n)[1:2] <- c("lat", "lon")
@@ -268,7 +268,7 @@ rm(tmin_n, ndaysinf5_all)
 day_begin <- 91
 day_end <- 151
 ndaysinf0_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmin_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmn", "_", i, "_dly.fit")
   tmin_n <- fread(tmin_file, showProgress = F)
   names(tmin_n)[1:2] <- c("lat", "lon")
@@ -290,7 +290,7 @@ rm(tmin_n, ndaysinf0_all)
 day_begin <- 91
 day_end <- 151
 ndaysinf2_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmin_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmn", "_", i, "_dly.fit")
   tmin_n <- fread(tmin_file, showProgress = F)
   names(tmin_n)[1:2] <- c("lat", "lon")
@@ -313,7 +313,7 @@ day_begin <- 60
 day_end <- 151
 base_temp <- 0
 sumGDD_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean <- fread(tmean_file, showProgress = F)
   names(tmean)[1:2] <- c("lat", "lon")
@@ -336,7 +336,7 @@ day_begin <- 152
 day_end <- 273
 base_temp <- 0
 sumGDD_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean <- fread(tmean_file, showProgress = F)
   names(tmean)[1:2] <- c("lat", "lon")
@@ -358,7 +358,7 @@ rm(tmean, sumGDD_all)
 day_begin <- 60
 day_end <- 304
 ndayssup10_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmean_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmp", "_", i, "_dly.fit")
   tmean_n <- fread(tmean_file, showProgress = F)
   names(tmean_n)[1:2] <- c("lat", "lon")
@@ -380,7 +380,7 @@ rm(tmean_n, ndayssup10_all)
 day_begin <- 152
 day_end <- 243
 ndaysinf0_all <- c()
-for(i in 1970:2000){
+for(i in 1951:1980){
   tmin_file <- paste0(clim_data_dir, "/ERA5LAND_", "tmn", "_", i, "_dly.fit")
   tmin_n <- fread(tmin_file, showProgress = F)
   names(tmin_n)[1:2] <- c("lat", "lon")
@@ -424,4 +424,5 @@ predictors_data$nd_neg5deg <- ndaysinf5_30y
 predictors_data$nd_neg0deg <- ndaysinf0_30y
 predictors_data$nd_neg2deg <- ndaysinf2_30y
 predictors_data$nd_summerfrost <- ndayssummerfrost_30y
-save(predictors_data, file = "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors/predictors_data.Rdata")
+predictors_data$w_bal <-  water_bal_30y
+save(predictors_data, file = "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/predictors/predictors_data_1951_1980.Rdata")

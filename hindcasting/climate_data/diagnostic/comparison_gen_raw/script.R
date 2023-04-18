@@ -187,7 +187,7 @@ ggplot(data = glo_df) +
 
 
 # load generated daily values
-gen_glo <- sapply(c(seq(21000,1000,-2000), seq(10800,10000,-200), seq(2000, 16000, 2000)), function(yr){
+gen_glo <- sapply(c(seq(21000,1000,-2000), seq(2000, 16000, 2000), seq(9800, 8200, -200), 8200), function(yr){
   print(yr)
   d <- fread(file.path(data_dir, "phenofit_format", "05deg_cor", paste0(yr, "BP"),
                        paste0("HadCM3B_glo_-", yr,"_dly.fit")))
@@ -195,11 +195,12 @@ gen_glo <- sapply(c(seq(21000,1000,-2000), seq(10800,10000,-200), seq(2000, 1600
   return(sum(as.matrix(d))/nrow(d))
 })
 
-gglo_df <- data.frame(year = c(seq(21000,1000,-2000), seq(10800,10000,-200), seq(2000, 16000, 2000)), gen = gen_glo)
+gglo_df <- data.frame(year = c(seq(21000,1000,-2000), seq(2000, 16000, 2000), seq(9800, 8200, -200), 8200), gen = gen_glo)
 
 ggplot() +
   geom_line(data = glo_df[glo_df$year >= 1000,], aes(x = year, y = raw), col = "#a8e6cf", size = 1, alpha = 0.6) +
-  geom_point(data = gglo_df, aes(x = year, y = gen), col = "#ffaaa5", size = 3) +
+  geom_point(data = gglo_df, aes(x = year, y = gen), col = "#ffaaa5", size = 2) +
+  geom_line(data = gglo_df, aes(x = year, y = gen), col = "#ffaaa5", size = 0.5) +
   scale_x_continuous(breaks = seq(1000, 21000, by = 2000)) +
   theme_minimal() +
   ylab("Global radiation") + 
@@ -207,13 +208,12 @@ ggplot() +
   theme(axis.text=element_text(size=12, color = "#c0c2ce"),
         axis.title=element_text(size=12, color = "#49657b"),
         panel.grid.minor = element_blank(),
-        panel.grid.major = element_line(linewidth = 0.1, color = "#c0c2ce"))     
+        panel.grid.major = element_line(linewidth = 0.05, color = alpha("#c0c2ce", 0.2)))     
 
 
+data <- na.omit(left_join(gglo_df, glo_df))
 
-
-
-
+RMSPE <- sqrt(mean(((data$raw - data$gen) / data$raw)^2)) # mean absolute percentage error
 
 
 
