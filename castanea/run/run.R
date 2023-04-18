@@ -210,10 +210,10 @@ with_progress(system.time(run()))
 
 
 
-# Read output variables
+# Read output variables D:/simulations/castanea/forward/quercus_petraea_capsisrevision18131
 
 
-reserve_biomass <- read_mean_outputvalue(grid_points, lambda = 1, output_folder = 'D:/applications/capsis4_castanea/var', var = "BiomassOfReserves")
+reserve_biomass <- read_mean_outputvalue(grid_points, lambda = 1, output_folder = 'D:/simulations/castanea/forward/quercus_petraea_capsisrevision18131', var = "BiomassOfReserves")
 npp <- read_mean_outputvalue(grid_points, lambda = 1, output_folder = 'D:/applications/capsis4_save/var', var = "NPP")
 gpp <- read_mean_outputvalue(grid_points, lambda = 1, output_folder = 'D:/applications/capsis4_save/var', var = "GPP")
 reserve_biomass <- t(reserve_biomass)
