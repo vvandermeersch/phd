@@ -1,4 +1,5 @@
 # function to write CSV in the format required by GWGEN
+# adapted to match with 10min downscaled netcdf format
 # return output file name
 
 # author : V. Van der Meersch - 18/01/2022
@@ -6,10 +7,11 @@
 # debug option (strange wet days without precipitation ?)
 # + some wind and cloud data are missing (in rare case)
 
-write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, debug_wet = F, debug_wndcld = F, debug_years = F){
+write_gwgen_csv <- function(years, extent, source_dir, output_dir, 
+                                 WHC_present, debug_wet = F, debug_wndcld = F){
   
   # get file spec
-  file_spec <- years_to_file(years)
+  filename <- paste0(years[2], "_", years[1], "kyr")
   outname <-   ifelse(!is.na(years [2]) ,paste0(years[1], "_",years[2],"BP"), paste0(years[1], "_BP"))
   
   # write header as require by gwgen
@@ -17,36 +19,29 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, 
               "cloud fraction", "wind speed", "precipitation", "wet")
   write.table(t(header), file = file.path(output_dir, paste0(outname, "_gwgen.csv")), col.names = FALSE, row.names = FALSE, sep=",")
   
-  # get months (ie subset of layers, or "bands")
-  rmonths <- year_to_months(years[1], years[2], file_spec$max)
-  
   # load raster files
   cat("Loading raster files \n")
-  r_tmin <- rast(file.path(source_dir, "tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
-                           paste0("tempmin_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                 subds = "tempmin_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  r_tmax <- rast(file.path(source_dir, "tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
-                           paste0("tempmax_av_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                 subds = "tempmax_av", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  r_pre <- rast(file.path(source_dir, "precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
-                          paste0("precip_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                subds = "precip_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  r_wet <- rast(file.path(source_dir, "rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                          paste0("rd3_mm_srf_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                subds = "rd3_mm_srf", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  r_cloud <- rast(file.path(source_dir, "totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
-                            paste0("totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", file_spec$name, ".nc")),
-                  subds = "totCloud_mm_ua", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  r_uwind <- rast(file.path(source_dir, "u_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                            paste0("u_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                  subds = "u_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  r_vwind <- rast(file.path(source_dir, "v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
-                            paste0("v_mm_10m_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", file_spec$name, ".nc")),
-                  subds = "v_mm_10m", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO")
-  
-  # calculate wind
-  # r_u2 <- r_uwind * r_uwind
-  # r_wind <- sqrt(r_uwind^2 + r_vwind^2)
+  r_tmin <- rast(file.path(source_dir, "tempmin_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr", 
+                           paste0("tempmin_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", filename, ".nc")),
+                 subds = "tempmin_av", opts="HONOUR_VALID_RANGE=NO")
+  r_tmax <- rast(file.path(source_dir, "tempmax_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr", 
+                           paste0("tempmax_av_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", filename, ".nc")),
+                 subds = "tempmax_av", opts="HONOUR_VALID_RANGE=NO")
+  r_pre <- rast(file.path(source_dir, "precip_mm_srf_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr", 
+                          paste0("precip_mm_srf_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", filename, ".nc")),
+                subds = "precip_mm_srf", opts="HONOUR_VALID_RANGE=NO")
+  r_wet <- rast(file.path(source_dir, "rd3_mm_srf_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_24000_0kyr", 
+                          paste0("rd3_mm_srf_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_", filename, ".nc")),
+                subds = "rd3_mm_srf", opts="HONOUR_VALID_RANGE=NO")
+  r_cloud <- rast(file.path(source_dir, "totCloud_mm_ua_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_24000_0kyr", 
+                            paste0("totCloud_mm_ua_old_sims_1yrAvg_monthly_15minRes_CRU_Europe_", filename, ".nc")),
+                  subds = "totCloud_mm_ua", opts="HONOUR_VALID_RANGE=NO")
+  r_uwind <- rast(file.path(source_dir, "u_mm_10m_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_24000_0kyr", 
+                            paste0("u_mm_10m_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_", filename, ".nc")),
+                  subds = "u_mm_10m", opts="HONOUR_VALID_RANGE=NO")
+  r_vwind <- rast(file.path(source_dir, "v_mm_10m_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_24000_0kyr", 
+                            paste0("v_mm_10m_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_", filename, ".nc")),
+                  subds = "v_mm_10m", opts="HONOUR_VALID_RANGE=NO")
   
   # crop
   cat("Cropping raster files \n")
@@ -57,34 +52,6 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, 
   r_cloud <- crop(r_cloud, extent)
   r_uwind <- crop(r_uwind, extent)
   r_vwind <- crop(r_uwind, extent)
-  
-  # mask with altitude data from ICE6GC
-  cat("Masking raster files \n")
-  mid_year <- (years[1]+years[2])/2
-  alt <- load_altitude_ICE6GC(year = mid_year, folder = "D:/climate/ICE-6G-C", folder_hadcm3b = "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw", extent)
-  alt_r <- rast(alt[,c("lon", "lat", "alt")])
-  crs(alt_r) <- crs(r_tmin)
-  r_tmin <- mask(r_tmin, alt_r)
-  r_tmax <- mask(r_tmax, alt_r)
-  r_pre <- mask(r_pre, alt_r)
-  r_wet <- mask(r_wet, alt_r)
-  r_cloud <- mask(r_cloud, alt_r)
-  r_uwind <- mask(r_uwind, alt_r)
-  r_vwind <- mask(r_uwind, alt_r)
-  
-  # mask with WHC data (from present)
-  WHC_present_r <- rast(WHC_present[,c("lon", "lat", "whc")])
-  WHC_present_r <- aggregate(WHC_present_r, 5, na.rm = T)
-  WHC_present_r <- terra::resample(WHC_present_r, alt_r, method = "bilinear")
-  WHC_present_r <- mask(WHC_present_r, alt_r)
-  crs(WHC_present_r) <- crs(r_tmin)
-  r_tmin <- mask(r_tmin, WHC_present_r)
-  r_tmax <- mask(r_tmax, WHC_present_r)
-  r_pre <- mask(r_pre, WHC_present_r)
-  r_wet <- mask(r_wet, WHC_present_r)
-  r_cloud <- mask(r_cloud, WHC_present_r)
-  r_uwind <- mask(r_uwind, WHC_present_r)
-  r_vwind <- mask(r_uwind, WHC_present_r)
   
   
   cat(paste0("Number of cells: ", ncell(r_tmin), "\n"))
@@ -99,15 +66,12 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, 
   vwind <- as.vector(r_vwind)
   wind <- sqrt(uwind^2 + vwind^2)
   
-  id <- rep(1:ncell(r_tmin), length(rmonths$min:rmonths$max))
-  lon <- rep(unlist(lapply(1:ncell(r_tmin), function(i)xFromCell(r_tmin, i))), length(rmonths$min:rmonths$max))
-  lat <- rep(unlist(lapply(1:ncell(r_tmin), function(i)yFromCell(r_tmin, i))), length(rmonths$min:rmonths$max))
+  id <- rep(1:ncell(r_tmin), dim(r_tmin)[3])
+  lon <- rep(unlist(lapply(1:ncell(r_tmin), function(i)xFromCell(r_tmin, i))), dim(r_tmin)[3])
+  lat <- rep(unlist(lapply(1:ncell(r_tmin), function(i)yFromCell(r_tmin, i))), dim(r_tmin)[3])
   month <- rep(unlist(lapply(1:12, function(i)rep(i,ncell(r_tmin)))), length(years[1]:years[2]))
   yr <- unlist(lapply(years[2]:years[1], function(i)rep(i,ncell(r_tmin)*12))) # time goes forward
-  if(debug_years){
-    yr <- unlist(lapply(1900:1930, function(i)rep(i,ncell(r_tmin)*12)))
-  }
-  
+
   data <- data.frame(id = id, lon = lon, lat = lat, yr = yr, month = month, 
                      tmin = round(tmin, 4), tmax = round(tmax, 4), 
                      cloud = round(cloud, 4), wind = round(wind, 4), 
@@ -119,11 +83,11 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, 
   nobs <- data %>% group_by(id) %>% count()
   nobs_max <- max(nobs$n)
   nobs_incomplete <- nobs %>% filter(n != nobs_max)
-  cat(paste0(nrow(nobs_incomplete), " cells are incomplete. Removing them..."))
+  cat(paste0(nrow(nobs_incomplete), " cells are incomplete.\n"))
   data <- data %>% filter(!(id %in% nobs_incomplete$id))
   
   
-  cat(paste0("Number of cells with data: ", nrow(data)/length(rmonths$min:rmonths$max), "\n"))
+  cat(paste0("Number of cells with data: ", nrow(data)/dim(r_tmin)[3], "\n"))
   
   if(debug_wet){
     data[data$pre >= 1 & data$pre <= 2, "wetd"] <- 1
@@ -143,5 +107,9 @@ write_gwgen_csv <- function(years, extent, source_dir, output_dir, WHC_present, 
   message("CSV file created !")
   
   return(file.path(output_dir, paste0(outname, "_gwgen.csv")))
+  
+  
+  
+  
   
 }
