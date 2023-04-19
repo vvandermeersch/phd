@@ -8,4 +8,7 @@
      
 * Elith and Graham (2009), Qiao et al. (2018) : interpolation/extrapolation along environmental gradients (response curves)  
    *=> Is this approach applicable/relevant with PBM? How could we draw a PBM response curve against the same predictor gradient as a SDM ?*  
-   ![Example response curve](observedresponse_example.png)
+   ![Example response curve](observedresponse_example.png)  
+  
+* Link between categorical approach and observed response curves ?
+   ![Categorical response curve](observedresponse_catagorical.png) 
