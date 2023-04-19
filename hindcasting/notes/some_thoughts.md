@@ -11,4 +11,4 @@
    ![Example response curve](observedresponse_example.png)  
   
 * Link between categorical approach and observed response curves ?
-   ![Categorical response curve](observedresponse_catagorical.png) 
+   ![Categorical response curve](observedresponse_categorical.png) 
