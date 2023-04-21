@@ -12,34 +12,94 @@ pred_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
 
 .round_acc = function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
 
-.get_response_curve <- function(data, variable, calibration_data = NULL, fullname, round_factor = 0.1){
+.get_response_curve <- function(data, variable, calibration_data = NULL, fullname, round_factor = 0.1, categorized = FALSE){
   
-  data_plot <- data.frame(model = data$mod, var = data[,variable], fitness = data$fitness)
-  data_plot$var <- .round_acc(data_plot$var, round_factor)
-  data_plot <- data_plot %>%
-    dplyr::group_by(model, var) %>% 
-    dplyr::summarise(fitness = median(fitness))
-  
-  plot <- ggplot(data = data_plot, aes(x = var, y = fitness, col = model)) + 
-    geom_line() +
-    theme_minimal() +
-    scale_y_continuous(expand = expansion(mult = c(0.02, 0.05)),
-                       name = "Fitness") +
-    scale_x_continuous(name = fullname) +
-    scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                       values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
-    theme_bw() + 
-    theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-          axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
-          axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
-          legend.position="bottom", legend.title=element_blank())
-  
-  if(!is.null(calibration_data)){
-    plot <- plot + 
-      geom_vline(xintercept = min(calibration_data[,variable]),linetype="dashed", color = "red", linewidth = 0.7) +
-      geom_vline(xintercept = max(calibration_data[,variable]), linetype="dashed", color = "red", linewidth = 0.7)
+  if(!categorized){
+    
+    data_plot <- data.frame(model = data$mod, var = data[,variable], fitness = data$fitness)
+    data_plot$var <- .round_acc(data_plot$var, round_factor)
+    data_plot <- data_plot %>%
+      dplyr::group_by(model, var) %>% 
+      dplyr::summarise(fitness = median(fitness))
+    
+    plot <- ggplot(data = data_plot, aes(x = var, y = fitness, col = model)) + 
+      geom_line() +
+      theme_minimal() +
+      scale_y_continuous(expand = expansion(mult = c(0.02, 0.05)),
+                         name = "Fitness") +
+      scale_x_continuous(name = fullname) +
+      scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+                         values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+      theme_bw() + 
+      theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+            axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+            axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+            legend.position="bottom", legend.title=element_blank())
+    
+    if(!is.null(calibration_data)){
+      plot <- plot + 
+        geom_vline(xintercept = min(calibration_data[,variable]),linetype="dashed", color = "red", linewidth = 0.7) +
+        geom_vline(xintercept = max(calibration_data[,variable]), linetype="dashed", color = "red", linewidth = 0.7)
+    }
+    
+    
+  }else{
+    
+    data_plot <- data
+    data_plot$cat <- factor(ifelse(data_plot$novel, "Full extrapolation", 
+                                   ifelse(!data_plot$overlapping & data_plot$combination, "Novel combination", 
+                                          "Interpolation")), levels = c("Interpolation", "Novel combination", "Full extrapolation"))
+    
+    data_plot <- data.frame(model = data_plot$mod, cat = data_plot$cat, var = data_plot[,variable], fitness = data_plot$fitness)
+    # data_plot$var <- .round_acc(data_plot$var, round_factor)
+    # data_plot <- data_plot %>%
+    #   dplyr::group_by(model, var, cat) %>% 
+    #   dplyr::summarise(fitness = median(fitness))
+    
+    # plot <- ggplot(data = data_plot, aes(x = var, y = fitness, col = model)) + 
+    #   geom_line() +
+    #   facet_grid(. ~ cat) +
+    #   theme_minimal() +
+    #   scale_y_continuous(expand = expansion(mult = c(0.02, 0.05)),
+    #                      name = "Fitness") +
+    #   scale_x_continuous(name = fullname) +
+    #   scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+    #                      values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+    #   theme_bw() + 
+    #   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+    #         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+    #         axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+    #         axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+    #         legend.position="bottom", legend.title=element_blank(),
+    #         strip.background = element_blank(),
+    #         strip.text = element_text(colour = "black", family= "Noto Sans", size = 8.5))
+    
+    
+    
+    plot <- ggplot(data = data_plot, aes(x = var)) + 
+      facet_grid(. ~ cat) +
+      geom_histogram(aes(x = var, y=after_stat(density)), alpha = 0.2) +
+      stat_summary_bin(aes(y = fitness, col = model), fun = "median", geom = "line", binwidth = round_factor) +
+      theme_minimal() +
+      scale_y_continuous(expand = expansion(mult = c(0.02, 0.05)),
+                         limits = c(0,1),
+                         name = "Fitness") +
+      scale_x_continuous(name = fullname) +
+      scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+                         values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+      theme_bw() + 
+      theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+            axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+            axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+            legend.position="bottom", legend.title=element_blank(),
+            strip.background = element_blank(),
+            strip.text = element_text(colour = "black", family= "Noto Sans", size = 8.5))
+    
   }
+  
+  
   
   return(plot)
   
@@ -57,6 +117,7 @@ model_response <- lapply(1:nrow(models),function(i){
     fitness <- left_join(fitness, predictors, by = c("lat", "lon"))
     
     return(data.frame(year = year, mod = mod$name,
+                      lat = fitness$lat, lon = fitness$lon,
                       fitness = fitness$pred, 
                       bio6 = fitness$bio6,
                       bio12 = fitness$bio12,

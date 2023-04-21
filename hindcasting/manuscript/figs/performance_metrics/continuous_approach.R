@@ -152,5 +152,98 @@ performance_figure <- plot_grid(
   ncol = 1,
   rel_heights = c(1,0.1)
 )
+
+model_performance <- left_join(model_performance, climatic_distance, by = c("year"))
+
+auc_plot <- ggplot(data = model_performance) +
+  geom_line(aes(x = median, y = auc, col = mod)) +
+  #geom_point(aes(x = year, y = auc, col = mod)) +
+  annotate("rect", xmin=1.1, xmax=1.7, ymin=0.25, ymax=0.5, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "red", linewidth = 0.7) +
+  scale_x_reverse(breaks = seq(1.2,1.8,0.2),
+                  expand = c(0, 0),
+                  name = "Median climatic distance") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "AUC") +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+tss_plot <- ggplot(data = model_performance) +
+  geom_line(aes(x = median, y = tss, col = mod)) +
+  #geom_point(aes(x = year, y = tss, col = mod)) +
+  annotate("rect", xmin=1.1, xmax=1.7, ymin=0, ymax=-0.25, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0, linetype="dashed", color = "red", linewidth = 0.7) +
+  scale_x_reverse(breaks = seq(1.2,1.8,0.2),
+                  expand = c(0, 0),
+                  name = "Median climatic distance") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "TSS") +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+boyceindex_plot <- ggplot(data = model_performance) +
+  geom_line(aes(x = median, y = bi, col = mod)) +
+  #geom_point(aes(x = year, y = bi, col = mod)) +
+  annotate("rect", xmin=1.1, xmax=1.7, ymin=0, ymax=-0.75, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0, linetype="dashed", color = "red", linewidth = 0.7) +
+  scale_x_reverse(breaks = seq(1.2,1.8,0.2),
+                  expand = c(0, 0),
+                  name = "Median climatic distance") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "Boyce index") +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+sorensen_plot <- ggplot(data = model_performance) +
+  geom_line(aes(x = median, y = sorensen, col = mod)) +
+  #geom_point(aes(x = year, y = sorensen, col = mod)) +
+  scale_x_reverse(breaks = seq(1.2,1.8,0.2),
+                  expand = c(0, 0),
+                  name = "Median climatic distance") +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.05)),
+                     name = "Sørensen index") +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+
+performance_figure_climdistance <- plot_grid(
+  auc_plot + theme(legend.position = 'none'), tss_plot + theme(legend.position = 'none'),
+  boyceindex_plot + theme(legend.position = 'none'), sorensen_plot + theme(legend.position = 'none'),
+  ncol = 2,
+  align = "v"
+) 
+
+performance_figure_climdistance <- plot_grid(
+  performance_figure_climdistance,
+  get_legend(auc_plot),
+  ncol = 1,
+  rel_heights = c(1,0.1)
+)
+
+
   
 

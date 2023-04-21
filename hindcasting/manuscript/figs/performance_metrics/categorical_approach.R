@@ -26,7 +26,7 @@ hv <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/performance
 e_box <- expectation_box(calibration_predictors_s) # broader estimate (range limits)
 
 # Determine categories
-predictors_cat <- lapply(seq(1000,15000,1000), function(year){
+predictors_cat <- lapply(seq(500,9000,500), function(year){
   
   pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
   predictors <- readRDS(file.path(pred_folder, paste0("predictors_", year, "BP.rds")))
