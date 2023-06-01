@@ -3,18 +3,20 @@
 #------------------------------------------#
 
 library(AUC)
+library(dplyr)
 source(file.path("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation", "functions/read_mean_outputvalue.R"))
 
 sp_folder <- "D:/species/processed"
-sp_presabs <- readRDS(file.path(sp_folder, "fagus_sylvatica/fagus_sylvatica_presabs_woUkraine.rds"))
-sp_name <- "fagus_sylvatica"
+sp_presabs <- readRDS(file.path(sp_folder, "quercus_petraea/quercus_petraea_presabs_woUkraine.rds"))
+sp_name <- "quercus_petraea"
 
 
 
-out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica"
-#sim_folder <- "D:/simulations/phenofit/backward/fagus_sylvatica/paper_data/CMAES/subset4_rep1"
-sim_folder <- "D:/simulations/phenofit/forward/fagus_sylvatica/VVanderMeersch"
-filename <- "Fagus_sylvatica_VVanderMeersch"
+out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_petraea"
+# sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_robur/paper_data/CMAES/subset2_rep5"
+sim_folder <- "D:/simulations/phenofit/present/expert/quercus_petraea/EvolLett2019"
+# filename <- "cmaes_fit_subset2_rep5"
+filename <- "Quercus_petraea_EvolLett2019"
 modality <- "expert calibration"
 
 # Compute AUC on every pres/abs points
