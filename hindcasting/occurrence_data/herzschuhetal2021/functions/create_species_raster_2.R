@@ -1,11 +1,21 @@
 
-create_species_raster <- function(year, field, dataset_count, grid, conservative = TRUE){
+create_species_raster <- function(year, window, threshold,
+                                  field, dataset_count,  
+                                  grid, conservative = TRUE){
+  
+  cat(paste0("Year ", year,"\n"))
   
   # sum by site within a time interval
-  data_yr <- dataset_count[dataset_count$`Age min [ka]` <= year/1000 & dataset_count$`Age max [ka]` >= year/1000,] %>%
-    dplyr::select(4, 6:7, 15:223) %>%
-    group_by(`ID (Dataset)`, Longitude, Latitude) %>% 
-    summarise(across(everything(), sum))
+  x1 <- (year-window)/1000 
+  x2 <- (year+window)/1000 
+  y1 <- dataset_count$`Age min [ka]`
+  y2 <- dataset_count$`Age max [ka]`
+  
+  data_yr <- dataset_count %>%
+    dplyr::filter(x1 <= y2 & y1 <= x2) %>%
+    dplyr::select(3, 6:7, 15:223) %>%
+    dplyr::group_by(`ID (Site)`, Longitude, Latitude) %>% 
+    dplyr::summarise(across(everything(), sum), .groups = "drop_last")
   
   if(conservative){
     # conservative approach - following Fitzpatrick et al. 2018
@@ -20,7 +30,7 @@ create_species_raster <- function(year, field, dataset_count, grid, conservative
     species_prop <- species_count/all_count
     
     # threshold scaled to 5% of the maximum abundance - following Nieto-Lugilde et al. (2015), Maguire et al. (2016)
-    threshold <- as.numeric(global(species_prop, fun = "max", na.rm = T))*0.05
+    # threshold <- as.numeric(global(species_prop, fun = "max", na.rm = T))*0.05
     m <- c(0, threshold, 0,
            threshold, 1, 1)
     rclmat <- matrix(m, ncol=3, byrow=TRUE)
@@ -37,13 +47,14 @@ create_species_raster <- function(year, field, dataset_count, grid, conservative
     species_prop <- values(data_yr_pts[,field])/values(data_yr_pts[,"pollen_count"])
     
     # threshold scaled to 5% of the maximum abundance - following Nieto-Lugilde et al. (2015), Maguire et al. (2016)
-    threshold <- max(species_prop)*0.05
-    data_yr_pts$pres <- as.numeric(species_prop>threshold)
+    # threshold <- max(species_prop)*0.05
+    data_yr_pts$pres <- as.numeric(species_prop>=threshold)
     
     species_pres <-  rasterize(data_yr_pts, grid, field = "pres", fun = "max")
     
   }
   
+  cat(paste0("   Nb of presence: ", nrow(species_pres[species_pres==1]),"\n"))
   
   return(species_pres)
 }
@@ -67,7 +78,7 @@ create_species_raster_qilex <- function(year, field = 'Quercus.ilex', dataset_co
   species_prop <- species_count/all_count
   
   # threshold scaled to 5% of the maximum abundance - following Nieto-Lugilde et al. (2015), Maguire et al. (2016)
-  threshold <- as.numeric(global(species_prop, fun = "max", na.rm = T))*0.05
+  # threshold <- as.numeric(global(species_prop, fun = "max", na.rm = T))*0.05
   m <- c(0, threshold, 0,
          threshold, 1, 1)
   rclmat <- matrix(m, ncol=3, byrow=TRUE)

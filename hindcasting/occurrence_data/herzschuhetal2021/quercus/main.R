@@ -12,6 +12,7 @@ library(dplyr)
 `%notin%` <- Negate(`%in%`)
 library(neotoma2)
 library(data.table)
+library(terra)
 
 # load taxa harmonization table:
 Harmonisation_Master <- read.csv(file.path(wd, "LegacyPollen", "taxa_harmonisation_table_VV.csv"), 
@@ -44,9 +45,9 @@ pollen_counts <- lapply(list.files(file.path(wd, "quercus", "output"), pattern =
 pollen_counts <- do.call(rbind.fill, pollen_counts)
 pollen_counts[is.na(pollen_counts)] <- 0
 
-# removing sequences with less thant 150 pollen grain counts
+# removing sequences with less thant 50 pollen grain counts
 pollen_counts <- pollen_counts %>% mutate(pollen_count = rowSums(across(12:221))) %>%
-  dplyr::filter(pollen_count >= 150) 
+  dplyr::filter(pollen_count >= 50) 
 
 # Load metadata
 metadata <- fread(file.path("D:/species/pollen/herzschuhetal2021", "Herzschuh-etal_2021_Europe-meta.tab"), skip = 1108) %>%
@@ -58,7 +59,7 @@ pollen_counts <- left_join(pollen_counts, metadata) %>%
   dplyr::filter(loctype != "Marine" & loctype != "Lagoon")
 
 # Load climate data grid
-grid <- fread("D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg/15BP/HadCM3B_Altitude.fit")
+grid <- fread("D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dscl_15min/250BP/HadCM3B_Altitude.fit")
 names(grid) <- c("lat", "lon", "alt")
 grid <- rast(grid[,c("lon", "lat", "alt")])
 
