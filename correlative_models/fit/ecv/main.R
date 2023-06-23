@@ -17,8 +17,9 @@ set.seed(1997)
 
 ### 0. Parameters --------------- #
 
-sp_name <- "fagus_sylvatica" # species name
+sp_name <- "larix_decidua" # species name
 nb_background <- 50000 # number of background points
+nfold <- 5
 
 cov_type <- "finalcov" # name of covariate set
 bc_covars <- c("bio6", "bio12") # bioclim predictors

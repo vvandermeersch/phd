@@ -101,7 +101,7 @@ europe_data <- terra::extract(r_pred, europe_points_sf, df = TRUE, ID = FALSE)
 e_clust <- cv_cluster(x = presbg_points_sf,
                       column = "pres",
                       r = r_pred,
-                      k = 5, 
+                      k = nfold, 
                       scale = TRUE)
 
 folds <- e_clust$folds_list
