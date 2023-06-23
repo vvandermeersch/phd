@@ -25,7 +25,7 @@ format_climate_2 <- function(years, ncells, out_folder, source_folder, ncores, c
     p(message = paste("Processing year", yr, "..."), class = "sticky", amount = 0)
     
     # only to get number of days in the year
-    tmp_file <- paste0(source_folder, "ERA5LAND_", "tmp", "_", yr, "_dly.fit")
+    tmp_file <- paste0(source_folder, "HadCM3B_", "tmp", "_", yr, "_dly.fit")
     temp <- fread(tmp_file, showProgress=F, skip = 5, nrows = 1)
     ndays <- length(temp)-2
     
@@ -57,11 +57,20 @@ format_climate_2 <- function(years, ncells, out_folder, source_folder, ncores, c
       phenofit_climate <- load_phenofit_climate_files(year = yr, folder = source_folder, skip = first_line-1, nrows = nlines)
       
       for(i in 1:nlines){
+        tmp <- t(phenofit_climate$tmp[i,])
+        tdew <- t(phenofit_climate$tmn[i,]) # approximate dewpoint temperature with minimum temperature
+        ea <- 0.6108*exp(17.27*tdew/(tdew+237.3))
+        es <- 0.6108*exp(17.27*tmp/(tmp+237.3))
+        rh <- round(100 * ea/es,2)
+        rh <- ifelse(rh>100, 100, rh)
+        
+        if(anyNA(rh)){stop(paste0("Error with j ", j, " and i ", i))}
+        
         cell_data <- data.frame(y = yr, m = months, d = (1:ndays),
-                                gr = t(phenofit_climate$glo[i,]), rh = t(phenofit_climate$rh[i,]),
+                                gr = t(phenofit_climate$glo[i,]), rh = rh,
                                 ws = t(phenofit_climate$wnd[i,]), p = t(phenofit_climate$pre[i,]),
                                 tmax = t(phenofit_climate$tmx[i,]), tmin = t(phenofit_climate$tmn[i,]),
-                                tj = t(phenofit_climate$tmp[i,]))
+                                tj = tmp)
         #names(cell_data) <- c('# y', 'm', 'd', 'gr', 'rh', 'ws', 'p', 'tmax', 'tmin', 'tj')
         climate_file <- paste0(out_folder, ncells_j[i], ".txt")
         suppressWarnings(write.table(cell_data, climate_file, 

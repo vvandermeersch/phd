@@ -23,8 +23,8 @@ for(i in as.character(years[1]:years[2])){
 biovars_30y <- abind(biovars_all, along=3)
 biovars_30y <- apply(biovars_30y, c(1,2), mean)
 biovars_30y <- as.data.frame(biovars_30y)
-biovars_30y$lat <- round(biovars_30y$lat,1)
-biovars_30y$lon <- round(biovars_30y$lon,1)
+biovars_30y$lat <- round(biovars_30y$lat,2)
+biovars_30y$lon <- round(biovars_30y$lon,2)
 rm(biovars, biovars_all)
 
 
@@ -84,5 +84,18 @@ rm(pet, yearly_pet, yearly_pre, water_bal_all)
 
 
 predictors_data <- cbind(biovars_30y, sum_apsep_GDD5 = sumGDD5_apsep_30y, w_bal = water_bal_30y)
+
+# soil predictors
+r_res <- rast(predictors_data[,c("lon", "lat", "bio6")])
+soil_pred <- mask(terra::resample(soil_pred, r_res, method = "average"), r_res)
+soil_pred <- mask(focal(soil_pred, w = 3, fun = "mean", na.policy ="only"), r_res)
+soil_pred <- mask(focal(soil_pred, w = 3, fun = "mean", na.policy ="only"), r_res)
+soil_pred <- mask(focal(soil_pred, w = 3, fun = "mean", na.policy ="only"),r_res)
+soil_pred <- mask(focal(soil_pred, w = 3, fun = "mean", na.policy ="only"),r_res)
+soil_pred <- mask(focal(soil_pred, w = 3, fun = "mean", na.policy ="only"),r_res)
+soil_predictors <- round(as.data.frame(soil_pred, xy = T),2)
+names(soil_predictors)[1:2] <- c("lon", "lat")
+
+predictors_data <- inner_join(predictors_data, soil_predictors)
 saveRDS(predictors_data, file = file.path(csdm_folder, paste0("predictors_", year, "BP.rds")))
 
