@@ -6,7 +6,7 @@ compute_thermo_variables <- function(tmin, tmax){
   # parameters
   sb <- 5.6704e-8
   e <- 0.98 
-  Al <- 0.045 
+  lw_albedo <- 0.045 
   a <- 10.77
   b <- 2.34
   c <- 18.44
@@ -30,8 +30,8 @@ compute_thermo_variables <- function(tmin, tmax){
           2.57180651e-9, 1.32268878e-11, 3.94116744e-14, 4.98070196e-17)
   
   # slope of vapour pressure curve
-  ss <- 100*ifel(Tk <= Tfreeze, sum(bi[1]*(Tk - Tfreeze)**0,  tapp(rast(lapply(2:9, function(i) bi[i]*(Tk - Tfreeze)**i)), 1:365, sum)),
-                 sum(bl[1]*(Tk - Tfreeze)**0, tapp(rast(lapply(2:9, function(i) bl[i]*(Tk - Tfreeze)**i)), 1:365, sum)))
+  ss <- 100*ifel(Tk <= Tfreeze, sum(bi[1]*(Tk - Tfreeze)**0,  tapp(rast(lapply(2:9, function(i) bi[i]*(Tk - Tfreeze)**(i-1))), 1:365, sum)),
+                 sum(bl[1]*(Tk - Tfreeze)**0, tapp(rast(lapply(2:9, function(i) bl[i]*(Tk - Tfreeze)**(i-1))), 1:365, sum)))
   
   Ts <- Tk # approximation: mean daily surface temperature = air temperature
   
@@ -42,11 +42,10 @@ compute_thermo_variables <- function(tmin, tmax){
           6.14396778e-6, 6.02780717e-8, 3.87940929e-10, 1.49436277e-12, 2.62655803e-15)
   
   # saturated vapor pressure 
-  es <- ifel(Tk <= Tfreeze, sum(ai[1]*(Tk - Tfreeze)**0,  tapp(rast(lapply(2:9, function(i) ai[i]*(Tk - Tfreeze)**i)), 1:365, sum)),
-             sum(al[1]*(Tk - Tfreeze)**0, tapp(rast(lapply(2:9, function(i) al[i]*(Tk - Tfreeze)**i)), 1:365, sum)))  
+  es <- ifel(Tk <= Tfreeze, sum(ai[1]*(Tk - Tfreeze)**0,  tapp(rast(lapply(2:9, function(i) ai[i]*(Tk - Tfreeze)**(i-1))), 1:365, sum)),
+             sum(al[1]*(Tk - Tfreeze)**0, tapp(rast(lapply(2:9, function(i) al[i]*(Tk - Tfreeze)**(i-1))), 1:365, sum)))  
   
   TdewK <- 34.07 + 4157 / log(2.1718e8 / es)
-  
   tdew <- TdewK - Tfreeze
   
   return(list(tdew = tdew, ss = ss, gamma = gamma, es = es))

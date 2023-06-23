@@ -24,6 +24,7 @@ generate_radiation_PET <- function(tmin, tmax, cloud, pre, wind, alt, ratm, dayl
     k <- k+1
     
   }
+  cat(paste0("Number of iterations: ", k, "\n"))
   
   return(list(glo = rs, pet = pet))
   
@@ -84,8 +85,7 @@ generate_radiation_PET <- function(tmin, tmax, cloud, pre, wind, alt, ratm, dayl
 
 
 
-
-
+# function to compute PET (FAO standard Penman-Monteith equation)
 .compute_pet <- function(rs, cloud, wind, tmax, tmin, dayl, thermo_data){
   
   # "identity" raster
@@ -111,25 +111,23 @@ generate_radiation_PET <- function(tmin, tmax, cloud, pre, wind, alt, ratm, dayl
   es_Tmin <- 0.6108 * exp(17.27 * tmin/(tmin + 237.3))
   es <- (es_Tmax + es_Tmin)/2
   
-  #
+  # actual vapour pressure
   ea <- 0.6108 * exp((17.27 * tdew)/(tdew+237.3))
   
   # slope of vapour pressure curve (delta)
-  # ss <- 4098 * (0.6108 * exp((17.27 * gwgen_data[i,"temp"])/(gwgen_data[i,"temp"] + 237.3)))/((gwgen_data[i,"temp"] + 237.3)^2)
   ss <- ss/1000 # convert to kPa/C
   
   # psychrometric constant
   gamma <- gamma/1000 #convert to kPa/C
   
   # effect of cloudiness (relative shortwave radiation)
-  # rs0 <- (0.75 + (2 * 10^-5) * elev) * toa_data_temp[i,"toa"]/1000 # as in FAO
-  # rs_rs0 <- 1-0.29*(gwgen_data_temp[i,"mean_cloud"] + (gwgen_data_temp[i,"mean_cloud"])^2) # Antoine et al, 1996
-  rs_rs0 <- 1 - cloud
+  rs_rs0 <- 1-0.29*(cloud + (cloud)^2) # Antoine et al, 1996
+  # rs_rs0 <- 1 - cloud
   
   # estimated net outgoing longwave radiation
-  r_nl <- 4.903e-09 * (0.34 - 0.14 * sqrt(ea)) * 
-    ((tmax + 273.2)^4 + (tmin + 273.2)^4)/2 * 
-    (1.35 * rs_rs0 - 0.35) 
+  r_nl <- 4.903e-09 * (0.34 - 0.14 * sqrt(ea)) *
+    ((tmax + 273.2)^4 + (tmin + 273.2)^4)/2 *
+    (1.35 * rs_rs0 - 0.35)
   
   # net radiation
   r_ng <- (1 - albFAO) * rs  - r_nl
@@ -139,7 +137,9 @@ generate_radiation_PET <- function(tmin, tmax, cloud, pre, wind, alt, ratm, dayl
     (ss + gamma * (1 + 0.34 * u2))
   pet[pet<0] <- 0
   
-  
   return(pet)
   
 }
+
+
+

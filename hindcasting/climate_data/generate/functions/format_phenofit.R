@@ -4,11 +4,21 @@ format_phenofit <- function(yr, tmin, tmax, pre, pet, glo, wind, tdew, alt, whc,
   
   cat("Formating data for PHENOFIT\n")
   
+  tmax <- round(tmax, 2)
+  tmin <- round(tmin, 2)
+  tmean <- (tmin+tmax)/2
+  tmean <- round(tmean, 2)
+  pre <- round(pre, 2)
+  wind <- round(wind, 2)
+  tdew <- round(tdew, 2)
+  glo <- round(glo, 2)
+  
+  tmax <- ifel(tmin == 0 & tmax == 0 & tmean == 0 & pre == 0, 0.01, tmax) # necessary check for FitlibClimateLoader in Capsis
+  
   tmin_df <- as.data.frame(tmin, xy = T)
   tmin_df <- round(tmin_df[,c(2,1,3:ncol(tmin_df))],2) #lat/lon order + change decimal precision
   tmax_df <- as.data.frame(tmax, xy = T)
   tmax_df <- round(tmax_df[,c(2,1,3:ncol(tmax_df))],2)
-  tmean <- (tmin+tmax)/2
   tmean_df <- as.data.frame(tmean, xy = T)
   tmean_df <- round(tmean_df[,c(2,1,3:ncol(tmean_df))],2)
   pre_df <- as.data.frame(pre, xy = T)

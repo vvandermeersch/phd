@@ -63,8 +63,8 @@ merge_rasters <- function(periods, folder){
   tmin <- c(tmin_1, tmin_2)
   tmax <- c(tmax_1, tmax_2)
   pre <- c(pre_1, pre_2)
-  alt <- c(alt_1, alt_2)
-  whc <- c(whc_1, whc_2)
+  alt <- mean(alt_1, alt_2)
+  whc <- mean(whc_1, whc_2)
   
   writeCDF(alb, file.path(folder, "albedos_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_24000_0kyr",
                                 paste0("albedos_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_", periods[3], ".nc")),

@@ -2,6 +2,7 @@
 # see gwgen() function
 
 gwgen_in_parallel <- function(input_file, wd, ncores, dir_gwgen){
+  start_time <- Sys.time()
   
   # Split GWGEN csv file in several chunks
   my_file <- fread(input_file)
@@ -54,6 +55,9 @@ gwgen_in_parallel <- function(input_file, wd, ncores, dir_gwgen){
   
   message("Daily weather generated !")
   
+  end_time <- Sys.time()
+  cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
+  
   return(output_file)
 
 }
@@ -80,7 +84,7 @@ gwgen_in_parallel <- function(input_file, wd, ncores, dir_gwgen){
   shell(cmd_line, mustWork = TRUE)
   
   start_time <- Sys.time()
-  while(!file.exists(file.path(output_dir, "check.temp")) & round(as.double(Sys.time()-start_time, units = "mins"), 1)< 60){
+  while(!file.exists(file.path(output_dir, "check.temp")) & round(as.double(Sys.time()-start_time, units = "mins"), 1)< 16){
     Sys.sleep(30)
     if(file.exists(file.path(output_dir, "error.temp"))){
       stop(paste0("Could not converge during daily weather generation with ", input_file, " !"))

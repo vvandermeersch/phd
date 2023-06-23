@@ -24,6 +24,7 @@ monthly_downscale <- function(yr_interval, years_list = NULL,
     alb_LR <- crop(rast(file.path(in_folder, "albedos_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_24000_0kyr", 
                                   paste0("albedos_old_sims_1yrAvg_monthly_0.5degRes_noBias_Europe_", time_slice, ".nc")),
                         subds = "albedos", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO"), extent)
+    alb_LR[alb_LR > 0.8] <- 0.8 # E. Armstrong: rare strange values because of monthly varying mask in HadCM3b: convert anything >0.8 
     cld_LR <- crop(rast(file.path(in_folder, "totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_24000_0kyr", 
                                   paste0("totCloud_mm_ua_old_sims_1yrAvg_monthly_0.5degRes_CRU_Europe_", time_slice, ".nc")),
                         subds = "totCloud_mm_ua", lyrs = rmonths$min:rmonths$max, opts="HONOUR_VALID_RANGE=NO"), extent)
@@ -40,7 +41,7 @@ monthly_downscale <- function(yr_interval, years_list = NULL,
     cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
     
     # load ICE-6G-C altitude (500yr slice)
-    yr_ICE6G <- yre%/%501*0.5
+    yr_ICE6G <- yre%/%500*0.5
     alt_HR <- crop(rotate(rast(paste0("D:/climate/ICE-6G-C/I6_C.VM5a_10min.",yr_ICE6G ,".nc"), subds = "Orog")), extent)
     ldmsk_HR <- crop(rotate(rast(paste0("D:/climate/ICE-6G-C/I6_C.VM5a_10min.",yr_ICE6G ,".nc"), subds = "sftlf")), extent)
     ldmsk_HR[ldmsk_HR == 0] <- NA
@@ -127,7 +128,7 @@ monthly_downscale <- function(yr_interval, years_list = NULL,
   
 }
 
-#extract months (between 1 - 6000)
+#extract months
 .year_to_months <- function(yr_beg, yr_end, max_year){
   
   min_mn <- ((max_year-yr_end)+1)*12-11

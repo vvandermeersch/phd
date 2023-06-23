@@ -27,10 +27,9 @@ rm(latlon_data)
 
 
 # Loop on years
-ind <- 1 # index of year
-
 for(yr in years[2]:years[1]){
   start_time <- Sys.time()
+  extent <- ext(c(-10,35,36,71))
   
   cat(paste0("Processing year ", yr,"\n"))
   gwgen_df <- data.frame(gwgen_data[gwgen_data$year == yr,])
@@ -63,9 +62,11 @@ for(yr in years[2]:years[1]){
   ratm <- exp(-alt * z0)
   
   # Load albedo
+  ind <- which(years[2]:years[1] == yr) # index of year
+  ind <- 1
   albedo <- rast(file.path(raw_folder, "albedos_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_24000_0kyr",
                            paste0("albedos_old_sims_1yrAvg_monthly_15minRes_noBias_Europe_", time_slice, ".nc")))
-  alb <- subset(albedo, (1+(ind-1)*12):(1+(ind-1)*12+11)) # keep the months of the year
+  alb <- subset(albedo, (1+(ind-1)*12):(1+(ind-1)*12+11)) # keep only the months of the year considered
   alb <- resample(alb, tmin) # just to have exactly the same extent
   # repeat over days
   if(max(unique(gwgen_df$doy)) == 366){
@@ -110,8 +111,6 @@ for(yr in years[2]:years[1]){
   out_folder_yr <- file.path(out_folder, paste0(mean(years), "BP"))
   dir.create(out_folder_yr, showWarnings = FALSE)
   format_phenofit(yr, tmin, tmax, pre, pet, glo, wind, tdew, alt, whc, out_folder_yr)
-  
-  ind <- ind +1 # update index
   
   end_time <- Sys.time()
   cat(paste0("Runtime: ",  round(as.double(end_time-start_time, units = "mins"), 1), "min \n"))
