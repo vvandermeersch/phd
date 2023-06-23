@@ -34,7 +34,7 @@ processeddata_folder <- "D:/climate/ERA5-Land/phenofit_format/not_transformed/"
 
 ## Run
 
-phenofit_formatting2(1970:2000, "2m_dewpoint_temperature", 'mean', rawdata_folder, processeddata_folder, ncores=2)
+phenofit_formatting2(1969:2000, "2m_dewpoint_temperature", 'mean', rawdata_folder, processeddata_folder, ncores=5)
 gc()
 
 phenofit_formatting2(2001:2020, "2m_temperature", "min", rawdata_folder, processeddata_folder, ncores=5)

@@ -122,58 +122,64 @@ phenofit_extract_all_climate <- function(years, pd_folder, out_folder, method_pe
   
   for(yr in years){
     
-    tmp_file <- paste0(pd_folder, "ERA5LAND_", "tmp", "_", yr, "_dly.fit")
-    tmp <- fread(tmp_file, showProgress=F)
-    colnames(tmp)[1:2] <- c("lat", "lon")
-    tmp_ext <- extract_all_climate(tmp, filter)
-    save_climate(tmp_ext, yr, out_folder, p_var = "tmp", species = "all Europe")
-
-    tmn_file <- paste0(pd_folder, "ERA5LAND_", "tmn", "_", yr, "_dly.fit")
-    tmn <- fread(tmn_file, showProgress=F)
-    colnames(tmn)[1:2] <- c("lat", "lon")
-    tmn_ext <- extract_all_climate(tmn, filter)
-    save_climate(tmn_ext, yr, out_folder, p_var = "tmn", species = "all Europe")
-
-    tmx_file <- paste0(pd_folder, "ERA5LAND_", "tmx", "_", yr, "_dly.fit")
-    tmx <- fread(tmx_file, showProgress=F)
-    colnames(tmx)[1:2] <- c("lat", "lon")
-    tmx_ext <- extract_all_climate(tmx, filter)
-    save_climate(tmx_ext, yr, out_folder, p_var = "tmx", species = "all Europe")
-    
-    rh_file <- paste0(pd_folder, "ERA5LAND_", "RH", "_", yr, "_dly.fit")
-    rh <- fread(rh_file, showProgress=F)
-    colnames(rh)[1:2] <- c("lat", "lon")
-    rh_ext <- extract_all_climate(rh, filter)
-    save_climate(rh_ext, yr, out_folder, p_var = "RH", species = "all Europe")
+    # tmp_file <- paste0(pd_folder, "ERA5LAND_", "tmp", "_", yr, "_dly.fit")
+    # tmp <- fread(tmp_file, showProgress=F)
+    # colnames(tmp)[1:2] <- c("lat", "lon")
+    # tmp_ext <- extract_all_climate(tmp, filter)
+    # save_climate(tmp_ext, yr, out_folder, p_var = "tmp", species = "all Europe")
     # 
-    glo_file <- paste0(pd_folder, "ERA5LAND_", "glo", "_", yr, "_dly.fit")
-    glo <- fread(glo_file, showProgress=F)
-    colnames(glo)[1:2] <- c("lat", "lon")
-    glo_ext <- extract_all_climate(glo, filter)
-    save_climate(glo_ext, yr, out_folder, p_var = "glo", species = "all Europe")
+    # tmn_file <- paste0(pd_folder, "ERA5LAND_", "tmn", "_", yr, "_dly.fit")
+    # tmn <- fread(tmn_file, showProgress=F)
+    # colnames(tmn)[1:2] <- c("lat", "lon")
+    # tmn_ext <- extract_all_climate(tmn, filter)
+    # save_climate(tmn_ext, yr, out_folder, p_var = "tmn", species = "all Europe")
     # 
-    pet_file <- paste0(pd_folder,"pet_",method_pet,"/", "ERA5LAND_", "pet", "_", yr, "_dly.fit")
-    pet <- fread(pet_file, showProgress=F)
-    colnames(pet)[1:2] <- c("lat", "lon")
-    # NA and negative values set to zero
-    cols <- c(3:ncol(pet))
-    setnafill(pet, cols=cols, fill=0)
-    pet[ , (cols) := lapply(.SD, pmax, 0), .SDcols = cols]
-
-    pet_ext <- extract_all_climate(pet, filter)
-    save_climate(pet_ext, yr, out_folder, p_var = "pet", species = "all Europe", method=method_pet)
-
-    pre_file <- paste0(pd_folder, "ERA5LAND_", "pre", "_", yr, "_dly.fit")
-    pre <- fread(pre_file, showProgress=F)
-    colnames(pre)[1:2] <- c("lat", "lon")
-    pre_ext <- extract_all_climate(pre, filter)
-    save_climate(pre_ext, yr, out_folder, p_var = "pre", species = "all Europe")
-    #
+    # tmx_file <- paste0(pd_folder, "ERA5LAND_", "tmx", "_", yr, "_dly.fit")
+    # tmx <- fread(tmx_file, showProgress=F)
+    # colnames(tmx)[1:2] <- c("lat", "lon")
+    # tmx_ext <- extract_all_climate(tmx, filter)
+    # save_climate(tmx_ext, yr, out_folder, p_var = "tmx", species = "all Europe")
+    # 
+    # rh_file <- paste0(pd_folder, "ERA5LAND_", "RH", "_", yr, "_dly.fit")
+    # rh <- fread(rh_file, showProgress=F)
+    # colnames(rh)[1:2] <- c("lat", "lon")
+    # rh_ext <- extract_all_climate(rh, filter)
+    # save_climate(rh_ext, yr, out_folder, p_var = "RH", species = "all Europe")
+    # # 
+    # glo_file <- paste0(pd_folder, "ERA5LAND_", "glo", "_", yr, "_dly.fit")
+    # glo <- fread(glo_file, showProgress=F)
+    # colnames(glo)[1:2] <- c("lat", "lon")
+    # glo_ext <- extract_all_climate(glo, filter)
+    # save_climate(glo_ext, yr, out_folder, p_var = "glo", species = "all Europe")
+    # # 
+    # pet_file <- paste0(pd_folder,"pet_",method_pet,"/", "ERA5LAND_", "pet", "_", yr, "_dly.fit")
+    # pet <- fread(pet_file, showProgress=F)
+    # colnames(pet)[1:2] <- c("lat", "lon")
+    # # NA and negative values set to zero
+    # cols <- c(3:ncol(pet))
+    # setnafill(pet, cols=cols, fill=0)
+    # pet[ , (cols) := lapply(.SD, pmax, 0), .SDcols = cols]
+    # 
+    # pet_ext <- extract_all_climate(pet, filter)
+    # save_climate(pet_ext, yr, out_folder, p_var = "pet", species = "all Europe", method=method_pet)
+    # 
+    # pre_file <- paste0(pd_folder, "ERA5LAND_", "pre", "_", yr, "_dly.fit")
+    # pre <- fread(pre_file, showProgress=F)
+    # colnames(pre)[1:2] <- c("lat", "lon")
+    # pre_ext <- extract_all_climate(pre, filter)
+    # save_climate(pre_ext, yr, out_folder, p_var = "pre", species = "all Europe")
+    # #
     wnd_file <- paste0(pd_folder, "ERA5LAND_", "wnd", "_", yr, "_dly.fit")
     wnd <- fread(wnd_file, showProgress=F)
     colnames(wnd)[1:2] <- c("lat", "lon")
     wnd_ext <- extract_all_climate(wnd, filter)
     save_climate(wnd_ext, yr, out_folder, p_var = "wnd", species = "all Europe")
+    
+    dtm_file <- paste0(pd_folder, "ERA5LAND_", "dtm", "_", yr, "_dly.fit")
+    dtm <- fread(dtm_file, showProgress=F)
+    colnames(dtm)[1:2] <- c("lat", "lon")
+    dtm_ext <- extract_all_climate(dtm, filter)
+    save_climate(dtm_ext, yr, out_folder, p_var = "dtm", species = "all Europe")
     
   }
   

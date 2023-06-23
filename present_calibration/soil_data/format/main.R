@@ -147,8 +147,8 @@ for (i in 3:7) {
 
 
 # Castanea need only mean value (weighted by each layer thickness), divide by 100 (percentage to proportion)
-fc_mean <- weighted.mean(fc_layer, w = depth_weights)/100
-wp_mean <- weighted.mean(wp_layer, w = depth_weights)/100
+fc_mean <- weighted.mean(fc_layer, w = depth_weights*(100-crf_layer))/100
+wp_mean <- weighted.mean(wp_layer, w = depth_weights*(100-crf_layer))/100
 crf_mean <- weighted.mean(crf_layer, w = depth_weights)/100
 cly_top <- weighted.mean(subset(cly_layer, 1:3), w = subset(depth_weights, 1:3))/100 # first 30cm (top soil)
 cly_sol <- weighted.mean(cly_layer, w = depth_weights)/100
@@ -164,7 +164,7 @@ ocs_mean <- ocs_stack / 10 # t/ha to kg/m2 (conventional unit)
 
 # Phenofit need a Water Holding Capacity (mm)
 dif <- (fc_layer - wp_layer)/100 
-whc <- sum(dif*depth_weights)*10
+whc <- sum(dif*depth_weights*(100-crf_layer)/100)*10
 
 # Get non NA values from ERA5
 ERA5land_df <- as.data.frame(ERA5land_grid, xy=T) %>% na.omit
@@ -224,7 +224,7 @@ data_soil <- as.data.frame(na.approx(data_soil)) # approximation based on before
 save(data_soil, file="D:/soil/processed/data_soil.Rdata")
 
 # Create WHC file for Phenofit
-# phenofit_get_WHC(data_soil, "D:/climate/ERA5-Land/phenofit_format/transformed/")
+phenofit_get_WHC(data_soil, "D:/climate/ERA5-Land/phenofit_format/transformed/")
 
 
 

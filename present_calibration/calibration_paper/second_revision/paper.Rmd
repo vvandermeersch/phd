@@ -490,7 +490,7 @@ phenofit_fagus_map <- ggplot(data=phenofit_fagus_best_fit, aes(x = lon, y = lat)
            family = "Linux Libertine G", fontface = "bold")
 
 
-sim_folder <- 'D:/simulations/phenofit/backward/quercus_ilex/paper_data'
+sim_folder <- 'D:/simulations/phenofit/present/fitted/quercus_ilex/paper_data'
 phenofit_quercus_best_rep <- paste0(quercus_auc_data_tot[quercus_auc_data_tot$tot == max(quercus_auc_data_tot$tot), "subset"],"_", quercus_auc_data_tot[quercus_auc_data_tot$tot == max(quercus_auc_data_tot$tot), "rep"])
 best_fit <- read_mean_outputvalue_phenofit(file.path(file.path(sim_folder, "CMAES"), phenofit_quercus_best_rep, "Fitness.txt"), points = ERA5_points)
 phenofit_quercus_best_fit <- as.data.frame(cbind(ERA5_points$lat, ERA5_points$lon,t(best_fit)))

@@ -1,16 +1,16 @@
 library(gtools)
 
 # Run Phenofit for every calibrated parameter sets
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper/first_revision'
 source(file.path(wd, "functions", "command_file_setup.R"))
 
-cal_folder <- 'D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/ABC'
-sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data/ABC'
+cal_folder <- 'D:/calibrations/phenofit/larix_decidua/1000pres_1000abs'
+sim_folder <- 'D:/simulations/phenofit/present/fitted/larix_decidua'
 
 species_files <- mixedsort(list.files(path = cal_folder, pattern = "\\.species$", full.names = F, recursive = T))
 
 climate_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed"
-capsis_settings=list(java8="java8.cmd", cd_java8="cd C:/Program Files/Java/scripts", cd_capsis="cd/d D:/applications/capsis4 && setmem 30000")
+capsis_settings=list(java8="java8.cmd", cd_java8="cd C:/Program Files/Java/scripts", cd_capsis="cd/d D:/applications/capsis4 && setmem 20000")
 
 for(cal in species_files){
   subset <- strsplit(cal, "_")[[1]][4]
@@ -30,8 +30,4 @@ for(cal in species_files){
   system.time(shell(run, intern=F))
 }
 
-cal_folder <- 'D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/ABC'
-sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data/ABC'
-
-species_files <- mixedsort(list.files(path = cal_folder, pattern = "\\.species$", full.names = F, recursive = T))
 
