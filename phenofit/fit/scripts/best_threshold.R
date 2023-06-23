@@ -7,16 +7,17 @@ library(dplyr)
 source(file.path("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation", "functions/read_mean_outputvalue.R"))
 
 sp_folder <- "D:/species/processed"
-sp_presabs <- readRDS(file.path(sp_folder, "quercus_petraea/quercus_petraea_presabs_woUkraine.rds"))
-sp_name <- "quercus_petraea"
+sp_presabs <- readRDS(file.path(sp_folder, "quercus_pubescens/quercus_pubescens_presabs.rds"))
+sp_name <- "quercus_pubescens"
 
 
 
-out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_petraea"
-# sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_robur/paper_data/CMAES/subset2_rep5"
-sim_folder <- "D:/simulations/phenofit/present/expert/quercus_petraea/EvolLett2019"
-# filename <- "cmaes_fit_subset2_rep5"
-filename <- "Quercus_petraea_EvolLett2019"
+out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_pubescens"
+#sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_pubescens/subset1_rep2"
+# sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_ilex/paper_data/CMAES/subset1_rep1"
+sim_folder <- "D:/simulations/phenofit/present/expert/quercus_pubescens/BLeys"
+# filename <- "cmaes_fit_subset2_rep1"
+filename <- "Quercus_pubescens_BLeys"
 modality <- "expert calibration"
 
 # Compute AUC on every pres/abs points
