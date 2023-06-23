@@ -15,35 +15,73 @@ wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/manuscript/figs"
 ## Climate overview
 
 ```{r climateoverview, fig.height = 5, fig.width = 7, dev=c('png'), dpi = 600, eval = F}
-source(file.path(wd, "climate_overview", "script.R"))
+source(file.path(wd, "overview", "script.R"))
 climateoverview_figure
 ```
+
 ```{r climateoverview2, fig.height = 5, fig.width = 7, dev=c('png'), dpi = 600, eval = T}
-source(file.path(wd, "climate_overview", "script_black.R"))
+source(file.path(wd, "overview", "climate_overview.R"))
+climateoverview_figure
+```
+```{r climateoverview_zoom, fig.height = 4, fig.width = 6.5, dev=c('png'), dpi = 600, eval = F}
+source(file.path(wd, "overview", "climate_overview_zoom.R"))
 climateoverview_figure
 ```
 
-## Performance metrics
+## Climate metrics
 
-### Fagus sylvatica
+```{r metrics, fig.height = 5, fig.width = 6, dev=c('png'), dpi = 600, eval = T}
 
-```{r fagussylvatica_performance, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+clim_hypv_similarity <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/climate_approach/data/hypervolume_similarity.rds")
+names(clim_hypv_similarity)[2:3] <- c("hypv_sorensen", "hypv_jaccard")
+clim_dist <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/climate_approach/data/mahal_clim_distance.rds")
+clim_dist_pollen <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/climate_approach/data/mahal_clim_distance_pollenpoints.rds")
+dist_from_nichecentroid <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/niche_approach/data/distance_from_nichecentroid.rds")
+burke_climatenovelty <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/climate_approach/data/burke_climatenovelty_CRUbaseline.rds")
+burke_climatenovelty <- burke_climatenovelty[burke_climatenovelty$year > 15,]
 
-pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
+source(file.path(wd, "overview", "metric_overview.R"))
+metrics_plot + guides(col=guide_legend(nrow=3,byrow=TRUE), linetype=guide_legend(nrow=2,byrow=TRUE))
+```
+
+```{r distance_futurepast, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, eval = T}
+burke_futureclimatenovelty <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/forecasting/metrics/climate_approach/data/burke_futureclimatenovelty_CRUbaseline.rds")
+source(file.path(wd, "overview", "distance_futurepast.R"))
+#distance_futurepast
+#distance_futurepast2
+distance_futurepast3 
+distance_futurepast4
+```
+
+## Fagus
+
+### Much evaluation points as possible - from 15000BP
+
+```{r fagussylvatica_allpoints_15kBP, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+
+combine_models <- FALSE
+
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica/025deg/002_thr"
 models <- data.frame(name = c("PHENOFIT",
                                "PHENOFIT (fitted)",
                                "Random Forest",
                                "Lasso GLM",
                                "BRT",
                                "GAM"),
-                     simfolder = c("D:/simulations/phenofit/paleo/05deg",
-                                "D:/simulations/phenofit/paleo/05deg_fitted",
-                                "D:/simulations/csdm/random_forest/paleo/fagus_sylvatica",
-                                "D:/simulations/csdm/lasso_glm/paleo/fagus_sylvatica",
-                                "D:/simulations/csdm/brt/paleo/fagus_sylvatica",
-                                "D:/simulations/csdm/gam/paleo/fagus_sylvatica"),
-                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/forward/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/backward/fagus_sylvatica",
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/fagus_sylvatica",
+                                "D:/simulations/phenofit/paleo/fitted/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/random_forest/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/025deg/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/fagus_sylvatica",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
@@ -55,41 +93,608 @@ models <- data.frame(name = c("PHENOFIT",
                              "brt_finalcov_fullmodel.rds",
                              "gam_finalcov_fullmodel.rds"))
 
+years <- seq(500,15000,500)
+brk <- 3000
+
 source(file.path(wd, "performance_metrics", "continuous_approach.R"))
 performance_figure
 
 ```
 
-```{r fagussylvatica_performance5180, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+```{r fagussylvatica_allpoints_15kBP_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
 
-pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica"
-models <- data.frame(name = c("Random Forest",
+performance_figure_summary
+
+```
+
+### Much evaluation points as possible - Holocene only
+
+```{r fagussylvatica_allpoints_holocene, fig.height = 7, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+combine_models <- FALSE
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica/025deg/002adp_thr"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
                                "Lasso GLM",
                                "BRT",
                                "GAM"),
-                     simfolder = c("D:/simulations/csdm/random_forest/paleo_cal5180/fagus_sylvatica",
-                                "D:/simulations/csdm/lasso_glm/paleo_cal5180/fagus_sylvatica",
-                                "D:/simulations/csdm/brt/paleo_cal5180/fagus_sylvatica",
-                                "D:/simulations/csdm/gam/paleo_cal5180/fagus_sylvatica"),
-                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/random_forest/fit/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/lasso_glm/fit/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/brt/fit/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/gam/fit/fagus_sylvatica"),
-                     mod = c("random_forest_finalcov_fullmodel.rds",
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/fagus_sylvatica",
+                                "D:/simulations/phenofit/paleo/fitted/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/random_forest/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/025deg/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/fagus_sylvatica",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
+                     mod = c("Fagus_sylvatica_VVanderMeersch.rds",
+                             "cmaes_fit_subset4_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
                              "lasso_glm_finalcov_fullmodel.rds",
                              "brt_finalcov_fullmodel.rds",
                              "gam_finalcov_fullmodel.rds"))
 
+years <- c(seq(500, 11500, 500))
+brk <- 2000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+fagus_performance <- model_performance
+fagus_performance$species <- "fagus"
+
+```
+
+```{r fagussylvatica_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+performance_figure_summary
+
+```
+
+### Constant prevalence - from 15000BP
+
+```{r fagussylvatica_cstprev_15kBP, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+
+combine_models <- FALSE
+
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica/025deg/002_thr_cstprev15"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/fagus_sylvatica",
+                                "D:/simulations/phenofit/paleo/fitted/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/random_forest/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/025deg/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/fagus_sylvatica",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
+                     mod = c("Fagus_sylvatica_VVanderMeersch.rds",
+                             "cmaes_fit_subset4_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+years <- seq(500,15000,500)
+brk <- 3000
+
 source(file.path(wd, "performance_metrics", "continuous_approach.R"))
 performance_figure
 
 ```
+
+```{r fagussylvatica_cstprev_15kBP_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+
+performance_figure_summary
+
+```
+
+### Constant prevalence - Holocene only
+
+```{r fagussylvatica_cstprev_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+
+combine_models <- FALSE
+
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica/025deg/002_thr_cstprev11.5"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/fagus_sylvatica",
+                                "D:/simulations/phenofit/paleo/fitted/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/random_forest/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/brt/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/csdm/gam/paleo/025deg/fagus_sylvatica"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/fagus_sylvatica",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
+                     mod = c("Fagus_sylvatica_VVanderMeersch.rds",
+                             "cmaes_fit_subset4_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+years <- seq(500,11500,500)
+brk <- 3000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+
+```
+
+```{r fagussylvatica_cstprev_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+
+performance_figure_summary
+
+```
+
+## Abies
+
+### Much evaluation points as possible - from 15000BP
+
+```{r abiesalba_allpoints_15kBP, fig.height = 7, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+combine_models <- FALSE
+pollen_folder <- "D:/species/pollen/processed/abies_alba/025deg/001_thr"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/abies_alba",
+                                "D:/simulations/phenofit/paleo/fitted/025deg/abies_alba",
+                                "D:/simulations/csdm/random_forest/paleo/025deg/abies_alba",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/abies_alba",
+                                "D:/simulations/csdm/brt/paleo/025deg/abies_alba",
+                                "D:/simulations/csdm/gam/paleo/025deg/abies_alba"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/abies_alba",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/abies_alba"),
+                     mod = c("Abies_alba_VVanderMeersch2.rds",
+                             "cmaes_fit_subset2_rep5.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+years <- seq(500,16000,500)
+brk <- 3000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+
+```
+
+
+### Much evaluation points as possible - Holocene only
+
+```{r abiesalba_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+combine_models <- FALSE
+pollen_folder <- "D:/species/pollen/processed/abies_alba/025deg/002adp_thr"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/abies_alba",
+                                "D:/simulations/phenofit/paleo/fitted/025deg/abies_alba",
+                                "D:/simulations/csdm/random_forest/paleo/025deg/abies_alba",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/abies_alba",
+                                "D:/simulations/csdm/brt/paleo/025deg/abies_alba",
+                                "D:/simulations/csdm/gam/paleo/025deg/abies_alba"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/abies_alba",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/abies_alba",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/abies_alba"),
+                     mod = c("Abies_alba_VVanderMeersch2.rds",
+                             "cmaes_fit_subset2_rep5.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+# years <- c(seq(500,11500,500))
+years <- c(seq(500, 11500, 500))
+brk <- 2000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+abies_performance <- model_performance
+abies_performance$species <- "abies"
+
+```
+
+```{r abiesalba_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+performance_figure_summary
+
+```
+
+## Quercus - deciduous type
+
+```{r quercusdeciduous_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+combine_models <- TRUE
+
+pollen_folder <- "D:/species/pollen/processed/quercus_deciduoustype/025deg/002adp_thr"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder1 = c("D:/simulations/phenofit/paleo/expert/025deg/quercus_robur",
+                                 "D:/simulations/phenofit/paleo/fitted/025deg/quercus_robur",   
+                                "D:/simulations/csdm/random_forest/paleo/025deg/quercus_robur",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/quercus_robur",
+                                "D:/simulations/csdm/brt/paleo/025deg/quercus_robur",
+                                "D:/simulations/csdm/gam/paleo/025deg/quercus_robur"),
+                     modfolder1 = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_robur",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_robur",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/quercus_robur",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/quercus_robur",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/quercus_robur",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/quercus_robur"),
+                     mod1 = c("Quercus_robur_ADuputie.rds",
+                             "cmaes_fit_subset1_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"),
+                     simfolder2 = c("D:/simulations/phenofit/paleo/expert/025deg/quercus_petraea",
+                                   "D:/simulations/phenofit/paleo/fitted/025deg/quercus_petraea", 
+                                "D:/simulations/csdm/random_forest/paleo/025deg/quercus_petraea",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/quercus_petraea",
+                                "D:/simulations/csdm/brt/paleo/025deg/quercus_petraea",
+                                "D:/simulations/csdm/gam/paleo/025deg/quercus_petraea"),
+                     modfolder2 = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_petraea",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_petraea",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/quercus_petraea",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/quercus_petraea",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/quercus_petraea",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/quercus_petraea"),
+                     mod2 = c("Quercus_petraea_EvolLett2019.rds",
+                              "cmaes_fit_subset1_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"),
+                     simfolder3 = c("D:/simulations/phenofit/paleo/expert/025deg/quercus_pubescens",
+                                   "D:/simulations/phenofit/paleo/fitted/025deg/quercus_pubescens", 
+                                "D:/simulations/csdm/random_forest/paleo/025deg/quercus_pubescens",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/quercus_pubescens",
+                                "D:/simulations/csdm/brt/paleo/025deg/quercus_pubescens",
+                                "D:/simulations/csdm/gam/paleo/025deg/quercus_pubescens"),
+                     modfolder3 = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_pubescens",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_pubescens",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/quercus_pubescens",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/quercus_pubescens",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/quercus_pubescens",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/quercus_pubescens"),
+                     mod3 = c("Quercus_pubescens_Bleys.rds",
+                              "cmaes_fit_subset1_rep3.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"))
+
+years <- c(seq(500,11500,500))
+brk <- 2000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+quercusdec_performance <- model_performance
+quercusdec_performance$species <- "quercus_deciduous"
+
+```
+
+```{r quercusdeciduous_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+performance_figure_summary
+
+```
+
+## Quercus - evergreen type
+
+```{r quercusevergreen_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+combine_models <- FALSE
+
+pollen_folder <- "D:/species/pollen/processed/quercus_evergreentype/025deg/002adp_thr"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/quercus_ilex",
+                                 "D:/simulations/phenofit/paleo/fitted/025deg/quercus_ilex",   
+                                "D:/simulations/csdm/random_forest/paleo/025deg/quercus_ilex",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/quercus_ilex",
+                                "D:/simulations/csdm/brt/paleo/025deg/quercus_ilex",
+                                "D:/simulations/csdm/gam/paleo/025deg/quercus_ilex"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_ilex",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_ilex",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/quercus_ilex",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/quercus_ilex",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/quercus_ilex",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/quercus_ilex"),
+                     mod = c("Quercus_ilex_FTauc_ptype3.rds",
+                             "cmaes_fit_subset1_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds")
+                     )
+
+years <- c(seq(500,11500,500))
+brk <- 2000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+quercuseve_performance <- model_performance
+quercuseve_performance$species <- "quercus_evergreen"
+
+```
+
+```{r quercusevergreen_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+performance_figure_summary
+
+```
+
+## Betula pendula
+
+```{r betulapendula_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+combine_models <- FALSE
+
+pollen_folder <- "D:/species/pollen/processed/betula_pendula/025deg/002adp_thr"
+models <- data.frame(name = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "Random Forest",
+                               "Lasso GLM",
+                               "BRT",
+                               "GAM"),
+                     type = c("PHENOFIT",
+                               "PHENOFIT (fitted)",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM",
+                               "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/betula_pendula",
+                                 "D:/simulations/phenofit/paleo/fitted/025deg/betula_pendula",   
+                                "D:/simulations/csdm/random_forest/paleo/025deg/betula_pendula",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/betula_pendula",
+                                "D:/simulations/csdm/brt/paleo/025deg/betula_pendula",
+                                "D:/simulations/csdm/gam/paleo/025deg/betula_pendula"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/betula_pendula",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/betula_pendula",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/betula_pendula",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/betula_pendula",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/betula_pendula",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/betula_pendula"),
+                     mod = c("Betula_pendula_DAsse.rds",
+                             "cmaes_fit_subset2_rep2.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds")
+                     )
+
+years <- c(seq(500,18000,500))
+brk <- 2000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+betula_performance <- model_performance
+betula_performance$species <- "betula"
+
+```
+
+```{r betulapendula_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+performance_figure_summary
+
+```
+
+## Larix decidua
+
+```{r larixdecidua_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+combine_models <- FALSE
+
+pollen_folder <- "D:/species/pollen/processed/larix_decidua/025deg/002adp_thr"
+models <- data.frame(name = c("PHENOFIT",
+                              "PHENOFIT (fitted)",
+                              "Random Forest",
+                              "Lasso GLM",
+                              "BRT",
+                              "GAM"),
+                     type = c("PHENOFIT",
+                              "PHENOFIT (fitted)",
+                              "cSDM",
+                              "cSDM",
+                              "cSDM",
+                              "cSDM"),
+                     simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/larix_decidua",
+                                   "D:/simulations/phenofit/paleo/fitted/025deg/larix_decidua",   
+                                   "D:/simulations/csdm/random_forest/paleo/025deg/larix_decidua",
+                                   "D:/simulations/csdm/lasso_glm/paleo/025deg/larix_decidua",
+                                   "D:/simulations/csdm/brt/paleo/025deg/larix_decidua",
+                                   "D:/simulations/csdm/gam/paleo/025deg/larix_decidua"),
+                     modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/larix_decidua",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/larix_decidua",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/larix_decidua",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/larix_decidua",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/larix_decidua",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/larix_decidua"),
+                     mod = c("Larix_decidua_DAsse.rds",
+                             "cmaes_fit_subset2_rep1.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds")
+)
+
+years <- c(seq(500,11500,500))
+brk <- 2000
+
+source(file.path(wd, "performance_metrics", "continuous_approach.R"))
+performance_figure
+larix_performance <- model_performance
+larix_performance$species <- "larix"
+
+```
+
+```{r larixdecidua_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+
+performance_figure_summary
+
+```
+
+
+
+## All species
+
+```{r allspecies_allpoints_holocene_summary, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+model_performance <- rbind(fagus_performance, abies_performance, quercusdec_performance)
+
+auc_plot <- ggplot(data = model_performance) +
+  geom_point(aes(x = median, y = auc, col = type), size = 0.7) +
+  geom_smooth(aes(x = median, y = auc, col = type, fill = type), method = "loess", alpha = 0.3, size = 0.6) +
+  #geom_point(aes(x = year, y = auc, col = mod)) +
+  annotate("rect", xmin=min(model_performance$median), xmax=max(model_performance$median), ymin=min(model_performance$auc), ymax=0.5, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "red", linewidth = 0.5) +
+  scale_x_continuous(breaks = seq(0.9,1.85,0.1),
+                     expand = c(0, 0),
+                     name = "Climate novelty") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "AUC") +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4")) +
+  theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+tss_plot <- ggplot(data = model_performance) +
+  geom_point(aes(x = median, y = tss, col = type), size = 0.7) +
+  geom_smooth(aes(x = median, y = tss, col = type, fill = type), method = "loess", alpha = 0.3, size = 0.6) +
+  #geom_point(aes(x = year, y = auc, col = mod)) +
+  annotate("rect", xmin=min(model_performance$median), xmax=max(model_performance$median), ymin=0, ymax=min(model_performance$tss), alpha=0.05, fill="red") +
+  geom_hline(yintercept=0, linetype="dashed", color = "red", linewidth = 0.5) +
+  scale_x_continuous(breaks = seq(0.9,1.85,0.1),
+                     expand = c(0, 0),
+                     name = "Climate novelty") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "TSS") +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4")) +
+  theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+
+performance_figure_summary <- plot_grid(
+  auc_plot + theme(legend.position = 'none'), tss_plot + theme(legend.position = 'none'),
+  ncol = 2,
+  align = "v"
+)
+
+performance_figure_summary <- plot_grid(
+  performance_figure_summary,
+  get_legend(auc_plot),
+  ncol = 1,
+  rel_heights = c(1,0.1)
+)
+
+performance_figure_summary
+
+```
+
+
+
 
 ## Observed response curves
 
 ### Fagus sylvatica 
 
-```{r fagussylvatica_response, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+```{r fagussylvatica_response, fig.height = 6, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
 
 models <- data.frame(name = c("PHENOFIT",
                                "PHENOFIT (fitted)",
@@ -120,5 +725,23 @@ calibration_predictors <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/cor
 
 source(file.path(wd, "performance_metrics", "response_curve.R"))
 response_figure
+
+```
+
+### Fagus sylvatica across interpolation/extrapolation domains
+
+```{r fagussylvatica_response_domains, fig.height = 9, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = F}
+calibration_predictors <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/calibration_predictors.rds")
+source(file.path(wd, "performance_metrics", "response_curve_categorical_approach.R"))
+response_figure_cat
+
+```
+
+## Future confidence in models
+
+```{r future_perfomance, fig.height = 3, fig.width = 9, dev=c('png'), dpi = 600, results='hide', eval = T}
+future_novelty_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/forecasting/climate_data/climate_novelty"
+source(file.path(wd, "performance_metrics", "future_novelty.R"))
+future_figure_cont
 
 ```

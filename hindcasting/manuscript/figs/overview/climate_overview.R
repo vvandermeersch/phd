@@ -9,14 +9,16 @@ library(extrafont)
 library(zoo)
 library(data.table)
 
-years <- c(15, seq(1000,15000,1000), 17000, 19000, 21000)
-hadcm3b_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
+years <- c(15, seq(250,18000,250))
+hadcm3b_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/dscl_15min"
 
 
 # load climatic distance
-climdist_df <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/climate_novelty/save/predictors_climdist.rds")
+# climdist_df <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/climate_approach/data/mahal_clim_distance.rds")
+# climdist_df[climdist_df$year == 15, "year"] <- 0
+# climdist_df <- climdist_df[climdist_df$year < 17750,]
+climdist_df <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/metrics/climate_approach/data/burke_climatenovelty_CRUbaseline.rds")
 climdist_df[climdist_df$year == 15, "year"] <- 0
-
 
 # load temperature
 past_temp <- sapply(years, function(yr){
@@ -38,15 +40,15 @@ CO2_data <- data.frame(year = seq(0,21000,1000),
 
 # main part of the plot
 main_plot <- ggplot() +
-  geom_rect(data = climdist_df, aes(xmin = year-500, xmax = year+500,
+  geom_rect(data = climdist_df, aes(xmin = year-125, xmax = year+125,
                                     ymin = -23, ymax = 11,
                                     fill = median, color = median), alpha = 1) +
   scale_fill_gradientn(colours = c("#cee5f2", "#accbe1", "#7c98b3", "#637081"),
-                       limits = c(0,1.5),
-                       breaks = c(0,0.5,1,1.5)) +
+                       limits = c(0,2.5),
+                       breaks = c(0,1,2)) +
   scale_color_gradientn(colours = c("#cee5f2", "#accbe1", "#7c98b3", "#637081"),
-                       limits = c(0,1.5),
-                       breaks = c(0,0.5,1,1.5), guide = 'none') +
+                       limits = c(0,2.5),
+                       breaks = c(0,1,2), guide = 'none') +
   geom_hline(aes(yintercept= c(0, -10, -20, 10)), color = "white", alpha = 0.5) +
   geom_segment(aes(x = 14700, xend = 14700, y = -23, yend = 11), 
                color ="white", size = 0.8, linetype = "dashed") +
@@ -59,9 +61,9 @@ main_plot <- ggplot() +
   geom_line(data = pasttemp_df, aes(x = year, y = q25), col = "#25a244", size = 0.5) +
   geom_line(data = pasttemp_df, aes(x = year, y = q75), col = "#25a244", size = 0.5) +
   geom_line(data = pasttemp_df, aes(x = year, y = mean), col = "#2c6e49", size = 1) +
-  coord_cartesian(xlim=c(20050, 950)) +
+  coord_cartesian(xlim=c(17050, 950)) +
   scale_y_continuous(expand = c(0, 0), labels = ~sub("-", "-", .x)) +
-  scale_x_reverse(breaks = c(20000, 15000, 10000, 5000, 0)) +
+  scale_x_reverse(breaks = c(15000, 10000, 5000, 0)) +
   labs(y = "ANNUAL MEAN TEMPERATURE  (°C)", x = "YEARS (BP)", fill = "Climatic distance") +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
@@ -75,17 +77,19 @@ main_plot <- ggplot() +
         axis.title.y = element_text(margin = margin(r = 0)),
         legend.text = element_text(colour = "black", family= "Noto Sans", size = 8),
         legend.title = element_text(colour = "black", family= "Noto Sans", size = 8),
-        legend.title.align = 0.5, legend.position = "bottom",
+        legend.title.align = 0.5, 
         legend.key.height = unit(0.3, 'cm'), legend.key.width = unit(1, 'cm'),
-        legend.box.margin=margin(-10,-10,-10,-10)) +
-  annotate("text", x = 16500, y = 12.4, label = "LATE PLEISTOCENE", color = "black", family= "Noto Sans", size = 4) +
+        legend.margin=margin(t = 0.1, b=0.05, r = 0.3, l = 0.3, unit='cm'),
+        legend.position=c(.8,.1),
+        legend.background = element_rect(colour="black", fill="white")) +
+  annotate("text", x = 15000, y = 12.4, label = "LATE PLEISTOCENE", color = "black", family= "Noto Sans", size = 4) +
   annotate("text", x = 6000, y = 12.4, label = "HOLOCENE", color = "black", family= "Noto Sans", size = 4) +
   annotate("text", x = 12400, y = -15.3, label = "Younger Dryas", color = "white", angle = 90,
            family= "Noto Sans") +
   annotate("text", x = 13900, y = -15.3, label = "Bølling-Allerød", color = "white", angle = 90,
            family= "Noto Sans") +
-  geom_rect(aes(xmin=0, xmax=21000, ymin=-23, ymax= 13.7), fill = NA, color = "black", size = 0.8) +
-  geom_segment(aes(x = 0, xend = 21000, y = 11, yend = 11), color ="black", size = 0.6) +
+  geom_rect(aes(xmin=150, xmax=17850, ymin=-23, ymax= 13.7), fill = NA, color = "black", size = 0.8) +
+  geom_segment(aes(x = 0, xend = 18000, y = 11, yend = 11), color ="black", size = 0.6) +
   guides(fill = guide_colorbar(title.position = "top", direction = "horizontal", frame.colour = "black", frame.linewidth = 0.3,
                                ticks = FALSE))
 
@@ -129,12 +133,12 @@ d18O_plot <- ggplot() +
   geom_segment(aes(x = 11700, xend = 11700, y = -44, yend = -32.5), 
                color ="grey", size = 1) +
   geom_line(data = d18O_data, aes(y = d18O, x = Age), color = "#A22482") +
-  geom_rect(aes(xmin=0, xmax=21000, ymin=-44, ymax= -32.5), fill = NA, color = "black", size = 0.8) +
+  geom_rect(aes(xmin=150, xmax=17850, ymin=-44, ymax= -32.5), fill = NA, color = "black", size = 0.8) +
   labs(y = expression(delta^18*O), x = "") +
   scale_y_continuous(limits = c(-44, -32.5), position = "right", breaks = c(-42, -40, -38,  -36, -34),
                      expand = c(0, 0)) +
-  scale_x_reverse(breaks = c(20000, 15000, 10000, 5000, 0)) +
-  coord_cartesian(xlim=c(20050, 950)) +
+  scale_x_reverse(breaks = c(15000, 10000, 5000, 0)) +
+  coord_cartesian(xlim=c(17050, 950)) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(), 
