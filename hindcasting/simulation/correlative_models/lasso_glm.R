@@ -3,16 +3,16 @@
 # Lasso GLM paleosimulations #
 #----------------------------#
 
-model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv_5180/lasso_glm/fit"
-sim_dir <- "D:/simulations/csdm/lasso_glm/paleo_cal5180"
-clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format"
+model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit"
+sim_dir <- "D:/simulations/csdm/lasso_glm/paleo/025deg"
+clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/dscl_15min"
 
 library(Matrix)
 library(glmnet)
 library(dplyr)
 
 # Setup
-species <- "fagus_sylvatica"
+species <- "larix_decidua"
 bc_covars <- c("bio6", "bio12") # bioclim predictors
 soil_covars <- c("WHC", "pH") # soil predictors
 cc_covars <- c("sum_apsep_GDD5", "w_bal") # custom climatic predictors
@@ -23,14 +23,9 @@ dir.create(file.path(sim_dir, species), showWarnings = F)
 # Load model
 glmmod <- readRDS(file.path(model_dir, species, "lasso_glm_finalcov_fullmodel.rds"))
 
-# Load soil predictors (present data used throughout past simulations)
-soil_predictors <- readRDS(file.path(clim_dir, "soil_predictors.rds"))
-
 # Simulation loop
-for(year in seq(500,9000,500)){
-  clim_predictors <- readRDS(file.path(clim_dir, paste0("predictors_", year, "BP.rds")))
-  predictors <- left_join(clim_predictors, soil_predictors) %>%
-    na.omit()
+for(year in seq(250,18000,250)){
+  predictors <- readRDS(file.path(clim_dir, paste0("predictors_", year, "BP.rds")))
   
   sim <- predictors[, c("lat", "lon")]
   
