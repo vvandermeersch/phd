@@ -21,7 +21,9 @@ model_performance <- lapply(1:nrow(models),function(i){
       fitness1 <- readRDS(file.path(mod$simfolder1, paste0(year, "BP.rds")))
       fitness2 <- readRDS(file.path(mod$simfolder2, paste0(year, "BP.rds")))
       fitness3 <- readRDS(file.path(mod$simfolder3, paste0(year, "BP.rds")))
-      fitness <- data.frame(lat = fitness1$lat, lon = fitness1$lon, pred = rowMeans(cbind(fitness1$pred,fitness2$pred, fitness3$pred)))
+      fitness4 <- readRDS(file.path(mod$simfolder4, paste0(year, "BP.rds")))
+      fitness <- data.frame(lat = fitness1$lat, lon = fitness1$lon, 
+                            pred = rowMeans(cbind(fitness1$pred,fitness2$pred, fitness3$pred, fitness4$pred)))
     }else{
       
       fitness <- readRDS(file.path(mod$simfolder, paste0(year, "BP.rds")))
@@ -29,7 +31,9 @@ model_performance <- lapply(1:nrow(models),function(i){
     }
     
     pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
-  
+    
+    fitness$lat <- round(fitness$lat,2)
+    fitness$lon <- round(fitness$lon,2)
     fitness <- left_join(fitness, pollen, by = c("lat", "lon"))
     
     # boyce index
@@ -55,9 +59,13 @@ model_performance <- lapply(1:nrow(models),function(i){
       ths <- readRDS(file.path(mod$modfolder3, mod$mod3))$best_threshold
       fitness3$bin_pred <- 0
       fitness3[fitness3$pred >= ths, "bin_pred"] <- 1
-
       
-      fitness$bin_pred <- rowMeans(cbind(fitness1$bin_pred,fitness2$bin_pred, fitness3$bin_pred))
+      ths <- readRDS(file.path(mod$modfolder4, mod$mod4))$best_threshold
+      fitness4$bin_pred <- 0
+      fitness4[fitness4$pred >= ths, "bin_pred"] <- 1
+      
+      fitness$bin_pred <- rowMeans(cbind(fitness1$bin_pred,fitness2$bin_pred, fitness3$bin_pred, fitness4$bin_pred))
+      fitness[fitness$bin_pred > 0, "bin_pred"] <- 1
    
     }else{
       
@@ -180,8 +188,8 @@ auc_plot <- ggplot(data = model_performance) +
                   name = "YEARS (BP)") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "AUC") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                       values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                       values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81","#c29ab2")) +
   theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -199,8 +207,8 @@ tss_plot <- ggplot(data = model_performance) +
                   name = "YEARS (BP)") + 
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "TSS") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4","#995d81", "#c29ab2")) +
   theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -218,8 +226,8 @@ boyceindex_plot <- ggplot(data = model_performance) +
                   name = "YEARS (BP)") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "Boyce index") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81", "#c29ab2")) +
   theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -236,8 +244,8 @@ sorensen_plot <- ggplot(data = model_performance) +
                   name = "YEARS (BP)") +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.05)),
                      name = "Sørensen index") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81", "#c29ab2")) +
   theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -254,8 +262,8 @@ suitability_plot <- ggplot(data = model_performance) +
                   name = "YEARS (BP)") +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.05)),
                      name = "Prop. of predicted suitable area") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81", "#c29ab2")) +
   theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -354,11 +362,11 @@ auc_plot <- ggplot(data = model_performance) +
                   name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "AUC") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
-  scale_fill_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
-  theme_bw() +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4","#995d81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81","#c29ab2")) +
+  theme_bw() + 
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
         axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
@@ -375,8 +383,10 @@ tss_plot <- ggplot(data = model_performance) +
                   name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "TSS") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81","#c29ab2")) +
+  scale_fill_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81","#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -394,8 +404,10 @@ boyceindex_plot <- ggplot(data = model_performance) +
                   name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "Boyce index") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4","#995d81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81","#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -411,8 +423,10 @@ sorensen_plot <- ggplot(data = model_performance) +
                   name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.05)),
                      name = "Sørensen index") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4","#995d81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4", "#995d81","#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -446,8 +460,10 @@ sorensen_hpv <- ggplot(data = model_performance) +
                   name = "Sørensen hypervolume similarity") +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.05)),
                      name = "Sørensen index") +
-  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4","#995d81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('Lasso GLM', 'GAM', 'Random Forest', "BRT", "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117","#f9844a", "#5ab078", "#b5e48c", "#457b9d", "#82BCC4","#995d81","#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -469,10 +485,10 @@ auc_plot <- ggplot(data = model_performance) +
                      name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "AUC") +
-  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117", "#457b9d", "#82BCC4")) +
-  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                    values= c("#e86117", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -492,10 +508,10 @@ tss_plot <- ggplot(data = model_performance) +
                      name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "TSS") +
-  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117", "#457b9d", "#82BCC4")) +
-  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                    values= c("#e86117", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),

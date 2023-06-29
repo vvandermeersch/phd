@@ -27,6 +27,12 @@ climateoverview_figure
 source(file.path(wd, "overview", "climate_overview_zoom.R"))
 climateoverview_figure
 ```
+```{r temperature, fig.height = 1.5, fig.width = 6, dev=c('png'), dpi = 600, eval = T}
+source(file.path(wd, "overview", "climate_overview.R"))
+temperature_plot
+```
+
+
 
 ## Climate metrics
 
@@ -52,6 +58,19 @@ source(file.path(wd, "overview", "distance_futurepast.R"))
 distance_futurepast3 
 distance_futurepast4
 ```
+
+```{r nichesimilarity, fig.height =6, fig.width = 4, dev=c('png'), dpi = 600, eval = T}
+niche_similarity <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/performance/hypervolume/niche_similarity.rds")
+source(file.path(wd, "niche", "niche_similarity.R"))
+niche_similarity_fagus
+
+```
+
+```{r nichesimilarity2, fig.height =5, fig.width = 4, dev=c('png'), dpi = 600, eval = T}
+
+niche_similarity_abies
+```
+
 
 ## Fagus
 
@@ -111,39 +130,49 @@ performance_figure_summary
 
 ```{r fagussylvatica_allpoints_holocene, fig.height = 7, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
 combine_models <- FALSE
-pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica/025deg/002adp_thr"
+pollen_folder <- "D:/species/pollen/processed/fagus_sylvatica/025deg/001adp_thr_500yrunc"
 models <- data.frame(name = c("PHENOFIT",
                                "PHENOFIT (fitted)",
                                "Random Forest",
                                "Lasso GLM",
                                "BRT",
-                               "GAM"),
+                               "GAM",
+                              "CASTANEA",
+                              "CASTANEA (fitted)"),
                      type = c("PHENOFIT",
                                "PHENOFIT (fitted)",
                                "cSDM",
                                "cSDM",
                                "cSDM",
-                               "cSDM"),
+                               "cSDM",
+                              "CASTANEA",
+                              "CASTANEA (fitted)"),
                      simfolder = c("D:/simulations/phenofit/paleo/expert/025deg/fagus_sylvatica",
                                 "D:/simulations/phenofit/paleo/fitted/025deg/fagus_sylvatica",
                                 "D:/simulations/csdm/random_forest/paleo/025deg/fagus_sylvatica",
                                 "D:/simulations/csdm/lasso_glm/paleo/025deg/fagus_sylvatica",
                                 "D:/simulations/csdm/brt/paleo/025deg/fagus_sylvatica",
-                                "D:/simulations/csdm/gam/paleo/025deg/fagus_sylvatica"),
+                                "D:/simulations/csdm/gam/paleo/025deg/fagus_sylvatica",
+                                "D:/simulations/castanea/paleo/expert/025deg/fagus_sylvatica",
+                                "D:/simulations/castanea/paleo/fitted/025deg/fagus_sylvatica"),
                      modfolder = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/fagus_sylvatica",
                                     "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/fagus_sylvatica",
-                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica"),
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/fit/expert/fagus_sylvatica",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/fit/fitted/fagus_sylvatica"),
                      mod = c("Fagus_sylvatica_VVanderMeersch.rds",
                              "cmaes_fit_subset4_rep1.rds",
                              "random_forest_finalcov_fullmodel.rds",
                              "lasso_glm_finalcov_fullmodel.rds",
                              "brt_finalcov_fullmodel.rds",
-                             "gam_finalcov_fullmodel.rds"))
+                             "gam_finalcov_fullmodel.rds",
+                             "fagus_sylvatica.rds",
+                             "cmaes_fit_subset1_rep2.rds"))
 
-years <- c(seq(500, 11500, 500))
+years <- c(seq(500,8500, 500))
 brk <- 2000
 
 source(file.path(wd, "performance_metrics", "continuous_approach.R"))
@@ -314,7 +343,7 @@ performance_figure
 
 ```{r abiesalba_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
 combine_models <- FALSE
-pollen_folder <- "D:/species/pollen/processed/abies_alba/025deg/002adp_thr"
+pollen_folder <- "D:/species/pollen/processed/abies_alba/025deg/001adp_thr_500yrunc"
 models <- data.frame(name = c("PHENOFIT",
                                "PHENOFIT (fitted)",
                                "Random Forest",
@@ -363,13 +392,13 @@ performance_figure_summary
 
 ```
 
-## Quercus - deciduous type
+## Quercus - all type 
 
 ```{r quercusdeciduous_allpoints_holocene, fig.height = 8, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
 
 combine_models <- TRUE
 
-pollen_folder <- "D:/species/pollen/processed/quercus_deciduoustype/025deg/002adp_thr"
+pollen_folder <- "D:/species/pollen/processed/quercus/025deg/001adp_thr_500yrunc"
 models <- data.frame(name = c("PHENOFIT",
                                "PHENOFIT (fitted)",
                                "Random Forest",
@@ -432,6 +461,24 @@ models <- data.frame(name = c("PHENOFIT",
                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/quercus_pubescens"),
                      mod3 = c("Quercus_pubescens_Bleys.rds",
                               "cmaes_fit_subset1_rep3.rds",
+                             "random_forest_finalcov_fullmodel.rds",
+                             "lasso_glm_finalcov_fullmodel.rds",
+                             "brt_finalcov_fullmodel.rds",
+                             "gam_finalcov_fullmodel.rds"),
+                     simfolder4 = c("D:/simulations/phenofit/paleo/expert/025deg/quercus_ilex",
+                                 "D:/simulations/phenofit/paleo/fitted/025deg/quercus_ilex",   
+                                "D:/simulations/csdm/random_forest/paleo/025deg/quercus_ilex",
+                                "D:/simulations/csdm/lasso_glm/paleo/025deg/quercus_ilex",
+                                "D:/simulations/csdm/brt/paleo/025deg/quercus_ilex",
+                                "D:/simulations/csdm/gam/paleo/025deg/quercus_ilex"),
+                     modfolder4 = c("C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/expert/quercus_ilex",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_ilex",
+                                    "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/quercus_ilex",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/quercus_ilex",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/brt/fit/quercus_ilex",
+                                   "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/gam/fit/quercus_ilex"),
+                     mod4 = c("Quercus_ilex_FTauc_ptype3.rds",
+                             "cmaes_fit_subset1_rep1.rds",
                              "random_forest_finalcov_fullmodel.rds",
                              "lasso_glm_finalcov_fullmodel.rds",
                              "brt_finalcov_fullmodel.rds",
@@ -514,7 +561,7 @@ performance_figure_summary
 
 combine_models <- FALSE
 
-pollen_folder <- "D:/species/pollen/processed/betula_pendula/025deg/002adp_thr"
+pollen_folder <- "D:/species/pollen/processed/betula_pendula/025deg/001adp_thr_500yrunc"
 models <- data.frame(name = c("PHENOFIT",
                                "PHENOFIT (fitted)",
                                "Random Forest",
@@ -547,7 +594,7 @@ models <- data.frame(name = c("PHENOFIT",
                              "gam_finalcov_fullmodel.rds")
                      )
 
-years <- c(seq(500,18000,500))
+years <- c(seq(500,11500,500))
 brk <- 2000
 
 source(file.path(wd, "performance_metrics", "continuous_approach.R"))
@@ -569,7 +616,7 @@ performance_figure_summary
 
 combine_models <- FALSE
 
-pollen_folder <- "D:/species/pollen/processed/larix_decidua/025deg/002adp_thr"
+pollen_folder <- "D:/species/pollen/processed/larix_decidua/025deg/001adp_thr_500yrunc"
 models <- data.frame(name = c("PHENOFIT",
                               "PHENOFIT (fitted)",
                               "Random Forest",
@@ -636,10 +683,10 @@ auc_plot <- ggplot(data = model_performance) +
                      name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "AUC") +
-  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117", "#457b9d", "#82BCC4")) +
-  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                    values= c("#e86117", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -658,10 +705,10 @@ tss_plot <- ggplot(data = model_performance) +
                      name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "TSS") +
-  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                     values= c("#e86117", "#457b9d", "#82BCC4")) +
-  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)"),
-                    values= c("#e86117", "#457b9d", "#82BCC4")) +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -685,6 +732,105 @@ performance_figure_summary <- plot_grid(
 
 performance_figure_summary
 
+```
+
+```{r allspecies_allpoints_holocene_summarypointrange, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+model_performance_range <- model_performance %>% 
+  group_by(type, median) %>%
+  dplyr::summarise(median_tss=median(tss), sd_tss=sd(tss),
+                   median_auc=median(auc), sd_auc=sd(auc))
+
+auc_plot <- ggplot(data = model_performance_range) +
+  geom_pointrange(aes(x = median, y = median_auc, ymin=median_auc-sd_auc, ymax=median_auc+sd_auc, col = type), size = 0.3, 
+                  position = position_dodge(width = 0.015)) +
+  geom_smooth(aes(x = median, y = median_auc, col = type, fill = type), method = "loess", alpha = 0.3, size = 0.6) +
+  #geom_point(aes(x = year, y = auc, col = mod)) +
+  annotate("rect", xmin=min(model_performance$median), xmax=max(model_performance$median), ymin=min(model_performance$auc), ymax=0.5, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "red", linewidth = 0.5) +
+  scale_x_continuous(breaks = seq(0.9,1.85,0.1),
+                     expand = c(0, 0),
+                     name = "Climate novelty") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "AUC") +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+tss_plot <- ggplot(data = model_performance_range) +
+  geom_pointrange(aes(x = median, y = median_tss, ymin=median_tss-sd_tss, ymax=median_tss+sd_tss, col = type), size = 0.3) +
+  geom_smooth(aes(x = median, y = median_tss, col = type, fill = type), method = "loess", alpha = 0.3, size = 0.6) +
+  #geom_point(aes(x = year, y = auc, col = mod)) +
+  annotate("rect", xmin=min(model_performance$median), xmax=max(model_performance$median), ymin=0, ymax=min(model_performance$tss), alpha=0.05, fill="red") +
+  geom_hline(yintercept=0, linetype="dashed", color = "red", linewidth = 0.5) +
+  scale_x_continuous(breaks = seq(0.9,1.85,0.1),
+                     expand = c(0, 0),
+                     name = "Climate novelty") +
+  scale_y_continuous(expand = expansion(mult = c(0, .05)),
+                     name = "TSS") +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
+
+
+performance_figure_summary <- plot_grid(
+  auc_plot + theme(legend.position = 'none'), tss_plot + theme(legend.position = 'none'),
+  ncol = 2,
+  align = "v"
+)
+
+performance_figure_summary <- plot_grid(
+  performance_figure_summary,
+  get_legend(auc_plot),
+  ncol = 1,
+  rel_heights = c(1,0.1)
+)
+
+performance_figure_summary
+
+```
+
+```{r nls, fig.height = 3, fig.width = 7, dev=c('png'), dpi = 600, results='hide', eval = T}
+var <- "tss"
+source(file.path(wd, "performance_metrics", "nls.R"))
+tss_plot <- plot +
+  annotate("rect", xmin=min(model_performance$median)-0.01, xmax=max(model_performance$median)+0.02, ymin=0, ymax=-0.3, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0, linetype="dashed", color = "red", linewidth = 0.5)
+  
+
+var <- "auc"
+source(file.path(wd, "performance_metrics", "nls.R"))
+auc_plot <- plot +
+  annotate("rect", xmin=min(model_performance$median)-0.01, xmax=max(model_performance$median)+0.02, ymin=0.38, ymax=0.5, alpha=0.05, fill="red") +
+  geom_hline(yintercept=0.5, linetype="dashed", color = "red", linewidth = 0.5)
+
+performance_nls <- plot_grid(
+  auc_plot + theme(legend.position = 'none'), tss_plot + theme(legend.position = 'none'),
+  ncol = 2,
+  align = "v"
+)
+
+performance_nls <- plot_grid(
+  performance_nls,
+  get_legend(auc_plot),
+  ncol = 1,
+  rel_heights = c(1,0.1)
+)
+
+performance_nls
 ```
 
 

@@ -23,10 +23,11 @@ climdist_df[climdist_df$year == 15, "year"] <- 0
 # load temperature
 past_temp <- sapply(years, function(yr){
   data <- readRDS(file.path(hadcm3b_dir, paste0("predictors_", yr, "BP.rds"))) %>% 
-    dplyr::select(bio1)
+    dplyr::select(bio1, bio5)
   return(c(mean = mean(data$bio1), 
            q25 = as.numeric(quantile(data$bio1, 0.25)), 
-           q75 = as.numeric(quantile(data$bio1, 0.75))))
+           q75 = as.numeric(quantile(data$bio1, 0.75)),
+           meanmax = mean(data$bio5)))
 })
 pasttemp_df <- as.data.frame(cbind(year = years, t(past_temp)))
 pasttemp_df[pasttemp_df$year == 15, "year"] <- 0
@@ -163,4 +164,15 @@ climateoverview_figure <- plot_grid(
 
 
 
-
+temperature_plot <- ggplot() +
+  geom_line(data = pasttemp_df, aes(y = mean, x = year/1000), color = "#2c6e49") +
+  coord_cartesian(xlim=c(17, 0.9)) +
+  scale_y_continuous(expand = c(0.01, 0.01), labels = ~sub("-", "-", .x)) +
+  scale_x_reverse(breaks = c(17, 16, 14, 12, 11, 10, 8, 4, 0.5)) +
+  labs(y = "ANNUAL MEAN\nTEMPERATURE  (°C)", x = "kYEARS (BP)", fill = "Climatic distance") +
+  theme_bw() + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(colour = "black", family= "Noto Sans", size = 9),
+        axis.title = element_text(colour = "black", family= "Noto Sans", size = 9),
+        legend.position="bottom", legend.title=element_blank())
