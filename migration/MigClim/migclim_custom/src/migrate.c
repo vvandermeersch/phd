@@ -354,7 +354,7 @@ void mcMigrate (char **paramFile, int *nrFiles)
         loopID = 1;
       }
       else{
-	    loopID = envChgStep * 100;
+	    loopID = (envChgStep-1) * 250; /*Modify by V.V. */
       }
       
       
