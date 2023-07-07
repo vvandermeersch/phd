@@ -40,14 +40,27 @@ create_pollen_raster <- function(year, window,
     
   }else if(method == "one_is_enough"){
     
-    # If at least one site has a rel. abundance > threshold, we consider the species present in the cell
+    # If at least one site has a rel. abundance >= threshold, we consider the species present in the cell
     data_yr_pts <- vect(data_yr, geom=c("Longitude", "Latitude"))
-    data_yr_pts$pres <- as.numeric(data_yr_pts$relative_abundance>threshold)
+    data_yr_pts$pres <- as.numeric(data_yr_pts$relative_abundance>=threshold)
     
     species_raster <- rasterize(data_yr_pts, grid, field = "pres", fun = "max")
     
-    cat(paste0("   Number of presence: ", length(species_raster[species_raster==1]),"\n"))
+    # records outside grid (coastal cells) - circle interpolation and keep only the nearest cell
+    rec_outside <- as.points(mask(species_raster, grid, inverse = TRUE)) # p
+    rec_outside_buffer <- mask(rasterizeWin(rec_outside, grid, field = "pres_max", win = "circle", pars = 0.25, fun = "max"), 
+                               grid)
+    nearest_cell <- class::knn1(crds(rec_outside_buffer, na.rm = T), crds(rec_outside), factor(seq_len(nrow(crds(rec_outside_buffer, na.rm = T)))))
+    rec_out_pts <- vect(crds(rec_outside_buffer, na.rm = T)[nearest_cell,])
+    rec_out_pts$pres <- rec_outside$pres_max
+    rec_out_raster <- rasterize(rec_out_pts, grid, field = "pres", fun = "max")
+
+  
+    species_raster <- mask(species_raster, grid)
+    cat(paste0("   Number of presence inside grid: ", length(species_raster[species_raster==1]),"\n"))
+    cat(paste0("   Number of presence near coastal cells: ", length(rec_out_raster[rec_out_raster==1]),"\n"))
     
+    species_raster <- max(species_raster, rec_out_raster, na.rm = T)
   }
   
   return(species_raster)
@@ -96,13 +109,27 @@ create_pollen_raster_quercus <- function(year, window,
     
   }else if(method == "one_is_enough"){
     
-    # If at least one site has a rel. abundance > threshold, we consider the species present in the cell
-    data_yr_pts <- vect(data_yr, geom=c("long", "lat"))
-    data_yr_pts$pres <- as.numeric(data_yr_pts$relative_abundance>threshold)
+    # If at least one site has a rel. abundance >= threshold, we consider the species present in the cell
+    data_yr_pts <- vect(data_yr, geom=c("Longitude", "Latitude"))
+    data_yr_pts$pres <- as.numeric(data_yr_pts$relative_abundance>=threshold)
     
     species_raster <- rasterize(data_yr_pts, grid, field = "pres", fun = "max")
     
-    cat(paste0("   Number of presence: ", length(species_raster[species_raster==1]),"\n"))
+    # records outside grid (coastal cells) - circle interpolation and keep only the nearest cell
+    rec_outside <- as.points(mask(species_raster, grid, inverse = TRUE)) # p
+    rec_outside_buffer <- mask(rasterizeWin(rec_outside, grid, field = "pres_max", win = "circle", pars = 0.25, fun = "max"), 
+                               grid)
+    nearest_cell <- class::knn1(crds(rec_outside_buffer, na.rm = T), crds(rec_outside), factor(seq_len(nrow(crds(rec_outside_buffer, na.rm = T)))))
+    rec_out_pts <- vect(crds(rec_outside_buffer, na.rm = T)[nearest_cell,])
+    rec_out_pts$pres <- rec_outside$pres_max
+    rec_out_raster <- rasterize(rec_out_pts, grid, field = "pres", fun = "max")
+    
+    
+    species_raster <- mask(species_raster, grid)
+    cat(paste0("   Number of presence inside grid: ", length(species_raster[species_raster==1]),"\n"))
+    cat(paste0("   Number of presence near coastal cells: ", length(rec_out_raster[rec_out_raster==1]),"\n"))
+    
+    species_raster <- max(species_raster, rec_out_raster, na.rm = T)
     
   }
   

@@ -17,8 +17,8 @@ library(terra)
 # Load European dataset (Herzschuh et al. 2022)
 dataset_count <- fread(file.path(input_folder, "Herzschuh-etal_2021_Europe-counts.tab"), skip = 1302) %>%
   dplyr::mutate(pollen_count = rowSums(across(15:223))) %>%
-  dplyr::filter(pollen_count >= 150)  # removing sequences with less than 150 pollen grain counts
-
+  dplyr::filter(pollen_count >= 100) %>% # removing sequences with less than 100 pollen grain counts 
+  dplyr::filter(`Age max [ka]` - `Age min [ka]` <= 1)
 
 
 # Load metadata
@@ -29,19 +29,13 @@ metadata <- fread(file.path(input_folder, "Herzschuh-etal_2021_Europe-meta.tab")
 dataset_count <- left_join(dataset_count, metadata) %>%
   dplyr::filter(`Loc type` != "Marine" & `Loc type` != "Lagoon")
 
-# Load climate data grid
-grid <- fread("D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dscl_15min/250BP/HadCM3B_Altitude.fit")
-names(grid) <- c("lat", "lon", "alt")
-grid <- rast(grid[,c("lon", "lat", "alt")])
 
 
-
-
-field <- "Lar [#]" # species fieldname in Herzschuh dataset 
+field <- "Que [#]" # species fieldname in Herzschuh dataset 
 
 # Find threshold with maximum relative abundance
-years <- seq(500, 18000, 500)
-sp_threshold <- find_threshold(years, window = 250, field, dataset_count, factor = 0.02)
+years <- seq(500, 16000, 500)
+sp_threshold <- find_threshold(years, window = 250, field, dataset_count, factor = 0.01)
 
 
 # Loop on years
@@ -52,6 +46,11 @@ for(i in 1:length(years)){
   names(grid) <- c("lat", "lon", "alt")
   grid <- rast(grid[,c("lon", "lat", "alt")])
   
+  # near 1km resolution (needed for migration)
+  grid_res <- grid
+  res(grid_res) <- c(0.01, 0.01)
+  grid <- resample(grid, grid_res)
+  
   # "one is enough" binarization - specific threshold
   pollen_r <- create_pollen_raster(year, window = 250, 
                                    field = field, dataset_count, 
@@ -60,32 +59,32 @@ for(i in 1:length(years)){
   pollen_df <- as.data.frame(pollen_r, xy = T)
   names(pollen_df) <- c("lon", "lat", "pres")
   pollen_df[,1:2] <- round(pollen_df[,1:2],2)
-  output_folder <- "D:/species/pollen/processed/larix_decidua/025deg/002adp_thr"
+  output_folder <- "D:/species/pollen/processed/quercus/025deg/001adp_thr_1000yrunc_1km"
   saveRDS(pollen_df, file.path(output_folder, paste0("pres_",year, "BP", ".rds")))
   
   
   # "one is enough" binarization - constant threshold of 2%
-  pollen_r <- create_pollen_raster(year, window = 250, 
-                                   field = field, dataset_count, 
-                                   grid,
-                                   method = "one_is_enough", threshold = 0.02)
-  pollen_df <- as.data.frame(pollen_r, xy = T)
-  names(pollen_df) <- c("lon", "lat", "pres")
-  pollen_df[,1:2] <- round(pollen_df[,1:2],2)
-  output_folder <- "D:/species/pollen/processed/larix_decidua/025deg/002_thr"
-  saveRDS(pollen_df, file.path(output_folder, paste0("pres_",year, "BP", ".rds")))
-  
-  
-  # "one is enough" binarization - constant threshold of 1%
-  pollen_r <- create_pollen_raster(year, window = 250, 
-                                   field = field, dataset_count, 
-                                   grid,
-                                   method = "one_is_enough", threshold = 0.01)
-  pollen_df <- as.data.frame(pollen_r, xy = T)
-  names(pollen_df) <- c("lon", "lat", "pres")
-  pollen_df[,1:2] <- round(pollen_df[,1:2],2)
-  output_folder <- "D:/species/pollen/processed/larix_decidua/025deg/001_thr"
-  saveRDS(pollen_df, file.path(output_folder, paste0("pres_",year, "BP", ".rds")))
+  # pollen_r <- create_pollen_raster(year, window = 250, 
+  #                                  field = field, dataset_count, 
+  #                                  grid,
+  #                                  method = "one_is_enough", threshold = 0.02)
+  # pollen_df <- as.data.frame(pollen_r, xy = T)
+  # names(pollen_df) <- c("lon", "lat", "pres")
+  # pollen_df[,1:2] <- round(pollen_df[,1:2],2)
+  # output_folder <- "D:/species/pollen/processed/larix_decidua/025deg/002_thr"
+  # saveRDS(pollen_df, file.path(output_folder, paste0("pres_",year, "BP", ".rds")))
+  # 
+  # 
+  # # "one is enough" binarization - constant threshold of 1%
+  # pollen_r <- create_pollen_raster(year, window = 250, 
+  #                                  field = field, dataset_count, 
+  #                                  grid,
+  #                                  method = "one_is_enough", threshold = 0.01)
+  # pollen_df <- as.data.frame(pollen_r, xy = T)
+  # names(pollen_df) <- c("lon", "lat", "pres")
+  # pollen_df[,1:2] <- round(pollen_df[,1:2],2)
+  # output_folder <- "D:/species/pollen/processed/larix_decidua/025deg/001_thr"
+  # saveRDS(pollen_df, file.path(output_folder, paste0("pres_",year, "BP", ".rds")))
   
   
   # relative abundance
@@ -139,7 +138,8 @@ pollen_counts[is.na(pollen_counts)] <- 0
 
 # removing sequences with less thant 50 pollen grain counts
 pollen_counts <- pollen_counts %>% dplyr::mutate(pollen_count = rowSums(dplyr::across(12:221))) %>%
-  dplyr::filter(pollen_count >= 150) 
+  dplyr::filter(pollen_count >= 100) %>%
+  dplyr::filter(maxAgeBP - minAgeBP <= 1000)
 
 # Load metadata
 metadata <- fread(file.path("D:/species/pollen/herzschuhetal2021", "Herzschuh-etal_2021_Europe-meta.tab"), skip = 1108) %>%
@@ -155,8 +155,8 @@ field <- "Quercus" # Quercus = deciduous/ Quercus.evg.type = evergreen
 
 
 # Find threshold with maximum relative abundance
-years <- seq(0, 11500, 500) 
-sp_threshold <- find_threshold_quercus(years, window = 250, field, dataset_count = pollen_counts, factor = 0.02)
+years <- seq(0, 15000, 500) 
+sp_threshold <- find_threshold_quercus(years, window = 250, field, dataset_count = pollen_counts, factor = 0.01)
 
 # Loop on years
 for(year in years){
