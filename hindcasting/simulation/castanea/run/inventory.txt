@@ -1,15 +1,15 @@
 # Inventory file for Castanea
-# Generated on Rstudio by user vandermeersch, on the 2023-06-23
+# Generated on Rstudio by user vandermeersch, on the 2023-07-07
 
 # General
 fmCellWidth	=	20
-year	=	-5514
+year	=	-1514
 latitude	=	44
 longitude	=	5
 
 # CASTANEA parameters
 CO2mode	=	CO2_FIXED
-Ca	=	267
+Ca	=	390
 elevationEffect	=	ELEVATION_EFFECT_FIXED
 predawnModel	=	PREDAWN_CAMP
 LAImode	=	LAI_STAND
