@@ -64,7 +64,7 @@ model_performance <- lapply(1:nrow(models),function(i){
       fitness4$bin_pred <- 0
       fitness4[fitness4$pred >= ths, "bin_pred"] <- 1
       
-      fitness$bin_pred <- rowMeans(cbind(fitness1$bin_pred,fitness2$bin_pred, fitness3$bin_pred, fitness4$bin_pred))
+      fitness$bin_pred <- matrixStats::rowMaxs(cbind(fitness1$bin_pred,fitness2$bin_pred, fitness3$bin_pred, fitness4$bin_pred))
       fitness[fitness$bin_pred > 0, "bin_pred"] <- 1
    
     }else{
