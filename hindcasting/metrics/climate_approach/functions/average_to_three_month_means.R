@@ -1,5 +1,5 @@
 
-average_to_three_month_means <- function(years, name_sim, data_dir){
+average_to_three_month_means <- function(years, name_sim, data_dir, verbose = F){
   
   cat("Computing three-month means...\n")
   
@@ -15,24 +15,26 @@ average_to_three_month_means <- function(years, name_sim, data_dir){
   
   for(yr in years){
     
-    cat(paste0("   Year ", yr,"\n"))
+    if(verbose){cat(paste0("   Year ", yr,"\n"))}
     
-    temp <- fread(file.path(data_dir, paste0(name_sim, "_tmp_", yr, "_dly.fit")))
-    temp_DJF_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,c(3:61,337:365)])))
-    temp_MAM_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,c(62:153)])))
-    temp_JJA_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,c(154:245)])))
-    temp_SON_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,c(247:336)])))
+    temp <- data.frame(fread(file.path(data_dir, paste0(name_sim, "_tmp_", yr, "_dly.fit"))))
+    leap_year <- ncol(temp)-2 == 366 # leap year ?
+    
+    temp_DJF_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,c((1+2):(59+2+leap_year),(335+2+leap_year):(365+2+leap_year))])))
+    temp_MAM_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,(60+2+leap_year):(151+2+leap_year)])))
+    temp_JJA_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,(152+2+leap_year):(243+2+leap_year)])))
+    temp_SON_yr <- rast(data.frame(lon = temp[,2], lat = temp[,1], tas = rowMeans(temp[,(244+2+leap_year):(334+2+leap_year)])))
     
     temp_DJF <- c(temp_DJF, temp_DJF_yr)
     temp_MAM <- c(temp_MAM, temp_MAM_yr)
     temp_JJA <- c(temp_JJA, temp_JJA_yr)
     temp_SON <- c(temp_SON, temp_SON_yr)
     
-    pre <- fread(file.path(data_dir, paste0(name_sim, "_pre_", yr, "_dly.fit")))
-    pre_DJF_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,c(3:61,337:365)])))
-    pre_MAM_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,c(62:153)])))
-    pre_JJA_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,c(154:245)])))
-    pre_SON_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,c(247:336)])))
+    pre <- data.frame(fread(file.path(data_dir, paste0(name_sim, "_pre_", yr, "_dly.fit"))))
+    pre_DJF_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,c((1+2):(59+2+leap_year),(335+2+leap_year):(365+2+leap_year))])))
+    pre_MAM_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,(60+2+leap_year):(151+2+leap_year)])))
+    pre_JJA_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,(152+2+leap_year):(243+2+leap_year)])))
+    pre_SON_yr <- rast(data.frame(lon = pre[,2], lat = pre[,1], tas = rowSums(pre[,(244+2+leap_year):(334+2+leap_year)])))
     
     pre_DJF <- c(pre_DJF, pre_DJF_yr)
     pre_MAM <- c(pre_MAM, pre_MAM_yr)
