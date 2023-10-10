@@ -11,7 +11,7 @@ library(vroom)
 ## Test data ----
 capsis_settings=list(cd_java8 ="cd C:/Program Files/Java/scripts", java8 ="java8.cmd",
                      cd ="cd/d D:/applications/capsis4_castanea && setmem 2000",
-                     castanea_run = "capsis -clfd -p script castaneaonly.myscripts.Simulation_EU_Victor", nb_lines_per_file = 5171
+                     castanea_run = "capsis -clfd -p script castaneaonly.myscripts.Simulation_EU_Victor", nb_lines_per_file = 2586
                      )
 
 sim_options <- list(command_file_suffix = "",
@@ -111,29 +111,32 @@ sim_options <- list(command_file_suffix = "",
 #                                  age = 42, clumping = 0.7, LAI = 6, opt_vars = "-")
 # )
 
-inv_options <- list(inventory_file_suffix = "",
-                    general = list(cell_size = 20, start_year = 1970,
-                                   lat = 44, lon = 5),
-                    model = list(CO2_mode = "CO2_PAST_EVOLUTION", elevation_mode = "ELEVATION_EFFECT_FIXED",
-                                 predawn_mode = "PREDAWN_CAMP", LAI_mode = "LAI_STAND", mortality_mode = "MORTALITY_RDI",
-                                 phenology_mode = "PHENO_CASTANEA", fit2018_file = "fit2018/UniChillRenecofor_2021.fit2018",
-                                 drought_on_respiration = "FALSE", soil_init = "SOIL_INIT_EQ", vegetation_type = "TYPE_VEG_STAND",
-                                 temperature_on_photosynthesis = "TEMPERATURE_EFFECT_BERNACCHI",
-                                 ETR_mode = "ETR_FAO", aero_mode = "AERO_FAO", i_frost = 3,
-                                 simulate_reproduction = "FALSE", allocation_schema = "ALLOC_SCHEMA_DAVI2009",
-                                 allocation_remain = "ALLOC_REMAIN_RESERVES", allocation_repro = "REPRO_OLD",
-                                 potential_from_soil_texture = "true", stomata_stress = "STOMATA_STRESS_GRANIER",
-                                 opt_cols = "-"),
-                    init_wood_by_volume = "true",
-                    output_type = 1,
-                    stand = list(species_code = 14,
-                                 macropor_prop = 0, fineroot_prop = 0.5,
-                                 dbh = 14.66, n_trees_ha = 1286, volume_ha = 62.56,
-                                 age = 32, clumping = 0.61, LAI = 8, opt_vars = "-")
-)
+# inv_options <- list(inventory_file_suffix = "",
+#                     general = list(cell_size = 20, start_year = 1970,
+#                                    lat = 44, lon = 5),
+#                     model = list(CO2_mode = "CO2_PAST_EVOLUTION", elevation_mode = "ELEVATION_EFFECT_FIXED",
+#                                  predawn_mode = "PREDAWN_CAMP", LAI_mode = "LAI_STAND", mortality_mode = "MORTALITY_RDI",
+#                                  phenology_mode = "PHENO_CASTANEA", fit2018_file = "fit2018/UniChillRenecofor_2021.fit2018",
+#                                  drought_on_respiration = "FALSE", soil_init = "SOIL_INIT_EQ", vegetation_type = "TYPE_VEG_STAND",
+#                                  temperature_on_photosynthesis = "TEMPERATURE_EFFECT_BERNACCHI",
+#                                  ETR_mode = "ETR_FAO", aero_mode = "AERO_FAO", i_frost = 3,
+#                                  simulate_reproduction = "FALSE", allocation_schema = "ALLOC_SCHEMA_DAVI2009",
+#                                  allocation_remain = "ALLOC_REMAIN_RESERVES", allocation_repro = "REPRO_OLD",
+#                                  potential_from_soil_texture = "true", stomata_stress = "STOMATA_STRESS_GRANIER",
+#                                  opt_cols = "-"),
+#                     init_wood_by_volume = "true",
+#                     output_type = 1,
+#                     stand = list(species_code = 14,
+#                                  macropor_prop = 0, fineroot_prop = 0.5,
+#                                  dbh = 14.66, n_trees_ha = 1286, volume_ha = 62.56,
+#                                  age = 32, clumping = 0.61, LAI = 8, opt_vars = "-")
+# )
 # h. davi renecofor site CHP_70
 
 
+inv_options <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/castanea/inv/abies_alba_24yr.rds")
+inv_options$model$CO2_mode <- "CO2_FIXED"
+inv_options$model$Ca <- 240
 
 
 load("D:/soil/processed/data_soil.Rdata")
@@ -146,7 +149,7 @@ grid_points <- ERA5_points$points
 
 # extract the grid points 
 # library(data.table)
-# species_occurrence <- readRDS("C:/Users/vandermeersch/Documents/temp/tgcc_quercus/occurrence_subset_1.rds")
+# species_occurrence <- readRDS("D:/species/processed/abies_alba/abies_alba_presabs_woUkraine.rds")
 # alt_folder <- "D:/climate/ERA5-Land/phenofit_format/transformed"
 # alt_file <- paste0(alt_folder, "/ERA5LAND_", "Altitude.fit")
 # alt <- fread(alt_file, showProgress=F)
@@ -173,13 +176,13 @@ data <- list(grid = grid_points, lat = data_soil[grid_points, "lat"], lon = data
              wilt = round(data_soil[grid_points, "WP"],3), stone = round(data_soil[grid_points, "crf_all"],3), 
              bulk = round(data_soil[grid_points, "bld"],3), soil_prop = soil_prop)
 
-species=list(name = "Quercus robur", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
+species=list(name = "Abies alba", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
 
 
 ## Create needed files ----
 
 create_inventoryfile(output_dir = file.path(wd, "run"), inv_options, data)
-create_runfile(capsis_settings$nb_lines_per_file, output_dir = file.path(wd, "run"), species_file = "CastaneaSpecies_08_2021.txt", 
+create_runfile(capsis_settings$nb_lines_per_file, output_dir = file.path(wd, "run"), species_file = "aalba_subset1_rep1.txt", 
                sim_options = sim_options, data = data , capsis_settings = capsis_settings, start = 1)
 
 runlines <- read.table(file.path(wd, "run","runfile.txt"), sep='\t')
@@ -187,7 +190,7 @@ runlines <- read.table(file.path(wd, "run","runfile.txt"), sep='\t')
 
 ## Run the model ----
 
-ncores <- 15
+ncores <- 30
 list_lines <- split(1:nrow(runlines), cut(seq_along(1:nrow(runlines)), ncores, labels = FALSE))
 
 plan(multisession, workers = ncores)
@@ -208,6 +211,9 @@ run <- function(){
 unlink(paste0("D:/applications/capsis4_castanea/var"), recursive=TRUE)
 with_progress(system.time(run()))
 
+files_to_move <- list.files("D:/applications/capsis4_castanea/var", pattern = "yearlyResults.log", full.names = TRUE)
+output_folder <- "D:/simulations/castanea/backward/abies_alba_240ppm"
+move_files <- lapply(files_to_move, function(i) filesstrings::file.move(i, output_folder, overwrite = T))
 
 
 # Read output variables D:/simulations/castanea/forward/quercus_petraea_capsisrevision18131
