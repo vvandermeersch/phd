@@ -19,6 +19,7 @@ fontsize: 11pt
 endnote: no
 header-includes:
   - \usepackage{graphicx}
+  - \usepackage{xcolor}
   - \usepackage{float}
   - \floatplacement{figure}{H}
   - \usepackage[width=.6\textwidth, textfont=it, font=small]{caption}
@@ -57,7 +58,7 @@ alt$lon <- round(alt$lon, 1)
 
 ```{r data, include=FALSE}
 # Simulation (at European scale) folder
-sim_dir <- "D:/simulations/phenofit/forward/quercus_ilex/Puechabon"
+sim_dir <- "D:/simulations/phenofit/present/expert/picea_abies/Chuine"
 
 # Load variables
 fruit_index <- read_mean_outputvalue(sim_dir, "FruitIndex")
