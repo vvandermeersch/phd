@@ -1,5 +1,5 @@
 # Run file for Castanea
-# Generated on Rstudio by user vandermeersch, on the 2023-07-07
+# Generated on Rstudio by user vandermeersch, on the 2023-08-22
 
 cd C:/Program Files/Java/scripts && java8.cmd && cd/d D:/applications/capsis4_castanea && setmem 2000 && capsis -clfd -p script castaneaonly.myscripts.Simulation_EU_Victor C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/castanea/run/ind1/commandfile_1.txt
 cd C:/Program Files/Java/scripts && java8.cmd && cd/d D:/applications/capsis4_castanea && setmem 2000 && capsis -clfd -p script castaneaonly.myscripts.Simulation_EU_Victor C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/castanea/run/ind1/commandfile_2.txt

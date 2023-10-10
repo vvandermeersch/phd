@@ -12,20 +12,20 @@ library(terra)
 library(raster)
 
 hadcm3b_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/raw"
-pollen_folder <- "D:/species/pollen/processed/quercus_evergreentype/025deg/002adp_thr"
+pollen_folder <- "D:/species/pollen/processed/fagus/025deg/001thr_500yrunc"
 ext <- ext(c(-14,40,34,72))
 
 
 # setup
-sim_dir <- "D:/simulations/csdm/random_forest/paleo/025deg"
-species <- "quercus_ilex"
-mod <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit/quercus_ilex/random_forest_finalcov_fullmodel.rds")
+sim_dir <- "D:/simulations/csdm/lasso_glm/paleo/025deg"
+species <- "fagus_sylvatica"
+mod <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/lasso_glm/fit/fagus_sylvatica/lasso_glm_finalcov_fullmodel.rds")
 
 
 
 # loop on years
 
-for(year in seq(500,18000,500)){
+for(year in seq(500,16500,500)){
   
   fitness <- readRDS(file.path(sim_dir, species, paste0(year, "BP.rds")))
   

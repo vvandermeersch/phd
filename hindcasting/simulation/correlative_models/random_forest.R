@@ -5,14 +5,14 @@
 
 model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest/fit"
 sim_dir <- "D:/simulations/csdm/random_forest/paleo/025deg"
-clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/dscl_15min"
+clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/025deg"
 
 library(randomForest)
 library(dplyr)
 library(foreach)
 
 # Setup
-species <- "larix_decidua"
+species <- "quercus_robur"
 bc_covars <- c("bio6", "bio12") # bioclim predictors
 soil_covars <- c("WHC", "pH") # soil predictors
 cc_covars <- c("sum_apsep_GDD5", "w_bal") # custom climatic predictors
@@ -42,14 +42,16 @@ var_importance <- sapply(seq(250,18000,250), function(year){
   sim$pred <- as.numeric(predict(rfmod$model, predictors, type = "prob")[,"1"])
   saveRDS(sim, file.path(sim_dir, species, paste0(year, "BP.rds")))
   
-  var_importance <- bm_VariablesImportance(bm.model=rfmod$model, predictors, variables = c(bc_covars, cc_covars), 
-                                           method = "full_rand", nb.rep = 3, do.progress = FALSE)
+  # var_importance <- bm_VariablesImportance(bm.model=rfmod$model, predictors, variables = c(bc_covars, cc_covars), 
+  #                                          method = "full_rand", nb.rep = 3, do.progress = FALSE)
+  # 
+  # var_importance <- var_importance %>% 
+  #   group_by(expl.var) %>%
+  #   summarize(var.imp = mean(var.imp))
+  # 
+  # return(c(year, t(var_importance$var.imp)))
   
-  var_importance <- var_importance %>% 
-    group_by(expl.var) %>%
-    summarize(var.imp = mean(var.imp))
-  
-  return(c(year, t(var_importance$var.imp)))
+  return(c(year))
   
 })
 

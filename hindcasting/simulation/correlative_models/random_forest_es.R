@@ -1,0 +1,61 @@
+
+#-----------------------------------------------#
+# Random Forest (equal-sample) paleosimulations #
+#-----------------------------------------------#
+
+model_dir <- "C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/fit/ecv/random_forest_es/fit"
+sim_dir <- "D:/simulations/csdm/random_forest_es/paleo/025deg"
+clim_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/025deg"
+
+library(randomForest)
+library(dplyr)
+library(foreach)
+
+# Setup
+species <- "quercus_ilex"
+bc_covars <- c("bio6", "bio12") # bioclim predictors
+soil_covars <- c("WHC", "pH") # soil predictors
+cc_covars <- c("sum_apsep_GDD5", "w_bal") # custom climatic predictors
+covars <- c(bc_covars, soil_covars, cc_covars)
+dir.create(file.path(sim_dir, species), showWarnings = T)
+
+# Load model
+rfmod <- readRDS(file.path(model_dir, species, "random_forest_finalcov_fullmodel.rds"))
+
+# Simulation loop
+var_importance <- sapply(seq(250,18000,250), function(year){
+  predictors <- readRDS(file.path(clim_dir, paste0("predictors_", year, "BP.rds")))
+  
+  sim <- predictors[, c("lat", "lon")]
+  
+  predictors <- predictors %>% 
+    dplyr::select(all_of(covars))
+  
+  # normalize predictors
+  i <- 1
+  for(v in covars){
+    predictors[, v] <- (predictors[, v] - rfmod$meanv_l[i]) / rfmod$sdv_l[i]
+    i <- i+1
+  }
+  
+  # make and save predictions
+  rf_eql_preds <- lapply(rfmod$model, function(x) as.numeric(predict(x, predictors, type = "prob")[,"1"]))
+  sim$pred  <- do.call("cbind",rf_eql_preds) %>% rowMeans()
+  saveRDS(sim, file.path(sim_dir, species, paste0(year, "BP.rds")))
+  
+  # var_importance <- bm_VariablesImportance(bm.model=rfmod$model, predictors, variables = c(bc_covars, cc_covars), 
+  #                                          method = "full_rand", nb.rep = 3, do.progress = FALSE)
+  # 
+  # var_importance <- var_importance %>% 
+  #   group_by(expl.var) %>%
+  #   summarize(var.imp = mean(var.imp))
+  # 
+  # return(c(year, t(var_importance$var.imp)))
+  
+  return(c(year))
+  
+})
+
+var_importance <- as.data.frame(t(var_importance))
+names(var_importance) <- c("year", bc_covars, cc_covars)
+saveRDS(var_importance, file.path(sim_dir, species, "variable_importance.rds"))
