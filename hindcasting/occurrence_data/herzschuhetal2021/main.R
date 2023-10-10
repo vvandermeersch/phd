@@ -8,17 +8,18 @@
 
 wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/occurrence_data/herzschuhetal2021"
 
-input_folder <- "D:/species/pollen/herzschuhetal2021"
+input_folder <- "D:/species/pollen/herzschuhetal2021/Europe_pollen_datasets"
 
 library(data.table)
 library(dplyr)
 library(terra)
 
 # Load European dataset (Herzschuh et al. 2022)
-dataset_count <- fread(file.path(input_folder, "Herzschuh-etal_2021_Europe-counts.tab"), skip = 1302) %>%
-  dplyr::mutate(pollen_count = rowSums(across(15:223))) %>%
-  dplyr::filter(pollen_count >= 100) %>% # removing sequences with less than 100 pollen grain counts 
-  dplyr::filter(`Age max [ka]` - `Age min [ka]` <= 1)
+dataset_count <- fread(file.path(input_folder, "pollen_counts_europe.csv")) %>%
+  dplyr::select(-c(`Cyperaceae (#)`)) %>% # remove Cyperaceae
+  dplyr::mutate(pollen_count = rowSums(across(15:222))) %>%
+  dplyr::filter(pollen_count >= 200) %>% # removing sequences with less than 200 pollen grain counts 
+  dplyr::filter(`maximum_Age (cal. ka BP)` - `minimum_Age (cal. ka BP)` <= 0.5)
 
 
 # Load metadata
@@ -26,31 +27,32 @@ metadata <- fread(file.path(input_folder, "Herzschuh-etal_2021_Europe-meta.tab")
   dplyr::select(c(`ID (Dataset)`, `Loc type`))
 
 # Removing marine sites following Maguire et al. (2016)
-dataset_count <- left_join(dataset_count, metadata) %>%
+dataset_count <- left_join(dataset_count, metadata, by = c("Dataset_ID" = "ID (Dataset)")) %>%
   dplyr::filter(`Loc type` != "Marine" & `Loc type` != "Lagoon")
 
 
 
-field <- "Que [#]" # species fieldname in Herzschuh dataset 
+field <- "Abies (#)" # species fieldname in Herzschuh dataset 
+years <- seq(500, 18000, 500)
 
 # Find threshold with maximum relative abundance
-years <- seq(500, 16000, 500)
-sp_threshold <- find_threshold(years, window = 250, field, dataset_count, factor = 0.01)
-
+sp_threshold <- find_threshold(years, window = 250, field, dataset_count, factor = 0.05)
+sp_threshold <- 0.01 # fagus, abies
+# sp_threshold <- 0.025 # quercus
 
 # Loop on years
 for(i in 1:length(years)){
   year <- years[i]
   
-  grid <- fread(paste0("D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dscl_15min/",ifelse(year==0,15,year),"BP/HadCM3B_Altitude.fit"))
-  names(grid) <- c("lat", "lon", "alt")
-  grid <- rast(grid[,c("lon", "lat", "alt")])
+  grid <- readRDS(paste0("D:/simulations/phenofit/paleo/expert/025deg/fagus_sylvatica/",ifelse(year==0,15,year),"BP.rds"))
+  names(grid) <- c("lat", "lon", "pred")
+  grid <- rast(grid[,c("lon", "lat", "pred")])
   
   # near 1km resolution (needed for migration)
   grid_res <- grid
   res(grid_res) <- c(0.01, 0.01)
   grid <- resample(grid, grid_res)
-  
+
   # "one is enough" binarization - specific threshold
   pollen_r <- create_pollen_raster(year, window = 250, 
                                    field = field, dataset_count, 
@@ -59,7 +61,7 @@ for(i in 1:length(years)){
   pollen_df <- as.data.frame(pollen_r, xy = T)
   names(pollen_df) <- c("lon", "lat", "pres")
   pollen_df[,1:2] <- round(pollen_df[,1:2],2)
-  output_folder <- "D:/species/pollen/processed/quercus/025deg/001adp_thr_1000yrunc_1km"
+  output_folder <- "D:/species/pollen/processed/quercus/1km/001thr_500yrunc"
   saveRDS(pollen_df, file.path(output_folder, paste0("pres_",year, "BP", ".rds")))
   
   
