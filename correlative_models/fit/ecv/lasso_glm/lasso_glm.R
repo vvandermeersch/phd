@@ -13,18 +13,18 @@
 source("C:/Users/vandermeersch/Documents/CEFE/phd/correlative_models/valavi_et_al/ecm1486-sup-0003-datas1/DataS1/modelling_codes/prediction_helper.R")
 
 # create quadratic terms and sparse matrix (all species points)
-quad_obj <- make_quadratic(presabs_data, cols = covars)
-quad <- predict.make_quadratic(quad_obj, newdata = presabs_data)
-new_vars <- names(quad)[names(quad) != "pres"]
-sp_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
-sp_data <- presabs_data
-
-# create quadratic terms and sparse matrix (all Europe)
-quad_obj <- make_quadratic(europe_data, cols = covars)
-quad <- predict.make_quadratic(quad_obj, newdata = europe_data)
-new_vars <- names(quad)[names(quad) != "pres"]
-all_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
-all_data <- europe_data 
+# quad_obj <- make_quadratic(presabs_data, cols = covars)
+# quad <- predict.make_quadratic(quad_obj, newdata = presabs_data)
+# new_vars <- names(quad)[names(quad) != "pres"]
+# sp_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+# sp_data <- presabs_data
+# 
+# # create quadratic terms and sparse matrix (all Europe)
+# quad_obj <- make_quadratic(europe_data, cols = covars)
+# quad <- predict.make_quadratic(quad_obj, newdata = europe_data)
+# new_vars <- names(quad)[names(quad) != "pres"]
+# all_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+# all_data <- europe_data 
 
 # dataframe to combine test predictions
 # (as in Valavi et al. (2023), we accumulate predictions to test data)
@@ -49,7 +49,7 @@ for(k in seq_len(length(folds))){
   train_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
   
   # create quadratic terms and sparse matrix (testing data)
-  quad_obj <- make_quadratic(test_data, cols = covars)
+  # quad_obj <- make_quadratic(test_data, cols = covars)
   quad <- predict.make_quadratic(quad_obj, newdata = test_data)
   new_vars <- names(quad)[names(quad) != "pres"]
   test_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
@@ -79,6 +79,10 @@ for(k in seq_len(length(folds))){
   accumulate_data[test_set, "pred"] <- test_data$pred
   
   # predict on all species points
+  quad <- predict.make_quadratic(quad_obj, newdata = presabs_data)
+  new_vars <- names(quad)[names(quad) != "pres"]
+  sp_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+  sp_data <- presabs_data
   sp_data$pred <- as.numeric(predict(mod_lasso, sp_sparse, type = "response", s = "lambda.min"))
   eval_obj <- evalmod(scores = sp_data$pred, labels = sp_data$pres)
   auc_all <- precrec::auc(eval_obj)
@@ -91,6 +95,10 @@ for(k in seq_len(length(folds))){
   best_threshold <- thresholds[which(youden_index == max(youden_index))]
   
   # predict on all Europe
+  quad <- predict.make_quadratic(quad_obj, newdata = europe_data)
+  new_vars <- names(quad)[names(quad) != "pres"]
+  all_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+  all_data <- europe_data 
   all_data$pred <- as.numeric(predict(mod_lasso, all_sparse, type = "response", s = "lambda.min"))
   
   # save file
@@ -123,6 +131,18 @@ auc_accumulate <- precrec::auc(eval_obj)
 boyce_accumulate <- ecospat.boyce(fit = accumulate_data$pred, obs = accumulate_data[accumulate_data$pres == 1,]$pred, 
                                   nclass=0, window.w="default", res=100, 
                                   PEplot = F, rm.duplicate = F,  method = 'pearson' )
+youden_index <- sensitivity(accumulate_data$pred, as.factor(accumulate_data$pres), perc.rank = F)$measure +
+  specificity(accumulate_data$pred, as.factor(accumulate_data$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(accumulate_data$pred, as.factor(accumulate_data$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+accumulate_data$pred_pres <- ifelse(accumulate_data$pred < best_threshold,0 , 1)
+tp <- nrow(accumulate_data[accumulate_data$pred_pres == 1 & accumulate_data$pres == 1,])
+fp <- nrow(accumulate_data[accumulate_data$pred_pres == 1 & accumulate_data$pres == 0,])
+tn <- nrow(accumulate_data[accumulate_data$pred_pres == 0 & accumulate_data$pres == 0,])
+fn <- nrow(accumulate_data[accumulate_data$pred_pres == 0 & accumulate_data$pres == 1,])
+mig_sens = tp/(tp+fn)
+mig_spec = tn/(tn+fp)
+tss_accumulate  = mig_sens + mig_spec - 1
 
 
 # 3. Full model (all the available training data is used)
@@ -132,6 +152,7 @@ full_data <- model_data
 cat("\n   Full model\n")
 cat(paste0("      AUC on combined set of test predictions = ", round(auc_accumulate$aucs[1],2),"\n"))
 cat(paste0("      Boyce index on combined set of test predictions = ", round(boyce_accumulate$cor,2),"\n"))
+cat(paste0("      TSS on combined set of test predictions = ", round(tss_accumulate,2),"\n"))
 
 # create quadratic terms and sparse matrix (full data)
 quad_obj <- make_quadratic(full_data, cols = covars)
@@ -155,6 +176,10 @@ mod_lasso <- glmnet::cv.glmnet(x = sparse,
 runtime <- proc.time() - t0
 
 # predict on all species points
+quad <- predict.make_quadratic(quad_obj, newdata = presabs_data)
+new_vars <- names(quad)[names(quad) != "pres"]
+sp_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+sp_data <- presabs_data
 sp_data$pred <- as.numeric(predict(mod_lasso, sp_sparse, type = "response", s = "lambda.min"))
 eval_obj <- evalmod(scores = sp_data$pred, labels = sp_data$pres)
 auc_all <- precrec::auc(eval_obj)
@@ -166,7 +191,22 @@ youden_index <- sensitivity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F
 thresholds <- sensitivity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F)$cutoffs
 best_threshold <- thresholds[which(youden_index == max(youden_index))]
 
+# tss
+sp_data$pred_pres <- ifelse(sp_data$pred < best_threshold,0 , 1)
+tp <- nrow(sp_data[sp_data$pred_pres == 1 & sp_data$pres == 1,])
+fp <- nrow(sp_data[sp_data$pred_pres == 1 & sp_data$pres == 0,])
+tn <- nrow(sp_data[sp_data$pred_pres == 0 & sp_data$pres == 0,])
+fn <- nrow(sp_data[sp_data$pred_pres == 0 & sp_data$pres == 1,])
+mig_sens = tp/(tp+fn)
+mig_spec = tn/(tn+fp)
+tss_all  = mig_sens + mig_spec - 1
+cat(paste0("      Total TSS = ", round(tss_all,2), "\n\n"))
+
 # predict on all Europe
+quad <- predict.make_quadratic(quad_obj, newdata = europe_data)
+new_vars <- names(quad)[names(quad) != "pres"]
+all_sparse <- sparse.model.matrix(~. -1, quad[, new_vars])
+all_data <- europe_data 
 all_data$pred <- as.numeric(predict(mod_lasso, all_sparse, type = "response", s = "lambda.min"))
 
 # save file
@@ -177,14 +217,17 @@ outfile$modality <- "ecv - full model" # modelling modality
 outfile$fit_date <- Sys.Date() # date
 outfile$model <- mod_lasso # model object
 outfile$runtime <- runtime[3] # runtime
-outfile$auc_test <- auc_accumulate # auc on  combined set of test predictions
+outfile$auc_test <- auc_accumulate # AUC on  combined set of test predictions
+outfile$tss_test <- tss_accumulate # TSS on  combined set of test predictions
 outfile$boyceindex_test <- boyce_accumulate # Boyce Index on  combined set of test predictions
-outfile$auc_all <- auc_all # auc on every species points
+outfile$auc_all <- auc_all # AUC on every species points
+outfile$tss_all <- tss_all # TSS on every species points
 outfile$best_threshold <- best_threshold # best threshold to discriminate probabilites
 outfile$europe_pred <- data.frame(lat = alt$lat, lon = alt$lon, pred = all_data$pred) # prediction on every Europe cells
 outfile$cov_norm <- FALSE # are covariates normalized before calibration ?
 outfile$meanv_l <- NULL # mean parameter list for normalization
 outfile$sdv_l <- NULL # standard deviation parameter list for normalization
+outfile$quad_obj <- quad_obj # only for Lasso GLM
 
 saveRDS(outfile, file = paste0(wd, "/lasso_glm/fit/", sp_name, "/lasso_glm_", cov_type, "_fullmodel.rds"))
 

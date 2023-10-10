@@ -36,9 +36,9 @@ for(k in seq_len(length(folds))){
   train_data$pres <- as.factor(train_data$pres)
   test_data$pres <- as.factor(test_data$pres)
   
-  # calculating the sample size
+  # calculating the sample size (down-sampled)
   prNum <- as.numeric(table(train_data$pres)["1"]) # number of presences
-  bgNum <- as.numeric(table(train_data$pres)["0"]) # number of backgrounds
+  # bgNum <- as.numeric(table(train_data$pres)["0"]) # number of backgrounds
   samsize <- c("0" = prNum, "1" = prNum)
   
   # run model
@@ -104,6 +104,18 @@ auc_accumulate <- precrec::auc(eval_obj)
 boyce_accumulate <- ecospat.boyce(fit = accumulate_data$pred, obs = accumulate_data[accumulate_data$pres == 1,]$pred, 
                                   nclass=0, window.w="default", res=100, 
                                   PEplot = F, rm.duplicate = F,  method = 'pearson' )
+youden_index <- sensitivity(accumulate_data$pred, as.factor(accumulate_data$pres), perc.rank = F)$measure +
+  specificity(accumulate_data$pred, as.factor(accumulate_data$pres), perc.rank = F)$measure - 1
+thresholds <- sensitivity(accumulate_data$pred, as.factor(accumulate_data$pres), perc.rank = F)$cutoffs
+best_threshold <- thresholds[which(youden_index == max(youden_index))]
+accumulate_data$pred_pres <- ifelse(accumulate_data$pred < best_threshold,0 , 1)
+tp <- nrow(accumulate_data[accumulate_data$pred_pres == 1 & accumulate_data$pres == 1,])
+fp <- nrow(accumulate_data[accumulate_data$pred_pres == 1 & accumulate_data$pres == 0,])
+tn <- nrow(accumulate_data[accumulate_data$pred_pres == 0 & accumulate_data$pres == 0,])
+fn <- nrow(accumulate_data[accumulate_data$pred_pres == 0 & accumulate_data$pres == 1,])
+mig_sens = tp/(tp+fn)
+mig_spec = tn/(tn+fp)
+tss_accumulate  = mig_sens + mig_spec - 1
 
 
 # 3. Full model (all the available training data is used)
@@ -113,6 +125,7 @@ full_data <- model_data_norm # (use normalized covariates)
 cat("\n   Full model\n")
 cat(paste0("      AUC on  combined set of test predictions = ", round(auc_accumulate$aucs[1],2),"\n"))
 cat(paste0("      Boyce index on combined set of test predictions = ", round(boyce_accumulate$cor,2),"\n"))
+cat(paste0("      TSS on combined set of test predictions = ", round(tss_accumulate,2),"\n"))
 
 # convert the response to factor for RF model to return probabilities
 full_data$pres <- as.factor(full_data$pres)
@@ -143,6 +156,17 @@ youden_index <- sensitivity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F
 thresholds <- sensitivity(sp_data$pred, as.factor(sp_data$pres), perc.rank = F)$cutoffs
 best_threshold <- thresholds[which(youden_index == max(youden_index))]
 
+# tss
+sp_data$pred_pres <- ifelse(sp_data$pred < best_threshold,0 , 1)
+tp <- nrow(sp_data[sp_data$pred_pres == 1 & sp_data$pres == 1,])
+fp <- nrow(sp_data[sp_data$pred_pres == 1 & sp_data$pres == 0,])
+tn <- nrow(sp_data[sp_data$pred_pres == 0 & sp_data$pres == 0,])
+fn <- nrow(sp_data[sp_data$pred_pres == 0 & sp_data$pres == 1,])
+mig_sens = tp/(tp+fn)
+mig_spec = tn/(tn+fp)
+tss_all  = mig_sens + mig_spec - 1
+cat(paste0("      Total TSS = ", round(tss_all,2), "\n\n"))
+
 # predict on all Europe
 all_data$pred <- as.numeric(predict(mod_rf, all_data, type = "prob")[,"1"])
 
@@ -154,9 +178,11 @@ outfile$modality <- "ecv - full model" # modelling modality
 outfile$fit_date <- Sys.Date() # date
 outfile$model <- mod_rf # model object
 outfile$runtime <- runtime[3] # runtime
-outfile$auc_test <- auc_accumulate # auc on  combined set of test predictions
+outfile$auc_test <- auc_accumulate # AUC on  combined set of test predictions
+outfile$tss_test <- tss_accumulate # TSS on  combined set of test predictions
 outfile$boyceindex_test <- boyce_accumulate # Boyce Index on  combined set of test predictions
-outfile$auc_all <- auc_all # auc on every species points
+outfile$auc_all <- auc_all # AUC on every species points
+outfile$tss_all <- tss_all # TSS on every species points
 outfile$best_threshold <- best_threshold # best threshold to discriminate probabilites
 outfile$europe_pred <- data.frame(lat = alt$lat, lon = alt$lon, pred = all_data$pred) # prediction on every Europe cells
 outfile$cov_norm <- TRUE # are covariates normalized before calibration ?
