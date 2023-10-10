@@ -49,6 +49,7 @@ global_sensitivity_analysis/razavi_et_al/2019_11_16_VARS-Tool-v2.1.zip
 **/correlative_models/fit/ecv/random_forest/fit
 **/correlative_models/fit/ecv/lasso_glm/fit
 **/correlative_models/fit/ecv/gam/fit
+**/correlative_models/fit/ecv/random_forest_es/fit
 
 **/correlative_models/old
 **/correlative_models/fit/ecv_5180/biomod/fit
