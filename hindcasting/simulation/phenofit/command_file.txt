@@ -1,10 +1,10 @@
 # File for Phenofit4 CommandScript
-# Generated with Rstudio (time: 2023-09-25 12:04:44, user: vandermeersch)
+# Generated with Rstudio (time: 2023-10-24 17:47:18, user: vandermeersch)
 					
 speciesInputDir =
 climateInputDir =
-outputDir = D:/simulations/phenofit/paleo/fpensemble/025deg/fagus_sylvatica/s1_r5
+outputDir = D:/simulations/phenofit/paleo/expert/025deg/abies_alba
 quietMode = true
 					
 # speciesFileName	climateFolderName	climateScenario	startingYear	endingYear
-D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/CMAES/subset_1/cmaes_fit_subset1_rep5.species	D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dscl_15min	HadCM3B	-264	-235
+C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Abies_alba_VVanderMeersch2.species	D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dscl_15min	HadCM3B	-12264	-12235
