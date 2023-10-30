@@ -1,0 +1,264 @@
+---
+output: 
+  stevetemplates::article:
+    keep_tex: true
+    fig_caption: true
+    number_sections: yes
+bibliography: bib/robustness_bibliography.bib
+csl: bib/mee.csl
+title: "Contrasted hindcast performances demonstrates the need for more realistic models"
+author:
+- name: Victor Van der Meersch \footnote{Corresponding author - victor.vandermeersch@cefe.cnrs.fr}
+  affiliation: CEFE, Université de Montpellier, CNRS, EPHE, IRD, Montpellier, France
+- name: Edward Armstrong
+  affiliation: Department of Geosciences and Geography, University of Helsinki, Helsinki, Finland
+- name: Florent Mouillot
+  affiliation: CEFE, Université de Montpellier, CNRS, EPHE, IRD, Montpellier, France
+- name: Frédérik Saltré
+  affiliation: Global Ecology | Partuyarta Ngadluku Wardli Kuu, College of Science and Engineering, Flinders University, Adelaide, Australia
+- name: Anne Duputié
+  affiliation: Université de Lille, Sciences et Technologies, CNRS, UMR 8198-EEP-Evo-Eco-Pal?o, Lille, France
+- name: Christophe Randin
+  affiliation: Univ. Lausanne, Dept. of Ecology & Evolution / Interdisciplinary Centre for Mountain Research (CIRM), Biophore, Lausanne, Switzerland
+- name: Hendrik Davi
+  affiliation: INRAE, URFM, Avignon, France
+- name: Isabelle Chuine
+  affiliation: CEFE, Université de Montpellier, CNRS, EPHE, IRD, Montpellier, France
+  
+abstract: "While process-based models are expected to provide better species range shift predictions under novel environmental conditions than correlative counterparts, this hypothesis has yet to be tested. \n\n We used both process- and correlative-based species distribution models to hindcast the range shift of 5 tree species across Europe for the last 15,000 years and evaluated these outputs against fossil pollen records. Using these results and considering the expected magnitude of climate novelty, we then quantified model uncertainties under future climate scenarios. \n\n We show that long-term hindcast decreases overall model performances and even the most promising approach (process-based models calibrated using occurrence data) is unlikely to provide any reliable projections under future no-analog conditions. \n\n Our results (i) challenge the concept of transferability in species distribution modelling, (ii) highlight the prerequisites for ensuring model robustness and (iii) provide a promising framework to scale up complex models and promote their use in an ever-changing world."
+keywords: "keyword1, keyword2"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: libertine
+fontsize: 11pt
+spacing: double
+endnote: no
+biblatex: true
+link-citations: true
+
+header-includes:
+  - \usepackage{graphicx}
+  - \usepackage{xcolor}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage[width=.9\textwidth, font=small]{caption}
+  - \usepackage{libertine}
+  - \usepackage[left]{lineno}
+  - \linenumbers
+  - \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(chunkhooks)
+hook_figure_unit("mm")
+
+
+wd <- "C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/robustness_paper"
+source(file.path(wd, "scripts", "setup.R"))
+```
+
+
+# Introduction
+
+Model simulations are a fundamental source for improving our understanding of past, present and future climate impacts on ecosystems and species distribution – provided that we can trust them.  As the demand for reliable projections is increasing, the systematic evaluation of model skill should be one of the main concerns of modellers. Such evaluation remains critical to build confidence in our models, and plays a crucial role in providing the most credible information on the impacts of climate change so that stakeholders can make informed decisions [@Dawson2011; @Mouquet2015].  
+  
+  
+The unforeseen will always remain so, and the accuracy of model future projections cannot thus be tested directly. Therefore, the most straightforward approach to evaluate models is to compare their output with what we know from the past. Plausibly reproducing the past (hindcast performance/skill) can be seen as a requisite condition to be considered a viable model for future projections (forecast reliability). Even if there is no observed period with climate conditions exactly matching those expected over the 21st century [@Burke2018], hindcasting exercises can still increase our confidence that the models represent, implicitly or explicitly, the essential processes for the simulation of future species range shifts.  
+  
+  
+In this regard, recent past observations (typically for a few decades) have been used for testing SDM predictions over time [e.g. @Araujo2005; @Kharouba2009; @Smith2013].  [Résultats de ces études ?]. However, as they were made in a limited climate range similar to calibration conditions,  they do not enable fully independent model evaluation. By looking much further back in the past, paleoenvironments offer a unique framework to test species distribution model transferability in more challenging conditions, in the same way as climate models are evaluated using palaeodata [@Braconnot2012].  Simulations in distant past (spanning several millennia) allow for model evaluation under conditions significantly different from present-day [@Maguire2015], where climate variations were larger than those encountered during the last century. Taking advantage of the available paleo-archives is a great opportunity to understand long-term climate-biodiversity dynamics [@Fordham2020].
+Several studies have tested the transferability of species distribution models using paleoclimate reconstructions and fossil records [e.g. @Pearman2008; @Veloz2012; @Williams2013]. They all show a decrease of the ability of SDMs to simulate past species distributions. Their findings remind us to exercise caution when interpreting their projections in novel climates that differ significantly from the present [@Maguire2016], especially as no-analogues climate conditions are forecasted to become common [@Williams2007] and may compromised the accuracy of model predictions [@Fitzpatrick2018]. These investigations have yielded valuable insights into the reliability of species distribution models, but have primarily focused on correlative models, despite the growing interest of process-based models in predictive ecology [@Connolly2017; @Urban2016; @Pilowsky2022].  
+  
+  
+This omission represents a notable gap in our understanding of the tenets of species distribution modelling, as only one side of the continuum between statistical and mechanistic approaches has been explored [@Dormann2012], neglecting the investigation of process-based model performance. Rather than inferring correlations between observations and potential environmental drivers, these models are built upon explicit causal relationships determined experimentally representing physiological, ecological and demographic processes. Their projections in response to climate change differ from correlative models, the latter being systematically more pessimistic [références]. However, very few studies have gone beyond these qualitative comparisons and really examined how they are performing, with virtual species [@Zurell2016], exotic species in new colonized areas [@Higgins2020], or in the recent past [@Fordham2018]. Therefore, despite process-based models have shown their usefulness for paleoecological studies [références], the extent to which the potential benefits of process-based models translate into improved predictions in really different climatic conditions remains unknown [@UribeRivera2022, @Briscoe2019]. Addressing this gap by a thorough evaluation of the different class of models is crucial [@Evans2016], as process-based models hold the potential to enhance our ability to predict species responses to climate change and to provide more robust projections in novel conditions [@Evans2012; @Singer2016].  
+  
+  
+Here, we propose a state-of-the-art comparison of the skills of correlative models and process-based models to simulate the paleodistributions of emblematic tree species of Europe. In order to fully explore the different classes of models, we use different versions of the models that differ by their level of complexity and the methods of estimation of their parameters. In particular, as hybrid models [sensu @Dormann2012] have been raised as a potential avenue by borrowing strength from both statistical and process-based approaches [@Evans2016], we use inverse modelling to fit the process-based models in the same way as the correlative models [@VanderMeersch2023].  By encompassing the entire spectrum of models, from correlative models to process-based models and their hybrid data-driven counterparts, our comprehensive approach allows us to gain a holistic understanding of the key features necessary for building reliable models.  
+
+
+
+
+```{r figure_climate_overview, fig.height = 105, fig.width = 180, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Climate overview"}
+source(file.path(wd, "scripts", "figs", "fig1_climateoverview_v2CRU.R"))
+climateoverview_figure
+```
+
+
+```{r process_model_outputs, include = F, eval = F}
+# source(file.path(wd, "scripts", "data_processing", "model_outputs.R"))
+source(file.path(wd, "scripts", "data_processing", "model_outputs_withmig.R"))
+# source(file.path(wd, "scripts", "data_processing", "migration_rates.R"))
+```
+
+# Results
+
+```{r figure_tss_type2, fig.height = 114, fig.width = 114, dev=c('cairo_pdf'), dpi = 600, fig.cap = "TSS performance + linear-plateau regressions", eval = F}
+
+model_performance <- model_performance_withmig
+source(file.path(wd, "scripts", "data_processing", "linear_plateau_allregressions_type2.R"))
+source(file.path(wd, "scripts", "figs", "fig3_alltss_type2.R"))
+tss_performance3
+```
+
+```{r figure_sorensen_type2, fig.height = 114, fig.width = 114, dev=c('cairo_pdf'), dpi = 600, fig.cap = "TSS performance + linear-plateau regressions", eval = F}
+
+model_performance <- model_performance_withmig
+source(file.path(wd, "scripts", "data_processing", "linear_plateau_allregressions_type2_sorensenandsorensen.R"))
+source(file.path(wd, "scripts", "figs", "fig3_all_type2_sorensenandsorensen.R"))
+tss_performance3
+```
+
+
+
+```{r figure_tss, fig.height = 114, fig.width = 114, dev=c('cairo_pdf'), dpi = 600, fig.cap = "TSS performance + linear-plateau regressions", eval = F}
+
+source(file.path(wd, "scripts", "figs", "fig3_alltss_type.R"))
+tss_performance3
+```
+
+
+```{r figure_tss_withmig, fig.height = 100, fig.width = 120, dev=c('ragg_png'), dpi = 600, fig.cap = "TSS performance + GAM", eval = F}
+# source(file.path(wd, "scripts", "figs", "fig4_tsswithmigration.R"))
+
+source(file.path(wd, "scripts", "figs", "fig3bis_tss.R"))
+tss_performance_gam
+```
+
+```{r figure_tss_withoutmig, fig.height = 4, fig.width = 5, dev=c('ragg_png'), dpi = 600, fig.cap = "TSS performance without migration", eval = F}
+tss_performance_withoutmig
+```
+
+```{r fagus_migration_rates, fig.height = 3.8, fig.width = 3.7, dev=c('ragg_png'), dpi = 600, fig.cap = "Fagus migration rates", eval = F}
+migration_rates <- fagus_migration_rates[fagus_migration_rates$year != 12000,]
+migration_rates[is.na(migration_rates$mig_rate), "mig_rate"] <- 0 # no migration some years
+y_geomtext_csdm <- 80
+source(file.path(wd, "scripts", "figs", "fig5bis_migrationrates.R"))
+fig_migration_rates 
+```
+
+```{r abies_migration_rates, fig.height = 3.8, fig.width = 3.7, dev=c('ragg_png'), dpi = 600, fig.cap = "Abies migration rates", eval = F}
+migration_rates <- abies_migration_rates[abies_migration_rates$year != 12000,]
+migration_rates[is.na(migration_rates$mig_rate), "mig_rate"] <- 0 # no migration some years
+y_geomtext_csdm <- 5
+source(file.path(wd, "scripts", "figs", "fig5bis_migrationrates.R"))
+fig_migration_rates 
+```
+
+# Discussion
+
+```{r future_novelty, fig.height = 60, fig.width = 150, dev=c('cairo_pdf'), dpi = 300, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "fig6_evolutionclimatenovelty.R"))
+distance_futurepast4
+```
+
+```{r futurepast_var, fig.height = 4.5, fig.width = 4.5, dev=c('ragg_png'), dpi = 800, fig.cap = "Tmean and pre", eval = F}
+climvar2
+```
+
+
+
+# Methods
+
+## 1. Late Quaternary climate and vegetation
+
+We used a monthly paleoclimate reconstruction dataset [@Armstrong2019], generated with the HadCM3B-M2.1 coupled general circulation model, from 18.000BP. It includes both millennial scale climate variability and inter-annual variability. For this work, several variables were specifically produced: mean temperature, average minimum and maximum daily temperatures, precipitation, number of rainy days, cloudiness, and wind speed. We further downscaled temperature and precipitation monthly data to 0.25° resolution, by applying a height correction of coarse-scale variables towards an elevation level at high resolution [from the ICE-6G_C dataset, @Peltier2015].  
+We then generated daily data (temperatures, precipitation, cloud cover and wind speed) using the weather generator GWGEN [@Sommer2017], for 30-year period every 250 years. We simulated daily extra-terrestrial solar radiation [with the same orbital forcing conditions used by @Armstrong2019] and then computed daily global radiation using previously generated daily cloud-cover data [as implemented in LPJ-LMfire global model, @Pfeiffer2013]. Finally, we computed potential evapotranspiration following the standard FAO Penman-Monteith method.  
+  
+Fossil pollen records were extracted from the LegacyPollen dataset [@Herzschuh2022]. This dataset is mainly based on the Neotoma database [@Williams2018], and provides samples with standardized chronologies and age uncertainties. We removed sites that had marine depositional environments [@Maguire2016], and only kept samples with more than 200 pollen grain counts and age uncertainty of less than 500 years.
+Pollen relative abundances were interpolated to consecutive 500-year intervals. If multiple samples from the same site belonged to the same period, we averaged their pollen abundances, weighting by their age uncertainty and temporal distance from the center of the period. Relative genus pollen abundances were converted to presence/absence using thresholds of 1% for *Fagus* and *Abies*, and 2.5% for *Quercus* [based on biome reconstructions, @Williams1998]. If several sites fell within the same grid cell (0.25°), we considered the species as present if there was at least one record.
+
+## 2. Species distribution modeling
+
+Two process-based models were used in this study. PHENOFIT focuses on phenology and how it relates to survival and reproduction [@Chuine2001], and has been validated for several North American and European species [e.g. @Morin2007; @Saltre2013; @Duputie2015; @Gauzere2020]. CASTANEA is much more complex, and focuses on carbon and water cycles [@Dufrene2005]. It was successfully applied to several European species [e.g. @Davi2006; @Delpierre2012; @Davi2017].  
+For both models, two versions were employed: one is calibrated with expert knowledge, observations and measurements of the processes modelled (expert calibration), and the other is calibrated using species distribution data [inverse calibration, @VanderMeersch2023].
+  
+Four well-established correlative models, whose predictive performances have been tested [@Valavi2022], were implemented: GLM with lasso regularization, GAM, BRT and down-sampled Random Forest. We chose four uncorrelated climate predictors related to ecological processes: minimum temperature of the coldest month (frost tolerance), total precipitation (accumulated water), GDD (>5°C) between April and September (vegetation growth and fruit maturation), water balance between June and July (summer drought). We also included two soil covariates (pH and WHC). For each statistical model and each species, we run a fivefold environmental cross-validation to check model performance. We then use all the available training data to calibrate the models, in order to favour final prediction quality [@Roberts2017].  
+  
+Model calibrations (both for correlative and inverse-calibrated process-based model) were performed in the historical climate (1970-2000), extracted from ERA5-Land hourly dataset [@Sabater2019; @Sabater2021]. The species occurrence data we used for model fitting came from the dataset assembled in @VanderMeersch2023.
+
+Paleosimulations were runned for 30-year period every 250 years, for five species: *Fagus sylvatica*, *Abies alba*, *Quercus robur*, *Quercus petraea* and *Quercus ilex*. Model outputs were averaged over each 30-year period. 
+
+## 3. Tree migration  
+
+Neglecting tree migration in an hindcasting experiment can lead to misleading predictions. To implement these dispersal constraints, we run a simple cellular automaton [@Engler2012], assuming that trees can disperse once a year. We modified the initial version of this dispersal model in order to use both short- and long-distance dispersal kernels. We used species-specific fat-tailed kernels [calibrated in @Zani2022], at a 500m resolution. Model outputs were classified in two classes, using specific optimal thresholds (Youden index-based cut-off points) which maximize model performance in the historical climate: (i) cells where the species cannot survived (under the threshold) were assigned a zero fitness, and (ii) cells where the species can migrate (above the threshold), for which the fitness was rescaled between 0 and 1.  
+*Fagus* and *Abies* migration simulations started from 12.000BP, while *Quercus* simulations started from 15.000BP (to take into account the potential spread of *Quercus* during the Lateglacial period). We considered *Fagus sylvatica* and *Abies alba* as the major representatives of their genus. For *Quercus* species, we runned two separate migration simulations for deciduous and evergreen individuals, that we then assembled. We considered the *Quercus* deciduous fitness as the maximum fitness between *Q. robur* and *Q. petraea*.  
+Migration starting points (refugia) were assessed by complementing LegacyPollen data with other sources, such as macrofossils [@TerhuerneBerson2004; @Magri2006; @Tzedakis2013]. These complementary points were not used for model performance evaluation afterwards. 
+
+## 4. Model skill in past and future environments
+
+We used the True Skill Statistic (TSS) to measure the hindcast skill of our models, based on the confusion matrix. We compared the area colonized after the migration simulations to the presence/absence data extracted from the LegacyPollen dataset, at each 500-year interval.
+
+In order to quantify the novel conditions under which models were projected, we computed climate dissimilarity as the minimum Mahalanobis distance (which accounts for covariance among variables), with vectors of three-month means temperature and three-month sums of precipitation [@Burke2019], between each cell of the projected period and all the cells of the baseline climate [the CRU TS v. 4.07 gridded dataset, @Harris2020].  
+We computed this climatic metric for past conditions and for future conditions [5 climate models and 2 scenarios from the CMIP6 experiment, @Noel2020]. Both paleoclimate and future climate data were uniformized with CRU dataset to maximize comparability among paleoclimate and future climate novelties. The difference (for three-month temperature average) and the ratio (for three-month precipitation sum) between the observations (from 1921 to 1980) and simulations (1921-1950 for HadCM3B, 1951-1980 for CMIP6 projections) were calculated and applied to the whole modeled time period, assuming that the bias was constant.  
+  
+Finally, we fitted linear-plateau regressions, which follow two phases (a flat plateau and a linear response), between median realized model skill and past climate novelty. These regressions allow us to compute tipping points, above which model predictive ability decreases strongly. The confidence intervals were calculated with the R package *propagate* [@Spiess2018], by using  first and second-order Taylor expansion and Monte Carlo simulations. To check whether our approach was not too deterministic, we also fitted generalized additive models which gave the same patterns (Supplementary Figure).
+
+# Supplementary material
+
+```{r var_skill, fig.height = 66, fig.width = 152, dev=c('cairo_pdf'), dpi = 800, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_varperformance.R"))
+supp_fig_var
+```
+
+  
+
+```{r species_skill, fig.height = 91, fig.width = 68, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_species.R"))
+
+# supp_fig_species
+```
+
+  
+
+```{r relchgtss, fig.height = 80, fig.width = 70, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_relchgtss.R"))
+# supp_fig_transferability
+```
+
+  
+
+```{r species_skill_transferability, fig.height = 90, fig.width = 160, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+plot_grid(supp_fig_species, NULL,supp_fig_transferability,ncol = 3, 
+          labels = c('','', 'D)'),
+          rel_widths = c(1,0.07,1),
+          label_fontfamily = "Helvetica Narrow",
+          label_fontface = "plain",
+          label_size = 8.5)
+
+```
+
+```{r speciesmodel_tss, fig.height = 100, fig.width = 140, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_migtss_speciesmodels.R"))
+supp_fig_speciesmodels
+```
+
+```{r speciesmodel_spec, fig.height = 100, fig.width = 140, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_spec_speciesmodels.R"))
+supp_fig_speciesmodels
+```
+
+```{r speciesmodel_sens, fig.height = 100, fig.width = 140, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_sens_speciesmodels.R"))
+supp_fig_speciesmodels
+```
+
+```{r speciesmodel_sor, fig.height = 100, fig.width = 140, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Evoltion of future clim novelty", eval = F}
+source(file.path(wd, "scripts", "figs", "supp_fig_sor_speciesmodels.R"))
+supp_fig_speciesmodels
+```
+
+```{r figure_tss_transferability, fig.height = 114, fig.width = 114, dev=c('cairo_pdf'), dpi = 600, fig.cap = "TSS performance + linear-plateau regressions", eval = F}
+
+source(file.path(wd, "scripts", "figs", "fig3_alltss_type2_transferability.R"))
+tss_performance3
+```
+
+# References
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\vspace*{-0.2in}
+\noindent
+<div id="refs"></div>
