@@ -134,7 +134,7 @@ sim_options <- list(command_file_suffix = "",
 # h. davi renecofor site CHP_70
 
 
-inv_options <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/castanea/inv/abies_alba_24yr.rds")
+inv_options <- readRDS("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/castanea/inv/quercus_petraea_32yr.rds")
 inv_options$model$CO2_mode <- "CO2_FIXED"
 inv_options$model$Ca <- 240
 
@@ -176,13 +176,13 @@ data <- list(grid = grid_points, lat = data_soil[grid_points, "lat"], lon = data
              wilt = round(data_soil[grid_points, "WP"],3), stone = round(data_soil[grid_points, "crf_all"],3), 
              bulk = round(data_soil[grid_points, "bld"],3), soil_prop = soil_prop)
 
-species=list(name = "Abies alba", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
+species=list(name = "Quercus petraea", structure_file = "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/species/CastaneaSpecies_08_2021.txt")
 
 
 ## Create needed files ----
 
 create_inventoryfile(output_dir = file.path(wd, "run"), inv_options, data)
-create_runfile(capsis_settings$nb_lines_per_file, output_dir = file.path(wd, "run"), species_file = "aalba_subset1_rep1.txt", 
+create_runfile(capsis_settings$nb_lines_per_file, output_dir = file.path(wd, "run"), species_file = "qpetraea_subset1_rep1.txt", 
                sim_options = sim_options, data = data , capsis_settings = capsis_settings, start = 1)
 
 runlines <- read.table(file.path(wd, "run","runfile.txt"), sep='\t')
@@ -212,8 +212,9 @@ unlink(paste0("D:/applications/capsis4_castanea/var"), recursive=TRUE)
 with_progress(system.time(run()))
 
 files_to_move <- list.files("D:/applications/capsis4_castanea/var", pattern = "yearlyResults.log", full.names = TRUE)
-output_folder <- "D:/simulations/castanea/backward/abies_alba_240ppm"
+output_folder <- "D:/simulations/castanea/backward/quercus_petraea_240ppm"
 move_files <- lapply(files_to_move, function(i) filesstrings::file.move(i, output_folder, overwrite = T))
+unlink(paste0("D:/applications/capsis4_castanea/var"), recursive=TRUE)
 
 
 # Read output variables D:/simulations/castanea/forward/quercus_petraea_capsisrevision18131

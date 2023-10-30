@@ -1,8 +1,8 @@
 # Command file for Castanea
-# Generated on Rstudio by user vandermeersch, on the 2023-10-09
+# Generated on Rstudio by user vandermeersch, on the 2023-10-26
 
 # The filenames below are relative to the folder containing this command file
-castaneaFileName	=	aalba_subset1_rep1.txt
+castaneaFileName	=	qpetraea_subset1_rep1.txt
 inventoryFileName	=	C:/Users/vandermeersch/Documents/CEFE/phd/castanea/run/inventory.txt
 
 climateBaseName	=	D:/climate/ERA5-Land/castanea_format/
