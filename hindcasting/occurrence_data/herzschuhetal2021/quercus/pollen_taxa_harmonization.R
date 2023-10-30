@@ -2,7 +2,7 @@
 ### Thomas Böhmer
 ### Alfred-Wegener-Institute Helmhotz Centre for Polar- and Marine Research, Potsdam, Germany 2021
 
-### modify by V. van der Meersch to match with new version of R package neotoma2
+
 
 baconAgeDepths <- baconAgeDepths_all[baconAgeDepths_all$ID == dataID,]
 

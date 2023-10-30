@@ -5322,8 +5322,8 @@ Debarya glyptosperma,Didiereaceae
 Decarya,Didiereaceae
 Decaspermum,Decaspermum
 Decaspermum-type,Decaspermum
-Deciduous oaks,Quercus
-Deciduous Quercus,Quercus
+Deciduous oaks,Quercus.dec.type
+Deciduous Quercus,Quercus.dec.type
 Deciduous trees,Delete
 Decodon,Delete
 Decodon verticillatus,Delete
@@ -12434,90 +12434,90 @@ Quassia amara,Quassia
 Quassia silvestris,Quassia
 Quercus,Quercus
 quercus,Quercus
-Quercus (Cyclobalanopsis),Quercus
-Quercus (decidious),Quercus
-Quercus (deciduous),Quercus
-Quercus (deciduous-type),Quercus
+Quercus (Cyclobalanopsis),Quercus.evg.type
+Quercus (decidious),Quercus.dec.type
+Quercus (deciduous),Quercus.dec.type
+Quercus (deciduous-type),Quercus.dec.type
 Quercus (evengreen),Quercus.evg.type
 Quercus (evergreen),Quercus.evg.type
 Quercus (evergreen-type),Quercus.evg.type
 Quercus (large),Quercus
-Quercus (Lepidobalanus),Quercus
+Quercus (Lepidobalanus),Quercus.dec.type
 Quercus (rough),Quercus
 Quercus (smooth),Quercus
-Quercus (type 1),Quercus
-Quercus (type 2),Quercus
+Quercus (type 1),Quercus.dec.type
+Quercus (type 2),Quercus.evg.type
 Quercus (unclear),Quercus
-Quercus acutissima,Quercus
+Quercus acutissima,Quercus.dec.type
 Quercus agrifolia,Quercus.evg.type
-Quercus ajoensis,Quercus
-Quercus boissieri,Quercus
-Quercus boissieri-type,Quercus
-Quercus borealis,Quercus
+Quercus ajoensis,Quercus.evg.type
+Quercus boissieri,Quercus boissieri
+Quercus boissieri-type,Quercus boissieri
+Quercus borealis,Quercus.dec.type
 Quercus calliprinos,Quercus.evg.type
 Quercus calliprinos-type,Quercus.evg.type
-Quercus canariensis,Quercus
-Quercus cerris,Quercus
-Quercus cerris/Q. suber,Quercus
-Quercus cerris-type,Quercus
-Quercus cf. Q. canariensis,Quercus
+Quercus canariensis,Quercus.evg.type
+Quercus cerris,Quercus.evg.type
+Quercus cerris/Q. suber,Quercus.evg.type
+Quercus cerris-type,Quercus.evg.type
+Quercus cf. Q. canariensis,Quercus.evg.type
 Quercus cf. Q. ilex,Quercus.evg.type
-Quercus cf. Q. pungens,Quercus
-Quercus cf. Q. robur,Quercus
-Quercus cf. Q. rotundifolia,Quercus
+Quercus cf. Q. pungens,Quercus.evg.type
+Quercus cf. Q. robur,Quercus.dec.type
+Quercus cf. Q. rotundifolia,Quercus.evg.type
 Quercus cf. Q. suber,Quercus.evg.type
-Quercus cf. Q. turbinella,Quercus
-Quercus cf. Q. undulata,Quercus
+Quercus cf. Q. turbinella,Quercus.evg.type
+Quercus cf. Q. undulata,Quercus.evg.type
 Quercus chrysolepis,Quercus.evg.type
-Quercus cl .Lepidobalanus,Quercus
-Quercus cl. Sclerophylldrys,Quercus
+Quercus cl .Lepidobalanus,Quercus.dec.type
+Quercus cl. Sclerophylldrys,Quercus.evg.type
 Quercus coccifera,Quercus.evg.type
 Quercus coccifera-type,Quercus.evg.type
 Quercus comp.,Quercus
-Quercus dec.,Quercus
-Quercus deciduous,Quercus
-Quercus dentata,Quercus
+Quercus dec.,Quercus.dec.type
+Quercus deciduous,Quercus.dec.type
+Quercus dentata,Quercus.dec.type
 Quercus dumosa,Quercus.evg.type
 Quercus Evengreen,Quercus.evg.type
 Quercus evergreen,Quercus.evg.type
-Quercus faginea,Quercus
-Quercus faginea-type,Quercus
-Quercus frainetto,Quercus
-Quercus gambelii,Quercus
-Quercus gambelii-type,Quercus
-Quercus garryana,Quercus
-Quercus grisea,Quercus
+Quercus faginea,Quercus.evg.type
+Quercus faginea-type,Quercus.evg.type
+Quercus frainetto,Quercus.dec.type
+Quercus gambelii,Quercus.dec.type
+Quercus gambelii-type,Quercus.dec.type
+Quercus garryana,Quercus.dec.type
+Quercus grisea,Quercus.evg.type
 Quercus hinckleyi,Quercus.evg.type
 Quercus ilex,Quercus.evg.type
 Quercus ilex/Q. coccifera,Quercus.evg.type
 Quercus ilex/Q. coccifera-type,Quercus.evg.type
 Quercus ilex-type,Quercus.evg.type
-Quercus infectoria,Quercus
-Quercus infectoria subsp. veneris,Quercus
-Quercus infectoria subsp. veneris-type,Quercus
-Quercus infectoria-type,Quercus
-Quercus ithaburensis,Quercus
-Quercus ithaburensis-type,Quercus
+Quercus infectoria,Quercus.evg.type
+Quercus infectoria subsp. veneris,Quercus.evg.type
+Quercus infectoria subsp. veneris-type,Quercus.evg.type
+Quercus infectoria-type,Quercus.evg.type
+Quercus ithaburensis,Quercus.evg.type
+Quercus ithaburensis-type,Quercus.evg.type
 Quercus john-tuckeri,Quercus.evg.type
-Quercus liaotungensis,Quercus
-Quercus macrocarpa,Quercus
-Quercus mongolica,Quercus
-Quercus pedunculata,Quercus
-Quercus petraea,Quercus
-Quercus pubescens,Quercus
-Quercus pubescens/Q. robur-type,Quercus
-Quercus pubescens-type,Quercus
-Quercus pungens,Quercus
-Quercus pyrenaica,Quercus
-Quercus pyrenaica-type,Quercus
-Quercus robur,Quercus
-Quercus robur group,Quercus
-Quercus robur/Q. cerris,Quercus
-Quercus robur-type,Quercus
+Quercus liaotungensis,Quercus.dec.type
+Quercus macrocarpa,Quercus.dec.type
+Quercus mongolica,Quercus.dec.type
+Quercus pedunculata,Quercus.dec.type
+Quercus petraea,Quercus.dec.type
+Quercus pubescens,Quercus.dec.type
+Quercus pubescens/Q. robur-type,Quercus.dec.type
+Quercus pubescens-type,Quercus.dec.type
+Quercus pungens,Quercus.dec.type
+Quercus pyrenaica,Quercus.dec.type
+Quercus pyrenaica-type,Quercus.dec.type
+Quercus robur,Quercus.dec.type
+Quercus robur group,Quercus.dec.type
+Quercus robur/Q. cerris,Quercus.dec.type
+Quercus robur-type,Quercus.dec.type
 Quercus rotundifolia,Quercus.evg.type
-Quercus rubra,Quercus
+Quercus rubra,Quercus.dec.type
 Quercus sclerophyllous,Quercus.evg.type
-Quercus sect. Cerris,Quercus
+Quercus sect. Cerris,Quercus.evg.type
 Quercus sect. Cyclobalanopsis,Quercus.evg.type
 Quercus sect. Ilex,Quercus.evg.type
 Quercus sect. Lobatae,Quercus
@@ -12527,27 +12527,27 @@ Quercus sect. Quercus,Quercus
 Quercus sect. Virentes,Quercus
 Quercus sempervirens,Quercus.evg.type
 Quercus sempervirens-type,Quercus.evg.type
-Quercus sessiliflora,Quercus
+Quercus sessiliflora,Quercus.dec.type
 Quercus sp.,Quercus
-Quercus sp.1,Quercus
-Quercus sp.2,Quercus
+Quercus sp.1,Quercus.dec.type
+Quercus sp.2,Quercus.evg.type
 Quercus suber,Quercus.evg.type
 Quercus suber-type,Quercus.evg.type
-Quercus subg. Cerris,Quercus
-Quercus subg. Cyclobalanopsis,Quercus
-Quercus subg. Lepidobalanus,Quercus
+Quercus subg. Cerris,Quercus.evg.type
+Quercus subg. Cyclobalanopsis,Quercus.evg.type
+Quercus subg. Lepidobalanus,Quercus.dec.type
 Quercus subg. Quercus,Quercus
 Quercus toumeyi,Quercus
 Quercus turbinella,Quercus.evg.type
 Quercus turbinella/Q. john-tuckeri,Quercus.evg.type
 Quercus undiff.,Quercus
 Quercus vaccinifolia,Quercus.evg.type
-Quercus vaccinifolia-type,Quercus
-Quercus(Cyclobalanopsis),Quercus
+Quercus vaccinifolia-type,Quercus.dec.type
+Quercus(Cyclobalanopsis),Quercus.evg.type
 Quercus(deciduous),Quercus
 Quercus(evergreen),Quercus.evg.type
 Quercus.ever,Quercus.evg.type
-Quercus/Cercocarpus,Quercus
+Quercus/Cercocarpus,Quercus.evg.type
 Quercus/Tilia/Ulmus,Quercus
 Quercus-type,Quercus
 Quercus-type (with pores),Quercus

@@ -14,9 +14,7 @@ library(neotoma2)
 library(data.table)
 library(terra)
 
-# load taxa harmonization table:
-Harmonisation_Master <- read.csv(file.path(wd, "LegacyPollen", "taxa_harmonisation_table_VV.csv"), 
-                                 header=TRUE, stringsAsFactors=FALSE, check.names=FALSE, encoding = "UTF-8")
+
 
 # load age-depth-file
 baconAgeDepths_all <- read.table(file.path(wd, "LegacyAge", "Table-S5_legacyage_1_0_chronology.csv"), header=TRUE, encoding = "UTF-8")
