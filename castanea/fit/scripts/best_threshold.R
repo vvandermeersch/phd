@@ -10,19 +10,19 @@ library(terra)
 source(file.path("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation", "functions/read_mean_outputvalue.R"))
 
 sp_folder <- "D:/species/processed"
-sp_presabs <- readRDS(file.path(sp_folder, "quercus_ilex/quercus_ilex_presabs_woUkraine.rds"))
-sp_name <- "quercus_ilex"
+sp_presabs <- readRDS(file.path(sp_folder, "quercus_petraea/quercus_petraea_presabs_woUkraine.rds"))
+sp_name <- "quercus_petraea"
 
 
 
-out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/fit/fitted/quercus_ilex"
-sim_folder <- "D:/simulations/castanea/backward/quercus_ilex_190ppm"
-filename <- "quercus_ilex_190ppm"
+out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/castanea/fit/expert/quercus_petraea"
+sim_folder <- "D:/simulations/castanea/backward/quercus_petraea_240ppm"
+filename <- "quercus_petraea_240ppm"
 modality <- "inverse calibration"
 
 # Compute AUC on every pres/abs points (NPP or Reserves)
 biomass <- read_mean_outputvalue(output_folder = sim_folder,
-                                 model = "CASTANEA_present", output_var = "NPP",
+                                 model = "CASTANEA_present", output_var = "BiomassOfReserves",
                                  num_years = 30)
 biomass$lat <- round(biomass$lat, 1)
 biomass$lon<- round(biomass$lon, 1)
