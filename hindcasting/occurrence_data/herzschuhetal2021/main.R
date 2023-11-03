@@ -14,7 +14,9 @@ library(dplyr)
 library(terra)
 
 
+#..................#
 ### PREPARE DATA ###
+#..................#
 
 # Load European dataset (Herzschuh et al. 2022)
 dataset_count <- fread(file.path(input_folder, "pollen_counts_europe.csv")) %>%
@@ -48,7 +50,9 @@ dataset_count <- left_join(dataset_count, metadata, by = c("Dataset_ID" = "ID (D
   dplyr::filter(`Loc type` != "Marine" & `Loc type` != "Lagoon")
 
 
+#........................#
 ### COMPUTE OCCURRENCE ###
+#........................#
 
 # Choose species and year range
 field <- "Abies (#)" # species fieldname in Herzschuh dataset 
