@@ -7,13 +7,13 @@ library(dplyr)
 source(file.path("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation", "functions/read_mean_outputvalue.R"))
 
 sp_folder <- "D:/species/processed"
-sp_presabs <- readRDS(file.path(sp_folder, "quercus_petraea/quercus_petraea_presabs.rds"))
-sp_name <- "quercus_petraea"
+sp_presabs <- readRDS(file.path(sp_folder, "quercus_robur/quercus_robur_presabs_woUkraine.rds"))
+sp_name <- "picea_abies"
 
-out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_petraea"
-sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_petraea/subset1_rep2"
-filename <- "cmaes_fit_subset1_rep2"
-# filename <- "Quercus_ilex_FTauc_ptype3"
+out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_robur"
+sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_robur/subset1_rep1"
+filename <- "cmaes_fit_subset1_rep1"
+# filename <- "Chuine2"
 modality <- "inverse calibration"
 
 # Compute AUC on every pres/abs points
@@ -40,6 +40,8 @@ mig_sens = tp/(tp+fn)
 mig_spec = tn/(tn+fp)
 tss = mig_sens + mig_spec - 1
 print(tss)
+sorensen = 2*tp/(fn + 2*tp + fp)
+print(sorensen)
 
 # save (as in CSDM)
 outfile <- list()
@@ -49,6 +51,7 @@ outfile$modality <- modality # modelling modality
 outfile$species_file <- filename
 outfile$auc_all <- auc_tot # auc on every species points
 outfile$tss_all <- tss # tss on every species points
+outfile$sorensen_all <- sorensen # sorensen on every species points
 outfile$best_threshold <- best_threshold # best threshold to discriminate probabilites
 outfile$europe_pred <- fitness # prediction on every Europe cells
 saveRDS(outfile, file = file.path(out_folder, paste0(filename, ".rds")))
