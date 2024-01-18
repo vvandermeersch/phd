@@ -1,10 +1,10 @@
 # File for Phenofit4 CommandScript
-# Generated with Rstudio (time: 2023-01-31 10:25:50, user: vandermeersch)
+# Generated with Rstudio (time: 2023-12-05 10:03:45, user: vandermeersch)
 					
 speciesInputDir =
 climateInputDir =
-outputDir = D:/simulations/phenofit/paleo/test
+outputDir = D:/simulations/phenofit/present/expert/picea_abies/ChuineVanderMeersch
 quietMode = true
 					
 # speciesFileName	climateFolderName	climateScenario	startingYear	endingYear
-C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Fagus_sylvatica_VVanderMeersch.species	D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/05deg/5000BP	HadCM3B	-5014	-4985
+C:/Users/vandermeersch/Dropbox/These_Victor/Phenofit4/species/forward/Picea_abies_ChuineVanderMeersch.species	D:/climate/ERA5-Land/phenofit_format/transformed	ERA5LAND	1970	2000
