@@ -513,8 +513,8 @@ void mcMigrate (char **paramFile, int *nrFiles)
 	    fprintf(fp, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", envChgStep, dispStep, loopID, nrUnivDispersal,
 	    	    nrNoDispersal, nrColonized, nrAbsent, nrStepColonized, nrStepDecolonized, nrStepLDDSuccess);
 	    	 
-	    /* If the user has requested full output, also write the current state matrix to file. */
-	    if(fullOutput){
+	    /* If the user has requested full output, also write the current state matrix to file. V.V.: only each 250 steps */
+	    if(fullOutput && loopID%250==0){
 	      sprintf (fileName, "%s/%s_step_%d.asc", simulName, simulName2, loopID);
 	      if(writeMat (fileName, currentState) == -1){
 	        *nrFiles = -1;
