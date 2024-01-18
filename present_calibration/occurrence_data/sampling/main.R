@@ -44,15 +44,15 @@ gc()
 ## Process occurrence data ##
 
 # load data
-# EVM <- read_sf(paste0(speciesdata_folder,"EuroVegMap/evm_species.shp"))
-EVM <- read_sf(paste0(speciesdata_folder,"EuroVegMap/evm_bonusspecies.shp"))
-# AFE <- read_sf(paste0(speciesdata_folder,"AFE/species/all.gpkg")) %>% dplyr::filter(status == 6)
-AFE <- read_sf(paste0(speciesdata_folder,"AFE/species/all_bonusspecies.gpkg")) %>% dplyr::filter(status == 6)
+EVM <- read_sf(paste0(speciesdata_folder,"EuroVegMap/evm_species.shp"))
+# EVM <- read_sf(paste0(speciesdata_folder,"EuroVegMap/evm_bonusspecies2.shp"))
+AFE <- read_sf(paste0(speciesdata_folder,"AFE/species/all.gpkg")) %>% dplyr::filter(status == 6)
+# AFE <- read_sf(paste0(speciesdata_folder,"AFE/species/all_bonusspecies2.gpkg")) %>% dplyr::filter(status == 6)
 EUForest <- read.csv(paste0(speciesdata_folder,"EUForest/EuForestspecies.csv")) 
 ERA5land <- raster(paste0(rawdata_folder,"2m_dewpoint_temperature_1969_01.nc"))
 source(paste0(speciesdata_folder, "WOODIV/WOODIV_DB_release_v1/OCCURRENCE/WOODIV_working_file_generation.R"))
 rm(working.file, working.file.Victor, WOODIV_Species_code, woodiv_grid, WOODIV_Occurrence_source, woodiv.grid.merge)
-WOODIV <- rbind(woodiv_queile, woodiv_quepub, woodiv_pinpin) %>% dplyr::select(source_code, species=spcode, geometry)
+WOODIV <- rbind(woodiv_queile, woodiv_quepub, woodiv_pinpin, woodiv_pinhal) %>% dplyr::select(source_code, species=spcode, geometry)
 
 # create rasters
 GBIF <- fread(paste0(speciesdata_folder,"GBIF/Abies_alba_18012022/0109922-210914110416597.csv"), sep="\t", dec=".", quote = "",
@@ -104,6 +104,12 @@ GBIF <- fread(paste0(speciesdata_folder,"GBIF/Pinus_pinaster_13122022/0214385-22
 pinuspinaster_occ_rs <- process_occurrence("Pinus pinaster", EUForest, GBIF, EVM, AFE, ERA5land, WOODIV)
 save(pinuspinaster_occ_rs, file = "D:/species/processed/pinus_pinaster/pinuspinaster_occ_rs.Rdata") # one can save file to prevent future computations
 
+GBIF <- fread(paste0(speciesdata_folder,"GBIF/Pinus_halepensis_07082023/0142320-230530130749713.csv"), sep="\t", dec=".", quote = "",
+              header = TRUE, fill = TRUE, stringsAsFactors = FALSE)
+pinushalepensis_occ_rs <- process_occurrence("Pinus halepensis", EUForest, GBIF, EVM, AFE, ERA5land, WOODIV)
+save(pinushalepensis_occ_rs, file = "D:/species/processed/pinus_halepensis/pinushalepensis_occ_rs.Rdata") # one can save file to prevent future computations
+
+
 ## Sampling presence and absence ##
 
 # Mean of 31 years of bioclim data
@@ -120,15 +126,14 @@ biovars_30y <- as.data.frame(biovars_30y)
 
 # Create several combinations 
 N <- 5 # number of combinations
-npres <- 1000 # number of presence points
-nabs <- 1000 # number of absence points
+npres <- 500 # number of presence points
+nabs <- 500 # number of absence points
 nclusters <- 10 # number of clusters for presence data
 
-output_folder <- "D:/species/processed/quercus_pubescens"
-#load("D:/species/processed/quercus_ilex/quercusilex_occ_rs.Rdata")
-#load("D:/species/processed/quercus_petraea/quercuspetraea_occ_rs.Rdata")
+output_folder <- "D:/species/processed/quercus_ilex"
+load("D:/species/processed/quercus_ilex/quercus_ilex_occ_rs.Rdata")
 
-generate_subsets(N, npres, nabs, nclusters, quercuspubescens_occ_rs, output_folder)
+generate_subsets(N, npres, nabs, nclusters, quercusilex_occ_rs, output_folder)
 
 
  # Missing points ? Some points are not covered by ERA5-Land or soil databases
@@ -137,13 +142,13 @@ generate_subsets(N, npres, nabs, nclusters, quercuspubescens_occ_rs, output_fold
 
 
 # Save all presence/pseudo-absence points to calculate a "true" AUC 
-presences <- sample_presence_by_env(quercuspubescens_occ_rs, biovars_30y, k = NULL, nb_samples = NULL) %>% dplyr::select(-c(nb_src))
+presences <- sample_presence_by_env(pinushalepensis_occ_rs, biovars_30y, k = NULL, nb_samples = NULL) %>% dplyr::select(-c(nb_src))
 presences$pres <- 1
-absences <- sample_absence(species_data = quercuspubescens_occ_rs, EUForest, ERA5land, nb_samples = NULL, env_data = biovars_30y)
+absences <- sample_absence(species_data = pinushalepensis_occ_rs, EUForest, ERA5land, nb_samples = NULL, env_data = biovars_30y)
 absences$pres <- 0
-quercuspubescens_presabs <- rbind(presences, absences)
-save(quercuspubescens_presabs, file = "D:/species/processed/quercus_pubescens/quercus_pubescens_presabs.Rdata")
-saveRDS(quercuspubescens_presabs, file = "D:/species/processed/quercus_pubescens/quercus_pubescens_presabs.rds")
+pinushalepensis_presabs <- rbind(presences, absences)
+save(pinushalepensis_presabs, file = "D:/species/processed/pinus_halepensis/pinus_halepensis_presabs.Rdata")
+saveRDS(pinushalepensis_presabs, file = "D:/species/processed/pinus_halepensis/pinus_halepensis_presabs.rds")
 
 
 

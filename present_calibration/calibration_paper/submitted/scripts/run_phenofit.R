@@ -1,11 +1,11 @@
 library(gtools)
 
 # Run Phenofit for every calibrated parameter sets
-wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper'
+wd <- 'C:/Users/vandermeersch/Documents/CEFE/phd/present_calibration/calibration_paper/submitted'
 source(file.path(wd, "functions", "command_file_setup.R"))
 
-cal_folder <- 'D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/ABC'
-sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data/ABC'
+cal_folder <- 'D:/calibrations/phenofit/picea_abies/1000pres_1000abs'
+sim_folder <- 'D:/simulations/phenofit/present/fitted/picea_abies'
 
 species_files <- mixedsort(list.files(path = cal_folder, pattern = "\\.species$", full.names = F, recursive = T))
 
@@ -30,8 +30,4 @@ for(cal in species_files){
   system.time(shell(run, intern=F))
 }
 
-cal_folder <- 'D:/calibrations/phenofit/fagus_sylvatica/1000pres_1000abs/paper_data/ABC'
-sim_folder <- 'D:/simulations/phenofit/backward/fagus_sylvatica/paper_data/ABC'
-
-species_files <- mixedsort(list.files(path = cal_folder, pattern = "\\.species$", full.names = F, recursive = T))
 

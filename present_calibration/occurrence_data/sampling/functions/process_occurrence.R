@@ -6,7 +6,7 @@ process_occurrence <- function(species, EUForest, GBIF, EVM, AFE, ERA5land, WOOD
   
   # GBIF data
   ## set-up filters
-  EVM_filter <- EVM %>% filter(!is.na(!!as.symbol(substr(paste0(word(species, 1), '_', word(species, 2)), 1, 10)))) %>% 
+  EVM_filter <- EVM %>% dplyr::filter(!is.na(!!as.symbol(substr(paste0(word(species, 1), '_', word(species, 2)), 1, 10)))) %>% 
     dplyr::select(geometry) %>% 
     st_transform(crs=st_crs(4326))
   
@@ -48,6 +48,8 @@ process_occurrence <- function(species, EUForest, GBIF, EVM, AFE, ERA5land, WOOD
       WOODIV <- WOODIV[WOODIV$species=='QPUB',]
     }else if(species=="Pinus pinaster"){
       WOODIV <- WOODIV[WOODIV$species=='PPIR',]
+    }else if(species=="Pinus halepensis"){
+      WOODIV <- WOODIV[WOODIV$species=='PHAL',]
     }else{
       stop("Error with Woodiv data. Are you sure the species name is correct ?")
     }
