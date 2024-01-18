@@ -6,7 +6,8 @@
 # 
 # remotes::install_github("saudiwin/ordbetareg_pack",build_vignettes=TRUE,dependencies = TRUE)
 
-ggplot(data = model_performance_withmig, aes(x = year, y = mig_sorensen, fill = type2, col = type2)) +
+ggplot(data = model_performance_withmig[model_performance_withmig$type != "3Expertprocessbasedincomplete",], 
+       aes(x = year, y = mig_sorensen, fill = type2, col = type2)) +
   geom_point() +
   scale_color_manual(breaks= c("1Treebased", "2Regressionbased", '3Expertprocessbased', "4Fittedprocessbased"),
                      values= c( "#457b9d", "#82BCC4", "#e86117","#995D81"),
@@ -20,8 +21,8 @@ hist(model_performance_withmig$mig_sorensen)
 hist(log(model_performance_withmig$mig_sorensen))
 
 library(ordbetareg)
-ord_fit_mean <- ordbetareg(formula=mig_sorensen ~ hypervolume_sorensen*mod, 
-                           data=model_performance_withmig,
+ord_fit_mean <- ordbetareg(formula=mig_sorensen ~ log(1-hypervolume_sorensen)*type, 
+                           data=model_performance_withmig[model_performance_withmig$type != "3Expertprocessbasedincomplete",],
                            backend="cmdstanr",
                            control=list(adapt_delta=0.95),
                            chains = 1,
@@ -53,11 +54,12 @@ model_performance_withmig %>%
 ord_pred <- conditional_effects(ord_fit_mean)[[3]]
 
 model_performance_median <- model_performance_withmig %>%
-  group_by(mod, hypervolume_sorensen) %>%
+  dplyr::filter(type != "3Expertprocessbasedincomplete") %>%
+  group_by(type, hypervolume_sorensen = round(hypervolume_sorensen, 3)) %>%
   dplyr::summarise(median_migtss=median(mig_sorensen), sd_migtss=sd(mig_sorensen)) %>%
   as.data.frame()
 
-ggplot(data = ord_pred, aes(y=estimate__,x=1-hypervolume_sorensen, col = mod, fill = mod)) +
+ggplot(data = ord_pred, aes(y=estimate__,x=1-hypervolume_sorensen, col = type, fill = type)) +
   geom_ribbon(aes(ymin=lower__,
                   ymax=upper__),
               alpha=0.3,
@@ -66,7 +68,7 @@ ggplot(data = ord_pred, aes(y=estimate__,x=1-hypervolume_sorensen, col = mod, fi
   geom_pointrange(data = model_performance_median, aes(y = median_migtss, 
                                                        ymin=median_migtss-sd_migtss, 
                                                        ymax=median_migtss+sd_migtss), 
-                  position = position_dodge(width = 0.015),
+                  position = position_dodge(width = 0.007),
                   linewidth = 0.3, size = 0.2, stroke = 0.4) +
   scale_x_continuous(breaks = seq(0.05,0.3,0.05),
                      expand = c(0,0),
@@ -92,12 +94,13 @@ ggplot(data = ord_pred, aes(y=estimate__,x=1-hypervolume_sorensen, col = mod, fi
         legend.key.size = unit(0.4, "cm"), legend.justification = "center",
         legend.spacing.x = unit(0.05, "cm"),
         plot.margin = unit(c(1, 0.5, 0.5, 0.5), "cm")) +
-  coord_cartesian(ylim=c(0, 1), xlim = c(0.05, 0.22), clip = "on")
+  coord_cartesian(ylim=c(-0.01, 1), xlim = c(0.05, 0.27), clip = "on")
 
 
 pp <- predict(ord_fit_mean, probs = c(0.05, 0.95))
 
-obs_vs_pred <- data.frame(obs = model_performance_withmig$sorensen, pred = pp[,1], qmin = pp[,3], qmax = pp[,4])
+obs_vs_pred <- data.frame(obs = model_performance_withmig$mig_sorensen, 
+                          pred = pp[,1,1], qmin = pp[,3,1], qmax = pp[,4,1])
 
 ggplot(data = obs_vs_pred, aes(x = obs, y = pred)) +
   geom_pointrange(aes(ymin=qmin, ymax=qmax), 
@@ -107,3 +110,11 @@ ggplot(data = obs_vs_pred, aes(x = obs, y = pred)) +
   geom_abline(intercept = 0, slope = 1) +
   coord_cartesian(ylim=c(0, 1), xlim = c(0, 1), clip = "on")
 
+
+
+ggplot() +
+  geom_pointrange(data = model_performance_median, aes(x = (1-hypervolume_sorensen),
+                                                       y = log(median_migtss), 
+                                                       ymin=median_migtss-sd_migtss, 
+                                                       ymax=median_migtss+sd_migtss))
+                  

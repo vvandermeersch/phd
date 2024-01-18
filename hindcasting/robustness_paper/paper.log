@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.16)  23 OCT 2023 10:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.16)  23 NOV 2023 19:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -540,8 +540,8 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip84
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 184.
-Package hyperref Info: Option `breaklinks' set `true' on input line 184.
+Package hyperref Info: Option `colorlinks' set `true' on input line 185.
+Package hyperref Info: Option `breaklinks' set `true' on input line 185.
 (c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/cleveref/cleveref.sty
 Package: cleveref 2018/03/27 v0.21.4 Intelligent cross-referencing
 Package cleveref Info: `hyperref' support loaded on input line 2370.
@@ -565,24 +565,24 @@ Package cleveref Info: include cross-reference names in hyperlinks on input line
 (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 191.
-LaTeX Font Info:    ... okay on input line 191.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 192.
+LaTeX Font Info:    ... okay on input line 192.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -644,160 +644,187 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'paper.bbl' not found.
 No file paper.bbl.
-Package biblatex Info: Reference section=0 on input line 191.
-Package biblatex Info: Reference segment=0 on input line 191.
+Package biblatex Info: Reference section=0 on input line 192.
+Package biblatex Info: Reference segment=0 on input line 192.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 191.
+Package hyperref Info: Link coloring ON on input line 192.
 (./paper.out) (./paper.out)
 \@outlinefile=\write4
 \openout4 = `paper.out'.
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 18.0pt on input line 200.
+(Font)              scaled to size 18.0pt on input line 204.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 202.
-LaTeX Font Info:    Trying to load font information for T1+LinuxBiolinumT-TLF on input line 202.
+(Font)              scaled to size 12.0pt on input line 206.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 6.0pt on input line 206.
+LaTeX Font Info:    Trying to load font information for T1+LinuxBiolinumT-TLF on input line 206.
 (c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/libertine/T1LinuxBiolinumT-TLF.fd
 File: T1LinuxBiolinumT-TLF.fd 2017/03/20 (autoinst) Font definitions for T1/LinuxBiolinumT-TLF.
 )
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 202.
+(Font)              scaled to size 6.0pt on input line 206.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 11.0pt on input line 208.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 208.
+(Font)              scaled to size 11.0pt on input line 214.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 214.
 (c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 208.
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 214.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 208.
+(Font)              size <5> substituted on input line 214.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 208.
+(Font)              size <5> substituted on input line 214.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 208.
+(Font)              size <5> substituted on input line 214.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <11> on input line 208.
+(Font)              <11> on input line 214.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7.69997> on input line 208.
+(Font)              <7.69997> on input line 214.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5.5> on input line 208.
+(Font)              <5.5> on input line 214.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.69997pt on input line 208.
-LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 208.
+(Font)              scaled to size 7.69997pt on input line 214.
+LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 214.
 (c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.69997pt on input line 208.
+(Font)              scaled to size 7.69997pt on input line 214.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 11.0pt on input line 208.
+(Font)              scaled to size 11.0pt on input line 214.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 208.
+(Font)              scaled to size 9.0pt on input line 214.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 208.
+(Font)              <9> on input line 214.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 208.
+(Font)              <6> on input line 214.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 208.
+(Font)              <5> on input line 214.
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 208.
+(Font)              scaled to size 6.0pt on input line 214.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 11.0pt on input line 210.
+(Font)              scaled to size 11.0pt on input line 216.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 10.0pt on input line 210.
+(Font)              scaled to size 10.0pt on input line 216.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 10.95pt on input line 270.
+(Font)              scaled to size 10.95pt on input line 276.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 10.95pt on input line 287.
+(Font)              scaled to size 10.95pt on input line 293.
 [1
 
 {c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
 <paper_files/figure-latex/figure_climate_overview-1.pdf, id=115, 511.9125pt x 298.11375pt>
 File: paper_files/figure-latex/figure_climate_overview-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/figure_climate_overview-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/figure_climate_overview-1.pdf  used on input line 404.
+Package pdftex.def Info: paper_files/figure-latex/figure_climate_overview-1.pdf  used on input line 410.
 (pdftex.def)             Requested size: 469.75449pt x 273.56291pt.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 405.
+(Font)              scaled to size 10.0pt on input line 411.
 [3]
-LaTeX Font Info:    Trying to load font information for T1+LinuxLibertineMonoT-TLF on input line 411.
+<paper_files/figure-latex/figure_climatedissimilarity-1.pdf, id=134, 426.59375pt x 170.6375pt>
+File: paper_files/figure-latex/figure_climatedissimilarity-1.pdf Graphic file (type pdf)
+<use paper_files/figure-latex/figure_climatedissimilarity-1.pdf>
+Package pdftex.def Info: paper_files/figure-latex/figure_climatedissimilarity-1.pdf  used on input line 416.
+(pdftex.def)             Requested size: 426.61873pt x 170.64748pt.
+<paper_files/figure-latex/figure_climatedissimilaritybis-1.pdf, id=135, 426.59375pt x 170.6375pt>
+File: paper_files/figure-latex/figure_climatedissimilaritybis-1.pdf Graphic file (type pdf)
+<use paper_files/figure-latex/figure_climatedissimilaritybis-1.pdf>
+Package pdftex.def Info: paper_files/figure-latex/figure_climatedissimilaritybis-1.pdf  used on input line 422.
+(pdftex.def)             Requested size: 426.61873pt x 170.64748pt.
+[4 <./paper_files/figure-latex/figure_climate_overview-1.pdf> <./paper_files/figure-latex/figure_climatedissimilarity-1.pdf
+
+pdfTeX warning: pdflatex.exe (file ./paper_files/figure-latex/figure_climatedissimilarity-1.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>]
+<paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf, id=165, 426.59375pt x 198.7425pt>
+File: paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf Graphic file (type pdf)
+<use paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf>
+Package pdftex.def Info: paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf  used on input line 428.
+(pdftex.def)             Requested size: 426.60571pt x 198.74806pt.
+<paper_files/figure-latex/figure_2-1.pdf, id=166, 426.59375pt x 682.55pt>
+File: paper_files/figure-latex/figure_2-1.pdf Graphic file (type pdf)
+<use paper_files/figure-latex/figure_2-1.pdf>
+Package pdftex.def Info: paper_files/figure-latex/figure_2-1.pdf  used on input line 437.
+(pdftex.def)             Requested size: 406.54408pt x 650.47057pt.
+[5 <./paper_files/figure-latex/figure_climatedissimilaritybis-1.pdf> <./paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf
+
+pdfTeX warning: pdflatex.exe (file ./paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>] [6]
+Overfull \vbox (65.84964pt too high) has occurred while \output is active []
+
+[7 <./paper_files/figure-latex/figure_2-1.pdf>]
+LaTeX Font Info:    Trying to load font information for T1+LinuxLibertineMonoT-TLF on input line 441.
 (c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/libertine/T1LinuxLibertineMonoT-TLF.fd
 File: T1LinuxLibertineMonoT-TLF.fd 2019/05/20 (autoinst) Font definitions for T1/LinuxLibertineMonoT-TLF.
 )
 LaTeX Font Info:    Font shape `T1/LinuxLibertineMonoT-TLF/m/n' in size <10.95> not available
-(Font)              Font shape `T1/LinuxLibertineMonoT-TLF/regular/n' tried instead on input line 411.
+(Font)              Font shape `T1/LinuxLibertineMonoT-TLF/regular/n' tried instead on input line 441.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineMonoT-TLF/regular/n' will be
-(Font)              scaled to size 10.95pt on input line 411.
-<paper_files/figure-latex/figure_tss_type2-1.pdf, id=134, 324.21124pt x 324.21124pt>
-File: paper_files/figure-latex/figure_tss_type2-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/figure_tss_type2-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/figure_tss_type2-1.pdf  used on input line 422.
-(pdftex.def)             Requested size: 324.23022pt x 324.23022pt.
-[4 <./paper_files/figure-latex/figure_climate_overview-1.pdf>]
-<paper_files/figure-latex/figure_sorensen_type2-1.pdf, id=158, 324.21124pt x 324.21124pt>
-File: paper_files/figure-latex/figure_sorensen_type2-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/figure_sorensen_type2-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/figure_sorensen_type2-1.pdf  used on input line 437.
-(pdftex.def)             Requested size: 324.23022pt x 324.23022pt.
-[5 <./paper_files/figure-latex/figure_tss_type2-1.pdf>]
+(Font)              scaled to size 10.95pt on input line 441.
+<paper_files/figure-latex/figure_3bis-1.pdf, id=433, 540.0175pt x 341.275pt>
+File: paper_files/figure-latex/figure_3bis-1.pdf Graphic file (type pdf)
+<use paper_files/figure-latex/figure_3bis-1.pdf>
+Package pdftex.def Info: paper_files/figure-latex/figure_3bis-1.pdf  used on input line 467.
+(pdftex.def)             Requested size: 469.762pt x 296.8756pt.
+[8]
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.95pt on input line 459.
+(Font)              scaled to size 10.95pt on input line 489.
 
-Overfull \hbox (14.37291pt too wide) in paragraph at lines 451--474
+Overfull \hbox (14.37291pt too wide) in paragraph at lines 481--504
 \T1/LinuxLibertineT-TLF/m/n/10.95 We used a monthly pa-le-o-cli-mate re-con-struc-tion dataset ([][]Arm-strong \T1/LinuxLibertineT-TLF/m/it/10.95 et al. \T1/LinuxLibertineT-TLF/m/n/10.95 2019[][]), gen-er-ated with the HadCM3B-
  []
 
-[6 <./paper_files/figure-latex/figure_sorensen_type2-1.pdf>] [7]
-Overfull \hbox (5.42392pt too wide) in paragraph at lines 534--542
+[9 <./paper_files/figure-latex/figure_3bis-1.pdf>] [10]
+Overfull \hbox (5.42392pt too wide) in paragraph at lines 564--572
 \T1/LinuxLibertineT-TLF/m/n/10.95 the his-tor-i-cal cli-mate (1970-2000), ex-tracted from ERA5-Land hourly dataset ([][]\T1/LinuxLibertineT-TLF/b/n/10.95 Sabater2019?[][]\T1/LinuxLibertineT-TLF/m/n/10.95 ; [][]\T1/LinuxLibertineT-TLF/b/n/10.95 Sabater2021?[][]\T1/LinuxLibertineT-TLF/m/n/10.95 ).
  []
 
-[8] [9] [10]
-Overfull \hbox (12.87796pt too wide) in paragraph at lines 752--757
+[11] [12] [13]
+Overfull \hbox (12.87796pt too wide) in paragraph at lines 782--787
  \T1/LinuxLibertineT-TLF/m/n/10.95 Range Mod-el-ing of Many Species. \T1/LinuxLibertineT-TLF/m/it/10.95 Trends in Ecol-ogy & Evo-lu-tion\T1/LinuxLibertineT-TLF/m/n/10.95 , \T1/LinuxLibertineT-TLF/b/n/10.95 31\T1/LinuxLibertineT-TLF/m/n/10.95 , 860--871. [][]10.1016/j.tree.2016.08.005[][] 
  []
 
-[11]
-Overfull \hbox (23.39322pt too wide) in paragraph at lines 825--832
+[14]
+Overfull \hbox (23.39322pt too wide) in paragraph at lines 855--862
  \T1/LinuxLibertineT-TLF/m/n/10.95 com-mu-ni-ties. \T1/LinuxLibertineT-TLF/m/it/10.95 Pro-ceed-ings of the Royal So-ci-ety B: Bi-o-log-i-cal Sci-ences\T1/LinuxLibertineT-TLF/m/n/10.95 , \T1/LinuxLibertineT-TLF/b/n/10.95 283\T1/LinuxLibertineT-TLF/m/n/10.95 , 20152817. [][]10.1098/rspb.2015.2817[][] 
  []
 
-[12]
-Overfull \hbox (6.3255pt too wide) in paragraph at lines 877--882
+[15]
+Overfull \hbox (6.3255pt too wide) in paragraph at lines 907--912
  \T1/LinuxLibertineT-TLF/m/n/10.95 struc-ture and dy-nam-ics of bio-di-ver-sity pat-terns. \T1/LinuxLibertineT-TLF/m/it/10.95 Sci-ence Ad-vances\T1/LinuxLibertineT-TLF/m/n/10.95 , \T1/LinuxLibertineT-TLF/b/n/10.95 8\T1/LinuxLibertineT-TLF/m/n/10.95 , eabj2271. [][]10.1126/sci-adv.abj2271[][] 
  []
 
-[13]
-Overfull \hbox (46.92027pt too wide) in paragraph at lines 898--906
+[16]
+Overfull \hbox (46.92027pt too wide) in paragraph at lines 928--936
  \T1/LinuxLibertineT-TLF/m/n/10.95 im-prove pro-jec-tions of species dis-tri-bu-tions? \T1/LinuxLibertineT-TLF/m/it/10.95 Eco-log-i-cal Mod-elling\T1/LinuxLibertineT-TLF/m/n/10.95 , \T1/LinuxLibertineT-TLF/b/n/10.95 326\T1/LinuxLibertineT-TLF/m/n/10.95 , 63--74. [][]10.1016/j.ecolmodel.2015.11.007[][] 
  []
 
-[14]
-Overfull \hbox (0.7904pt too wide) in paragraph at lines 953--959
+[17]
+Overfull \hbox (0.7904pt too wide) in paragraph at lines 983--989
  []\T1/LinuxLibertineT-TLF/m/n/10.95 Valavi, R., Guillera-Arroita, G., Lahoz-Monfort, J.J. & Elith, J. (2022). Pre-dic-tive per-for-mance of presence-
  []
 
 
-Overfull \hbox (0.7585pt too wide) in paragraph at lines 967--974
+Overfull \hbox (0.7585pt too wide) in paragraph at lines 997--1004
  \T1/LinuxLibertineT-TLF/m/n/10.95 species dis-tri-bu-tion mod-els. \T1/LinuxLibertineT-TLF/m/it/10.95 Global Change Bi-ol-ogy\T1/LinuxLibertineT-TLF/m/n/10.95 , \T1/LinuxLibertineT-TLF/b/n/10.95 18\T1/LinuxLibertineT-TLF/m/n/10.95 , 1698--1713. [][]10.1111/j.1365-2486.2011.02635.x[][] 
  []
 
 
-Overfull \hbox (47.6712pt too wide) in paragraph at lines 986--992
+Overfull \hbox (47.6712pt too wide) in paragraph at lines 1016--1022
  \T1/LinuxLibertineT-TLF/m/n/10.95 cli-mates by 2100 AD. \T1/LinuxLibertineT-TLF/m/it/10.95 Pro-ceed-ings of the Na-tional Academy of Sci-ences\T1/LinuxLibertineT-TLF/m/n/10.95 , \T1/LinuxLibertineT-TLF/b/n/10.95 104\T1/LinuxLibertineT-TLF/m/n/10.95 , 5738--5742. [][]10.1073/pnas.0606292104[][] 
  []
 
-[15] [16]
+[18] [19]
 
-LaTeX Warning: Empty bibliography on input line 1029.
+LaTeX Warning: Empty bibliography on input line 1059.
 
 (./paper.aux)
 
@@ -805,17 +832,17 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.5pt have occurred.
 
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 94E4EB32F7FBFE83394256F85F175597;1571.
+(rerunfilecheck)             Checksum: A1729116DD0110B3578A4A2710D6CD54;1578.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 21664 strings out of 477984
- 405535 string characters out of 5837085
- 1870382 words of memory out of 5000000
- 41497 multiletter control sequences out of 15000+600000
- 588164 words of font info for 75 fonts, out of 8000000 for 9000
+ 21692 strings out of 477984
+ 406884 string characters out of 5837085
+ 1869382 words of memory out of 5000000
+ 41516 multiletter control sequences out of 15000+600000
+ 593427 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  69i,8n,117p,678b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
@@ -828,10 +855,10 @@ pdfTeX warning (dest): name{ref-Sabater2021} has been referenced but does not ex
 pdfTeX warning (dest): name{ref-Sabater2019} has been referenced but does not exist, replaced by a fixed one
 
 {c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/libertine/lbtn_dhi6qf.enc}{c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}{c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}{c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}{c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}{c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}<c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/libertine/LinLibertineMT.pfb><c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><c:/Users/vandermeersch/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb>
-Output written on paper.pdf (16 pages, 482019 bytes).
+Output written on paper.pdf (19 pages, 755151 bytes).
 PDF statistics:
- 443 PDF objects out of 1000 (max. 8388607)
- 392 compressed objects within 4 object streams
- 99 named destinations out of 1000 (max. 500000)
- 96 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 705 PDF objects out of 1000 (max. 8388607)
+ 530 compressed objects within 6 object streams
+ 105 named destinations out of 1000 (max. 500000)
+ 111 words of extra memory for PDF output out of 10000 (max. 10000000)
 

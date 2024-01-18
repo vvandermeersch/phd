@@ -15,6 +15,18 @@ model_performance <- lapply(1:nrow(models),function(i){
     names(distribution_df) <- c("lon", "lat", "pred")
     
     pollen <- readRDS(file.path(pollen_folder, paste0("pres_", year, "BP.rds")))
+    
+    # if additional pollen folder (for Quercus only)
+    if(!is.null(add_pollen_folder)){
+      add_pollen <- readRDS(file.path(add_pollen_folder, paste0("pres_", year, "BP.rds")))
+      if(evergreen){
+        add_pollen[add_pollen$likely_only_deciduous == 1, "pres"]  <- 0 # evergreen only
+      }
+      pollen <- dplyr::full_join(pollen, add_pollen, by = c("lat", "lon"))
+      pollen$pres <- rowSums(pollen[, c("pres.x", "pres.y")], na.rm = T)
+      pollen$pres <- ifelse(pollen$pres > 0, 1, 0)
+    }
+    
     pollen <- left_join(pollen, distribution_df)
     pollen[pollen $lat > 66, "pred"] <- 0 # locations with lat > 66 are considered as not colonized (rather than NA)
     pollen <- na.omit(pollen)

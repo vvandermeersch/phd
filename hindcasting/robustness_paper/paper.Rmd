@@ -78,21 +78,70 @@ This omission represents a notable gap in our understanding of the tenets of spe
 Here, we propose a state-of-the-art comparison of the skills of correlative models and process-based models to simulate the paleodistributions of emblematic tree species of Europe. In order to fully explore the different classes of models, we use different versions of the models that differ by their level of complexity and the methods of estimation of their parameters. In particular, as hybrid models [sensu @Dormann2012] have been raised as a potential avenue by borrowing strength from both statistical and process-based approaches [@Evans2016], we use inverse modelling to fit the process-based models in the same way as the correlative models [@VanderMeersch2023].  By encompassing the entire spectrum of models, from correlative models to process-based models and their hybrid data-driven counterparts, our comprehensive approach allows us to gain a holistic understanding of the key features necessary for building reliable models.  
 
 
-
-
-```{r figure_climate_overview, fig.height = 105, fig.width = 180, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Climate overview"}
+```{r figure_climate_overview, fig.height = 105, fig.width = 180, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Climate overview", eval = T}
 source(file.path(wd, "scripts", "figs", "fig1_climateoverview_v2CRU.R"))
 climateoverview_figure
 ```
 
+```{r figure_climatedissimilarity, fig.height = 60, fig.width = 150, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Climate overview", eval = T}
+source(file.path(wd, "scripts", "figs", "fig1", "figure1.R"))
+fig1_final
+```
 
-```{r process_model_outputs, include = F, eval = F}
-# source(file.path(wd, "scripts", "data_processing", "model_outputs.R"))
-source(file.path(wd, "scripts", "data_processing", "model_outputs_withmig.R"))
+```{r figure_climatedissimilaritybis, fig.height = 60, fig.width = 150, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Climate overview", eval = T}
+fig1_final_bis
+```
+
+```{r figure_climatedissimilarityGCM, fig.height = 70, fig.width = 150, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Climate overview", eval = T}
+future_plot_gcm
+```
+
+
+```{r process_model_outputs, include = F, eval = T}
+
+source(file.path(wd, "scripts", "data_processing", "model_outputs_withmig_fullmodel.R"))
+source(file.path(wd, "scripts", "data_processing", "load_relchg_performance.R"))
+
+model_performance_withmig$clim_hpv_sorensen.mean <- 1-model_performance_withmig$clim_hpv_sorensen.mean # dissimilarity
+
 # source(file.path(wd, "scripts", "data_processing", "migration_rates.R"))
 ```
 
 # Results
+
+```{r figure_2, fig.height = 240, fig.width = 150, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Sorensen Index, ordered Beta regression", eval = T}
+
+source(file.path(wd, "scripts", "data_processing", "quercus_maps_bis.R")) 
+plots
+
+```
+
+
+```{r figure_3, fig.height = 95, fig.width = 190, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Sorensen Index, ordered Beta regression", eval = F}
+
+source(file.path(wd, "scripts", "data_processing", "ordbetareg_migsorensen.R"))
+
+source(file.path(wd, "scripts", "figs", "fig2", "beta_regression.R"))
+source(file.path(wd, "scripts", "figs", "fig2", "boxplot_performance.R"))
+source(file.path(wd, "scripts", "figs", "fig2", "boxplot_transferability.R"))
+source(file.path(wd, "scripts", "figs", "fig2", "figure2.R"))
+fig2_final_grid
+
+```
+
+```{r figure_3bis, fig.height = 120, fig.width = 190, dev=c('cairo_pdf'), dpi = 600, fig.cap = "Sorensen Index, ordered Beta regression", eval = T}
+
+source(file.path(wd, "scripts", "data_processing", "ordbetareg_migsorensen.R"))
+
+source(file.path(wd, "scripts", "figs", "fig2_bis", "beta_regression.R"))
+source(file.path(wd, "scripts", "figs", "fig2_bis", "boxplot_performance.R"))
+source(file.path(wd, "scripts", "figs", "fig2_bis", "boxplot_transferability.R"))
+source(file.path(wd, "scripts", "figs", "fig2_bis", "boxplot_variance.R"))
+source(file.path(wd, "scripts", "figs", "fig2_bis", "figure2.R"))
+fig2_final_grid
+
+```
+
 
 ```{r figure_tss_type2, fig.height = 114, fig.width = 114, dev=c('cairo_pdf'), dpi = 600, fig.cap = "TSS performance + linear-plateau regressions", eval = F}
 

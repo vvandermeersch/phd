@@ -26,10 +26,11 @@
 
 \makeatletter
 \def\@maketitle{%
-  \newpage
+ \newpage
 %  \null
 %  \vskip 2em%
 %  \begin{center}%
+{\fontsize{12}{12}\selectfont\raggedright \color{um-red}  This document is the preprint of the article published in Methods in Ecology and Evolution, DOI: 10.1111/2041-210X.14119 \vskip 13.5pt} 
   \let \footnote \thanks
     {\fontsize{18}{20}\selectfont\raggedright  \setlength{\parindent}{0pt} \@title \par}%
 }
@@ -192,7 +193,10 @@ de Montpellier, CNRS, EPHE, IRD, Montpellier, France}  }
 
 % \pagenumbering{arabic}% resets `page` counter to 1
 %
+
 % \maketitle
+
+
 
 {% \usefont{T1}{pnc}{m}{n}
 \setlength{\parindent}{0pt}
@@ -201,6 +205,8 @@ de Montpellier, CNRS, EPHE, IRD, Montpellier, France}  }
 \maketitle  % title \par
 
 }
+
+
 
 {
    \vskip 13.5pt\relax \normalsize\fontsize{11}{12}
@@ -405,22 +411,31 @@ reliable models.
 \caption{Climate overview}
 \end{figure}
 
-\hypertarget{results}{%
-\section{Results}\label{results}}
-
-\begin{verbatim}
-## 
-## alpha = 0.05
-## Reject Ho if p <= alpha/2
-## 
-## alpha = 0.05
-## Reject Ho if p <= alpha/2
-\end{verbatim}
+\begin{figure}
+\centering
+\includegraphics{paper_files/figure-latex/figure_climatedissimilarity-1.pdf}
+\caption{Climate overview}
+\end{figure}
 
 \begin{figure}
 \centering
-\includegraphics{paper_files/figure-latex/figure_tss_type2-1.pdf}
-\caption{TSS performance + linear-plateau regressions}
+\includegraphics{paper_files/figure-latex/figure_climatedissimilaritybis-1.pdf}
+\caption{Climate overview}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{paper_files/figure-latex/figure_climatedissimilarityGCM-1.pdf}
+\caption{Climate overview}
+\end{figure}
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+\begin{figure}
+\centering
+\includegraphics{paper_files/figure-latex/figure_2-1.pdf}
+\caption{Sorensen Index, ordered Beta regression}
 \end{figure}
 
 \begin{verbatim}
@@ -432,10 +447,25 @@ reliable models.
 ## Reject Ho if p <= alpha/2
 \end{verbatim}
 
+\begin{verbatim}
+## 
+## alpha = 0.05
+## Reject Ho if p <= alpha/2
+## 
+## alpha = 0.05
+## Reject Ho if p <= alpha/2
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## alpha = 0.05
+## Reject Ho if p <= alpha/2
+\end{verbatim}
+
 \begin{figure}
 \centering
-\includegraphics{paper_files/figure-latex/figure_sorensen_type2-1.pdf}
-\caption{TSS performance + linear-plateau regressions}
+\includegraphics{paper_files/figure-latex/figure_3bis-1.pdf}
+\caption{Sorensen Index, ordered Beta regression}
 \end{figure}
 
 \hypertarget{discussion}{%
