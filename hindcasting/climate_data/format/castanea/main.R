@@ -25,7 +25,7 @@ source(paste0(wd, 'functions/format_climate_2.R'))
 
 
 ## Loop on year
-for(year in seq(1000,12000,500)){
+for(year in seq(12250,15000,250)){
   
   phenofit_folder <- paste0("D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dscl_15min/",year,"BP/")
   processeddata_folder <- paste0("D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/castanea_format/025deg/",year,"BP/")
@@ -41,7 +41,6 @@ for(year in seq(1000,12000,500)){
   for(yr in (-year-14):(-year+15)){
     format_climate_2(years = yr, ncells = ncells, out_folder = processeddata_folder, source_folder = phenofit_folder, ncores = 6, create_files = FALSE)
   }
-  
   
 }
 

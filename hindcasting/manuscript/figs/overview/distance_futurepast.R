@@ -1,12 +1,10 @@
 
 # illustration purpose
-future <- data.frame(year = seq(2030,2090, 10), distance = c(1.47, 1.57, 1.69, 1.82, 1.88, 1.99, 2.07))
+future <- data.frame(year = seq(2020,2090, 10), median = c(1.32, 1.47, 1.57, 1.69, 1.82, 1.88, 1.99, 2.07))
 
 future_contribution <- data.frame(year = c(2030, 2030, 2040, 2040, 2050, 2050, 2060, 2060, 2070, 2070, 2080, 2080, 2090, 2090), 
                                   var = c("pre", "temp", "pre", "temp", "pre", "temp", "pre", "temp", "pre", "temp", "pre", "temp", "pre", "temp"), 
                                   contrib = c(0.2, 0.8, 0.36, 0.64, 0.18, 1-0.18, 0.23, 1-0.23, 0.19, 1-0.19, 0.27, 1-0.27, 0.23, 1-0.23))
-
-
 
 
 past_plot <- ggplot() +
@@ -29,7 +27,7 @@ past_plot <- ggplot() +
 
 
 future_plot <- ggplot() +
-  geom_line(data = burke_futureclimatenovelty, aes(x = year, y = median), col = "#ac6867") +
+  geom_line(data = future, aes(x = year, y = median), col = "#ac6867") +
   # geom_bar(data = future_contribution,
   #          aes(x = year, fill = var, weight = contrib), position = "fill",
   #          width = 1) +
@@ -62,6 +60,9 @@ distance_futurepast <- plot_grid(
 distance_futurepast <- distance_futurepast + 
   annotate("segment", x = 0.51, xend = 0.56,  y = 0.1, yend = 0.13, color = "black") +
   annotate("segment", x = 0.556, xend = 0.566,  y = 0.1, yend = 0.13, color = "black")
+
+
+
 
 
 plot_null <- ggplot() +

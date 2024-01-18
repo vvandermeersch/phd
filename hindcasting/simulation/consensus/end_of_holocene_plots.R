@@ -1,6 +1,6 @@
 # Investigate migration starting period
 
-models <- c("phenofit", "phenofitfitted", "castaneafitted",
+models <- c("phenofit", "phenofitfitted", "castanea", "castaneafitted",
             "brt", "randomforest", "gam", "lassoglm")
 species <- c("abies_alba", "fagus_sylvatica", "quercus_ilex", "quercus_robur", "quercus_petraea")
 
@@ -71,7 +71,8 @@ lassoglm_quercus_petraea <- 0.467
 
 # Plots (12k or 11.75k BP)
 plots <- lapply(species, function(s){
-  lapply(models, function(m){
+  cowplot::plot_grid(cowplot::ggdraw() + cowplot::draw_label(s, fontface='bold'),
+                     cowplot::plot_grid(plotlist = unlist(lapply(models, function(m){
     print(file.path(get(paste0(m, "_simdir")), s))
     lapply(c(12000, 11750), function(y){
       if(m %in% c("castanea", "castaneafitted")){
@@ -83,14 +84,16 @@ plots <- lapply(species, function(s){
       ggplot(data = out, aes(x = lon, y = lat, fill = as.factor(pred))) +
         geom_raster() +
         theme_void() +
-        ggtitle(paste(s, m, y)) + 
+        ggtitle(paste(m, y)) + 
         theme(legend.position = 'none')
       
     })
-  })
+  }), recursive = F), ncol = 4), ncol=1, rel_heights=c(0.1, 1))
 })
 
-cowplot::plot_grid(plotlist = unlist(unlist(plots, recursive = FALSE), recursive = FALSE), ncol = 8)
+grid <- cowplot::plot_grid(plotlist = plots, ncol = 1)
+ggsave(filename= file.path("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation/consensus", "grid_end_of_Holocene.pdf"), 
+       plot= grid, height=44, width=10)
 
 
 

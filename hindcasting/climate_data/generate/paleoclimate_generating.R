@@ -22,12 +22,14 @@ out_folder <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/phenofit_format/dsc
 # Years to compute in BP (BP = before present, pre-industrial, i.e. 1950)
 years_to_compute <- seq(250, 18000, 250)
 
+years_to_compute <- c(40)
+
 # Choose extent
 extent <- ext(c(-10,35,36,71))
 
 for(year in years_to_compute){
   
-  years <- c(year -15, year + 15) # 31-year interval
+  years <- c(year -9, year + 10) # 31-year interval
   
   # Write CSV file as required by GWGEN
   input_file <- write_gwgen_csv(years, extent, raw_folder, output_dir = file.path(wd, "inputs"),

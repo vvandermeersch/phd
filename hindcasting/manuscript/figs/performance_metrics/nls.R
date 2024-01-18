@@ -1,18 +1,19 @@
 library(nls2)
 
-test <- model_performance[model_performance$mod != "CASTANEA" & model_performance$mod != "CASTANEA (fitted)",]
+test <- model_performance[model_performance$mod != "CASTANEA" & model_performance$mod != "CASTANEA (fitted)" &
+                            model_performance$mod != "CASTANEA (fitted) - CO2 fixed" &
+                            model_performance$mod != "CASTANEA - CO2 fixed",]
 test <- test %>%
   group_by(type, median) %>%
   dplyr::summarise(median_var=median(!!sym(var)), sd_var=sd(!!sym(var)))
 
 # find starting values 
 p_csdm <- nls2(median_var~SSlogis(median,Asym,xmid,scal),data=test,
-              subset=(test$type=="cSDM"), weights = 1/sd_var^2)
+              subset=(test$type=="cSDM"))
 p_phenofit <- nls2(median_var~SSlogis(median,Asym,xmid,scal),data=test,
-                         subset=(test$type=="PHENOFIT"), weights = 1/sd_var^2,
-                   control = nls.control(tol = 2))
+                         subset=(test$type=="PHENOFIT"))
 p_phenofitfitted <- nls2(median_var~SSlogis(median,Asym,xmid,scal),data=test,
-                  subset=(test$type=="PHENOFIT (fitted)"), weights = 1/sd_var^2)
+                  subset=(test$type=="PHENOFIT (fitted)"))
 
 # one model with same parameters for all type
 fit_all <- nls(median_var~SSlogis(median,Asym,xmid,scal),data=test, weights = 1/sd_var^2)

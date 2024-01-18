@@ -10,7 +10,7 @@ library(zoo)
 library(data.table)
 
 years <- c(15, seq(250,18000,250))
-hadcm3b_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/dscl_15min"
+hadcm3b_dir <- "D:/climate/HadCM3B_60Kyr_Climate/2023_dataset/csdm_format/025deg"
 
 
 # load climatic distance

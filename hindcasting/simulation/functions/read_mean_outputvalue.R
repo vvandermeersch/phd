@@ -46,7 +46,7 @@ read_mean_outputvalue <- function(output_folder, model = "PHENOFIT", output_var 
     # load data
     files_to_read <- mixedsort(list.files(output_folder, 
                                           pattern = "yearlyResults.log", full.names = TRUE))
-    yearly_results <- vroom(files_to_read, col_select = all_of(output_var), show_col_types = FALSE, progress=FALSE)
+    yearly_results <- vroom(files_to_read, col_select = all_of(output_var), show_col_types = FALSE, progress=FALSE, num_threads = 40)
     yearly_results[is.na(yearly_results)] <- 0 # NA values mean tree is dead (thus biomass = 0) 
     mean_results <- aggregate(yearly_results, 
                               list(rep(1:(nrow(yearly_results) %/% num_years + 1), 

@@ -107,9 +107,6 @@ model_performance <- lapply(1:nrow(models),function(i){
                       mod = mod$name, type = mod$type))})
   return(do.call(rbind.data.frame, perf))}
 )
-
-
-
 model_performance <- do.call(rbind.data.frame, model_performance)
 
 
@@ -476,7 +473,7 @@ sorensen_hpv <- ggplot(data = model_performance) +
 
 auc_plot <- ggplot(data = model_performance) +
   geom_point(aes(x = median, y = auc, col = type), size = 0.7) +
-  geom_smooth(aes(x = median, y = auc, col = type, fill = type), method = "loess", alpha = 0.3, size = 0.6) +
+  geom_smooth(aes(x = median, y = auc, col = type, fill = type, linetype = type), method = "loess", alpha = 0.3, size = 0.6) +
   #geom_point(aes(x = year, y = auc, col = mod)) +
   annotate("rect", xmin=min(model_performance$median), xmax=max(model_performance$median), ymin=min(model_performance$auc), ymax=0.5, alpha=0.05, fill="red") +
   geom_hline(yintercept=0.5, linetype="dashed", color = "red", linewidth = 0.5) +
@@ -485,10 +482,12 @@ auc_plot <- ggplot(data = model_performance) +
                      name = "Climate novelty") +
   scale_y_continuous(expand = expansion(mult = c(0, .05)),
                      name = "AUC") +
-  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
-                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
-  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)"),
-                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2")) +
+  scale_color_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)", "CASTANEA - CO2 fixed", "CASTANEA (fitted) - CO2 fixed"),
+                     values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2",  "#995D81", "#c29ab2")) +
+  scale_fill_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)", "CASTANEA - CO2 fixed", "CASTANEA (fitted) - CO2 fixed"),
+                    values= c("#e86117", "#457b9d", "#82BCC4", "#995D81", "#c29ab2", "#995D81", "#c29ab2")) +
+  scale_linetype_manual(breaks= c('cSDM', "PHENOFIT", "PHENOFIT (fitted)", "CASTANEA", "CASTANEA (fitted)", "CASTANEA - CO2 fixed", "CASTANEA (fitted) - CO2 fixed"),
+                    values= c("solid", "solid", "solid", "solid", "solid", "dashed", "dashed")) +
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
