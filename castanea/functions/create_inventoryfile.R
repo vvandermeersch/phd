@@ -1,20 +1,5 @@
 
-# inv_options <- list(inventory_file_suffix = "",
-#                     general = list(cell_size = 20, start_year = 1970,
-#                                    lat = 44, lon = 5),
-#                     model = list(CO2_mode = "CO2_PAST_EVOLUTION", elevation_mode = "ELEVATION_EFFECT_FIXED",
-#                                  predawn_mode = "PREDAWN_CAMP", LAI_mode = "LAI_STAND", mortality_mode = "MORTALITY_RDI",
-#                                  phenology_mode = "PHENO_FIT2018", fit2018_file = "fit2018/UniChillRenecofor_2021.fit2018",
-#                                  drought_on_respiration = "FALSE", soil_init = "SOIL_INIT_EQ", vegetation_type = "TYPE_VEG_STAND",
-#                                  temperature_on_photosynthesis = "TEMPERATURE_EFFECT_BERNACCHI", 
-#                                  ETR_mode = "ETR_FAO", aero_mode = "AERO_FAO", i_frost = 3,
-#                                  simulate_reproduction = "FALSE", allocation_schema = "ALLOC_SCHEMA_DAVI2009", 
-#                                  allocation_remain = "ALLOC_REMAIN_RESERVES", allocation_repro = "REPRO_OLD",
-#                                  potential_from_soil_texture = "true", nb_canopy_layers = 5),
-#                     output_type = 1,
-#                     output_prefix = "gentree")
-
-
+# Castanea
 
 create_inventoryfile <- function(output_dir, inv_options, data){
   
@@ -33,6 +18,7 @@ create_inventoryfile <- function(output_dir, inv_options, data){
   
   castanea_options <- c("# CASTANEA parameters",
                         paste("CO2mode","=", inv_options$model$CO2_mode, sep="\t"),
+                        paste("Ca","=", inv_options$model$Ca, sep="\t"),
                         paste("elevationEffect","=", inv_options$model$elevation_mode, sep="\t"),
                         paste("predawnModel","=", inv_options$model$predawn_mode, sep="\t"),
                         paste("LAImode","=", inv_options$model$LAI_mode, sep="\t"),
