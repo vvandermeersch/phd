@@ -116,6 +116,7 @@ fn <- nrow(accumulate_data[accumulate_data$pred_pres == 0 & accumulate_data$pres
 mig_sens = tp/(tp+fn)
 mig_spec = tn/(tn+fp)
 tss_accumulate  = mig_sens + mig_spec - 1
+sorensen_accumulate = 2*tp/(fn + 2*tp + fp)
 
 
 # 3. Full model (all the available training data is used)
@@ -126,6 +127,7 @@ cat("\n   Full model\n")
 cat(paste0("      AUC on  combined set of test predictions = ", round(auc_accumulate$aucs[1],2),"\n"))
 cat(paste0("      Boyce index on combined set of test predictions = ", round(boyce_accumulate$cor,2),"\n"))
 cat(paste0("      TSS on combined set of test predictions = ", round(tss_accumulate,2),"\n"))
+cat(paste0("      Sorensen index on combined set of test predictions = ", round(sorensen_accumulate,2),"\n"))
 
 # convert the response to factor for RF model to return probabilities
 full_data$pres <- as.factor(full_data$pres)
@@ -165,7 +167,9 @@ fn <- nrow(sp_data[sp_data$pred_pres == 0 & sp_data$pres == 1,])
 mig_sens = tp/(tp+fn)
 mig_spec = tn/(tn+fp)
 tss_all  = mig_sens + mig_spec - 1
+sorensen_all = 2*tp/(fn + 2*tp + fp)
 cat(paste0("      Total TSS = ", round(tss_all,2), "\n\n"))
+cat(paste0("      Total Sorensen index = ", round(sorensen_all,2), "\n\n"))
 
 # predict on all Europe
 all_data$pred <- as.numeric(predict(mod_rf, all_data, type = "prob")[,"1"])
@@ -180,9 +184,11 @@ outfile$model <- mod_rf # model object
 outfile$runtime <- runtime[3] # runtime
 outfile$auc_test <- auc_accumulate # AUC on  combined set of test predictions
 outfile$tss_test <- tss_accumulate # TSS on  combined set of test predictions
+outfile$sorensen_test <- sorensen_accumulate # Sorensen on  combined set of test predictions
 outfile$boyceindex_test <- boyce_accumulate # Boyce Index on  combined set of test predictions
 outfile$auc_all <- auc_all # AUC on every species points
 outfile$tss_all <- tss_all # TSS on every species points
+outfile$sorensen_all <- sorensen_all # Sorensen on every species points
 outfile$best_threshold <- best_threshold # best threshold to discriminate probabilites
 outfile$europe_pred <- data.frame(lat = alt$lat, lon = alt$lon, pred = all_data$pred) # prediction on every Europe cells
 outfile$cov_norm <- TRUE # are covariates normalized before calibration ?

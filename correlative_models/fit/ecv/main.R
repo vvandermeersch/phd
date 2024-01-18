@@ -17,9 +17,9 @@ set.seed(1997)
 
 ### 0. Parameters --------------- #
 
-sp_name <- "quercus_ilex" # species name
+sp_name <- "picea_abies" # species name
 nb_background <- 50000 # number of background points
-nfold <- 3
+nfold <- 5
 
 cov_type <- "finalcov" # name of covariate set
 bc_covars <- c("bio6", "bio12") # bioclim predictors
@@ -49,9 +49,7 @@ source(file.path(wd, "random_forest", "random_forest.R"))
 ## Boosted regression tree
 source(file.path(wd, "brt", "brt.R"))
 
-
-
 ## Additional test : equal-sample Random Forest
-source(file.path(wd, "random_forest_es", "random_forest_es.R"))
+# source(file.path(wd, "random_forest_es", "random_forest_es.R"))
 
 
