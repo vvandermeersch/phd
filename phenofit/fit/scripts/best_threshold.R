@@ -7,12 +7,12 @@ library(dplyr)
 source(file.path("C:/Users/vandermeersch/Documents/CEFE/phd/hindcasting/simulation", "functions/read_mean_outputvalue.R"))
 
 sp_folder <- "D:/species/processed"
-sp_presabs <- readRDS(file.path(sp_folder, "quercus_robur/quercus_robur_presabs_woUkraine.rds"))
+sp_presabs <- readRDS(file.path(sp_folder, "pinus_sylvestris/pinus_sylvestris_presabs.rds"))
 sp_name <- "picea_abies"
 
-out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/quercus_robur"
-sim_folder <- "D:/simulations/phenofit/present/fitted/quercus_robur/subset1_rep1"
-filename <- "cmaes_fit_subset1_rep1"
+out_folder <- "C:/Users/vandermeersch/Documents/CEFE/phd/phenofit/fit/fitted/pinus_sylvestris"
+sim_folder <- "D:/simulations/phenofit/present/fitted/pinus_sylvestris/subset1_rep1"
+filename <- "cmaes_fit_subset2_rep5"
 # filename <- "Chuine2"
 modality <- "inverse calibration"
 

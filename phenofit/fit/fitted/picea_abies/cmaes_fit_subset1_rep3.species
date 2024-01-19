@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Picea_abies</Name>
+    <Leaf Model="9">
+      <!-- model ajusted on Phenoclim data 2007 to 2014 with 112 data by D. Asse -->
+      <t0>-13.6964042927583</t0>
+      <Vb>11.8255889513697</Vb>
+      <d>-1.4307422923398</d>
+      <e>9.61297744487897</e>
+      <Ccrit>147.077201286834</Ccrit>
+      <Fcrit>21.1270877984586</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <!-- model ajusted on Phenoclim data 2007 to 2014 with 92 data by D. Asse NOte that male and female flowering take place at the same period -->
+      <t0>-92.0944125460991</t0>
+      <Vb>-1.66250336634232</Vb>
+      <d>-0.95722512674405</d>
+      <e>8.43683314433749</e>
+      <Ccrit>16.8270473544103</Ccrit>
+      <Fcrit>32.796821811555</Fcrit>
+    </Flower>
+    <FruitMaturation Model="1">
+      <!-- model ajusted on 10 data from TEMPO with PMP5 -->
+      <aa>1.17348910947769</aa>
+      <bb>17.0125982941838</bb>
+      <Fcrit>34.3057182390013</Fcrit>
+      <Top>9.03305249852744</Top>
+      <matmoy>12.354650407049</matmoy>
+      <!-- 54.69  -->
+      <sigma>5.46365820289393</sigma>
+      <pfe50>0.351287361396811</pfe50>
+      <photosType>3</photosType>
+      <!-- Wang Tmin = 0, Tmax= 40  -->
+    </FruitMaturation>
+    <Senescence Model="1">
+      <!-- trick to have no senescence -->
+      <Fcrit>300</Fcrit>
+      <Tb>20</Tb>
+      <sigmaSen>0</sigmaSen>
+    </Senescence>
+    <CompoundBud>1</CompoundBud>
+    <LeafHabit>2</LeafHabit>
+    <LeafLifeSpan>6</LeafLifeSpan>
+    <!-- 5 to 7 years -->
+    <LeafType>NEEDLE_LEAF</LeafType>
+    <!-- NEEDLE_LEAF or BROAD_LEAF -->
+    <Tdeath>-70</Tdeath>
+    <Frost>
+      <FHfrmax1>-11.3506995211056</FHfrmax1>
+      <FHfrmax2>-13.231587705039</FHfrmax2>
+      <FHminfe>-9.28982458454236</FHminfe>
+      <!-- varie entre -3.6 et -6 selon étude,  Repo (2011) (10.1139/x92-254) -->
+      <FHminfl>-8.30569250551934</FHminfl>
+      <Te1>15.7281834686576</Te1>
+      <Te2>-10.6164694353226</Te2>
+      <FHtfemax>-12.7166803040135</FHtfemax>
+      <!-- Conifer Cold Hardiness-Springer Netherlands (2001). Original source: Stushnoff and Junttila (1986) -->
+      <FHtflmax>-14.7484866865023</FHtflmax>
+      <FHpfemax>-19.8159273743922</FHpfemax>
+      <!-- Conifer Cold Hardiness-Springer Netherlands (2001). Original source: Stushnoff and Junttila (1986) -->
+      <FHpflmax>-19.899135567652</FHpflmax>
+      <NL1>15.1800249616512</NL1>
+      <NL2>12.9590340490544</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>265.34923821689</ppextremelow>
+      <pplow>332.268073043343</pplow>
+      <pphigh>1034.7121160697</pphigh>
+      <ppextremehigh>3507.52775940223</ppextremehigh>
+    </Drought>
+    <!-- <Evapotranspiration Model="1"/> not used anymore -->
+  </Provenance>
+</Species>
