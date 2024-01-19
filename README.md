@@ -15,8 +15,12 @@ For a cleaner version, please look at each specific GitHub repo:\
 - [hindcasting performance](https://github.com/vvandermeersch/past_robustness)
 - ...
 
+[<img src="notebook/schema_timeline/1.png" width="250">](https://github.com/vvandermeersch/past_robustness) [<img src="notebook/schema_timeline/2.png" width="157.65">]() [<img src="notebook/schema_timeline/3.png" width="108.18">](https://github.com/vvandermeersch/inverse_calibration) [<img src="notebook/schema_timeline/4.png" width="162.93">]()
+
 Feel free to contact me for details !  
 :email: *victor.vandermeersch@cefe.cnrs.fr*
+
+
 
 
 
