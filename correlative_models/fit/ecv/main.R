@@ -17,7 +17,7 @@ set.seed(1997)
 
 ### 0. Parameters --------------- #
 
-sp_name <- "picea_abies" # species name
+sp_name <- "pinus_sylvestris" # species name
 nb_background <- 50000 # number of background points
 nfold <- 5
 
