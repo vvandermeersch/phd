@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Species>
+  <Provenance>
+    <Name>Pinus_sylvestris</Name>
+    <Leaf Model="9">
+      <!-- modify the model (2->9) to test whether it give the same results or not -->
+      <t0>-25.6684602629575</t0>
+      <Vb>9.57693028224683</Vb>
+      <d>-0.862635398727441</d>
+      <e>6.48955449340949</e>
+      <Ccrit>126.706594519701</Ccrit>
+      <Fcrit>77.1970142029259</Fcrit>
+    </Leaf>
+    <Flower Model="9">
+      <!-- modify the model (2->9) to test whether it give the same results or not -->
+      <t0>-91.5091832118329</t0>
+      <Vb>11.1746716773587</Vb>
+      <d>-1.13169544447894</d>
+      <e>8.27014038793244</e>
+      <Ccrit>6.40076198616478</Ccrit>
+      <Fcrit>16.3091367071377</Fcrit>
+    </Flower>
+    <FruitMaturation Model="2">
+      <Tb>9.00514820860145</Tb>
+      <Fcrit>22.8652792210905</Fcrit>
+      <sigma>195.3131132239</sigma>
+      <pfe50>0.39243779210645</pfe50>
+    </FruitMaturation>
+    <Senescence Model="1">
+      <!-- trick to have no senescence -->
+      <Fcrit>300</Fcrit>
+      <Tb>20</Tb>
+      <sigmaSen>0</sigmaSen>
+    </Senescence>
+    <CompoundBud>1</CompoundBud>
+    <LeafHabit>2</LeafHabit>
+    <Tdeath>-70</Tdeath>
+    <Frost>
+      <FHfrmax1>-14.2514097406038</FHfrmax1>
+      <FHfrmax2>-25.9755811528738</FHfrmax2>
+      <FHminfe>-7.87794289542591</FHminfe>
+      <FHminfl>-8.47208695233649</FHminfl>
+      <Te1>14.1302530281356</Te1>
+      <Te2>-12.3997194159714</Te2>
+      <FHtfemax>-6.45922167965961</FHtfemax>
+      <FHtflmax>-13.8833937510897</FHtflmax>
+      <FHpfemax>-13.3941104461875</FHpfemax>
+      <FHpflmax>-18.4469174493705</FHpflmax>
+      <NL1>11.4852071780554</NL1>
+      <NL2>19.1455198930952</NL2>
+    </Frost>
+    <Drought Model="6">
+      <ppextremelow>221.04709405085</ppextremelow>
+      <!-- 0th quantile OR use 429 1th quantile -->
+      <pplow>296.347316077801</pplow>
+      <!-- 5th quantile -->
+      <pphigh>1758.95948284187</pphigh>
+      <!-- 95th quantile -->
+      <ppextremehigh>2240.52031204473</ppextremehigh>
+      <!-- 100th quantile OR use 2079 99th quantile -->
+    </Drought>
+    <!-- <Evapotranspiration Model="1"/> not used anymore -->
+  </Provenance>
+</Species>
