@@ -1,0 +1,109 @@
+\documentclass{umontpellier_phd_thesis}
+
+\begin{document}
+
+%\title{phdthesis}
+%\author{victor.vandermeersch }
+%\date{May 2024}
+
+\include{title_page}
+\newpage 
+\ % The empty page
+\newpage
+\ % The empty page
+\newpage
+
+\include{thanks}
+
+\newpage 
+\ % The empty page
+\newpage
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\newpage 
+\ % The empty page
+\newpage
+
+\include{0introduction/introduction}
+
+\include{chapter1/chapter1}
+
+\newpage 
+\ % The empty page
+\newpage
+\ % The empty page
+\newpage
+
+\include{chapter2/chapter2}
+
+\newpage 
+\ % The empty page
+\newpage
+
+\include{chapter3/chapter3}
+
+\newpage 
+\ % The empty page
+\newpage
+\ % The empty page
+\newpage
+
+\include{chapter4/chapter4}
+
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+
+\newpage 
+\ % The empty page
+\newpage
+\ % The empty page
+\newpage
+
+\include{discussion/discussion}
+
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\renewcommand*\thetable{R\arabic{table}}
+\renewcommand*\thefigure{R\arabic{figure}}
+
+\newpage 
+\ % The empty page
+\newpage
+\ % The empty page
+\newpage
+
+\include{resume/resume}
+
+\newpage 
+\ % The empty page
+\newpage
+
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\renewcommand*\thetable{S\arabic{table}}
+\renewcommand*\thefigure{S\arabic{figure}}
+
+\include{chapter1/appendix}
+
+\include{chapter2/appendix}
+
+\include{chapter3/appendix}
+
+\include{chapter4/appendix}
+
+\include{discussion/appendix}
+
+\phantomsection
+\addcontentsline{toc}{section}{References}
+{\scriptsize
+\bibliography{phd_bibliography}
+}
+
+\newpage 
+\ % The empty page
+\newpage
+
+\include{abstract}
+
+\end{document}

@@ -1,0 +1,84 @@
+\begin{table}[!h]
+\fontsize{11}{10}\selectfont
+\vspace*{-6em}
+\caption{\bf{Description of PHENOFIT parameters for \emph{Fagus sylvatica}.}}
+\begin{tabular}{ ccccc }
+
+\hline
+Process & Subprocess & Function & Parameter & Definition \\
+\hline
+
+\multirow{6}{5em}{Leaf unfolding} & \multirow{3}{7em}{Endodormancy} & \multirow{3}{7em}{Threshold inferior} 
+& $t_0$ & Starting date of the endodormancy phase \\ 
+& & & $T_b$ & Threshold temperature \\
+& & & $C_{crit}$ & Critical state of development corresponding to dormancy break \\
+\cmidrule{4-5}
+& \multirow{3}{7em}{Ecodormancy} & \multirow{3}{7em}{Sigmoid} 
+& $d_T$ & Slope at the inflection point \\ 
+& & & $T_{50}$  & Mid-responsee temperature \\ 
+& & & $F^{leaf}_{crit}$  & Critical state of development corresponding to leaf unfolding \\ 
+
+\cmidrule{1-5}
+\multirow{6}{5em}{Flowering} & \multirow{3}{7em}{Endodormancy} & \multirow{3}{7em}{Threshold inferior}
+& $t_0$ &  Starting date of the endodormancy phase \\ 
+& & & $T_b$ & Threshold temperature \\
+& & & $C_{crit}$ & Critical state of development corresponding to dormancy break \\
+\cmidrule{4-5}
+& \multirow{3}{7em}{Ecodormancy} & \multirow{3}{7em}{Sigmoid} 
+& $d_T$ & Slope at the inflection point \\ 
+& & & $T_{50}$ & Mid-responsee temperature \\ 
+& & & $F^{flower}_{crit}$ & Critical state of development corresponding to flowering \\ 
+
+\cmidrule{1-5}
+\multirow{6}{5em}{Fruit maturation} & \multirow{3}{7em}{Cell multiplication and growth} & \multirow{3}{7em}{Sigmoid} 
+& aa & definition aa (sigmoid) \\ 
+& & & bb & definition bb (sigmoid) \\
+& & & $F^{fruit}_{crit}$ & Accumulation threshold above which accumulation starts \\
+\cmidrule{4-5}
+& \multirow{4}{7em}{Photosynthetic assimilate accumulation} & \multirow{4}{7em}{\citet{Wang1998}} 
+& $T_{opt}$ & Optimal temperature \\ 
+& & & $Mat_{moy}$  & Accumulation threshold above which maturation occurs \\ 
+& & & $\sigma$  & Standard deviation \\ 
+& & & ${pfe}_{50}$  & Prop. of injured leaves reducing by 50\% the flux of photosynthetic assimilates \\ 
+
+\cmidrule{1-5}
+{\multirow{6}{*}{Leaf senescence}} & & \multirow{6}{7em}{\citet{Delpierre2009}}
+& $P_b$ & Photoperiod threshold below which photothermal accumulation starts \\ 
+& & & $T_b$ & Max. temperature above which there no photothermal accumulation \\
+& & & $\alpha$ & Effect of temperature on photothermal accumulation $\alpha$ \\
+& & & $\beta$ & Effect of photoperiod on photothermal accumulation $\beta$ \\ 
+& & & $S_{crit}$  & Accumulation threshold above which senescence occurs \\ 
+& & & $\sigma^{senes}$  & Standard deviation \\ 
+
+\cmidrule{1-5}
+\multirow{10}{5em}{Frost hardening} & \multirow{2}{7em}{Leaf bud} & \multirow{8}{*}{\citet{Leinonen1996}}
+& $FH^{leaf}_{min}$ & Minimum level of frost hardiness \\ 
+& & & $FHT^{leaf}_{max}$/$FHP^{leaf}_{max}$ & Maximum level of the increase of frost hardiness induced by temperature/photoperiod \\
+\cmidrule{4-5}
+& \multirow{2}{7em}{Flower bud} &
+& $FH^{flower}_{min}$ & Minimum level of frost hardiness \\ 
+&  & & $FHT^{flower}_{max}$, $FHP^{flower}_{max}$ & Maximum level of the increase of frost hardiness induced by temperature/photoperiod \\
+\cmidrule{4-5}
+& \multirow{2}{7em}{Thermal control} &
+& $Te_1$ & Upper limit of the effective range of temperature \\ 
+& & & $Te_2$  & Lower limit of the effective range of temperature\\ 
+\cmidrule{4-5}
+& \multirow{2}{7em}{Photoperiod control} &
+& $NL_1$ & Lower limit of the effective range of photoperiod \\ 
+& & & $NL_2$  & Upper limit of the effective range of photoperiod\\ 
+\cmidrule{4-5}
+& \multirow{2}{7em}{Fruit} & \multirow{2}{*}{Piecewise linear}
+& FHfrmax1 & Minimum level of frost hardiness \\ 
+& & & FHfrmax2 & Maximum level of frost hardiness \\
+
+\cmidrule{1-5}
+\multirow{4}{5em}{Water stress} & \multicolumn{2}{c}{\multirow{4}{*}{Precipitation range}}
+& $pp_{extlow}$ & $1^{th}$ percentile \\
+\multicolumn{3}{c}{} & $pp_{low}$ & $5^{th}$ percentile \\
+\multicolumn{3}{c}{} & $pp_{high}$ & $95^{th}$ percentile \\
+\multicolumn{3}{c}{} & $pp_{exthigh}$ & $99^{th}$ percentile \\ 
+\hline
+
+\end{tabular}
+\vspace*{-4em}
+\end{table}

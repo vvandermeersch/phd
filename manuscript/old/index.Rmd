@@ -1,0 +1,54 @@
+---
+title: "FIABILITÉ DES PROJECTIONS DES MODÈLES D'AIRE DE RÉPARTITION DES ARBRES FORESTIERS"
+author: 'Victor VAN DER MEERSCH'
+date: '01 Janvier 2001'
+supervisor: 'Isabelle CHUINE'
+specialty: 'Écologie fonctionnelle et Sciences Agronomiques'
+department: 'UMR 5175 – Centre d’Ecologie Fonctionnelle et Evolutive - CNRS'
+
+output: 
+  bookdown::pdf_book:
+    template: latex/template.tex
+    includes:
+      before_body: [latex/title.tex, latex/abstract.tex]
+    keep_tex: true
+    toc: yes
+    toc_depth: 3
+    output_dir: "pdf"
+indent: true
+link-citations: yes
+lot: true
+lof: true
+colorlinks: true
+
+csl: csl/oikos.csl
+bibliography: bib/thesis.bib
+---
+
+<!-- Start the redaction on a new page -->
+\newpage
+
+<!-- Start page numbering where the redaction starts -->
+\pagenumbering{arabic}
+
+```{r globaloptions, include=FALSE}
+# Include here chunk options
+```
+
+```{r packages, include=FALSE}
+# Load here the packages
+```
+
+<!-- Call the child documents -->
+```{r body, child = c('contents/01-Acknowledgments.Rmd', 'contents/02-TOC.Rmd', 'contents/03-Resume.Rmd', 'contents/04-Introduction.Rmd')}
+```
+
+<!-- Placement of bibliography -->
+# References {-}
+
+<div id="refs"></div>
+
+
+<!-- Place the appendix after the bibliography -->
+```{r appendix, child = c('07--Appendix.Rmd'), eval=F}
+```
